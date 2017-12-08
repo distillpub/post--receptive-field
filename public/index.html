@@ -670,17 +670,74 @@
   <p>for all \(i,j,l\).</p>
 
   <p>
-    <strong>Algorithm for computing receptive field size and locations.</strong>
-    In the following,
-     we provide an algorithm in pseudocode for computing the receptive field size
-     \(r_0\), effective stride \(S_0\) and effective padding \(P_0\) for an arbitrary
-     computation graph that is aligned. The algorithm can also report if the input
-     graph is not aligned. This is implemented and released as part of the tensorflow codebase, under
-    <dt-cite key="araujo2017receptive">tf.contrib.receptive_field</dt-cite>
-    .
+    <strong>Algorithm for computing receptive field parameters.</strong>
+    It is straightforward to develop an algorithm that computes the receptive field size and associated parameters for such computation graphs,
+    in order to understand the spatial span of output features, and precisely localize them.
+    To make it concrete, we need to compute three variables:
+  </p>
+  <ul>
+    <li>\(r_0\): receptive field of output features with respect to input image (positive integer)</li>
+    <li>\(S_0\): effective stride of output features with respect to input image (positive integer)</li>
+    <li>
+      \(P_0\): effective padding of output features with respect to input image (non-negative integer)
+    </li>
+  </ul>
+
+  <p>
+    To make it simple and clear, we can start by topologically sorting the computation graph. Then, we can visit each layer (i.e., each node in the graph)
+    from the last (\(L\)) to the first (\(0\)) -- i.e., in reverse topological order.
+    This ensures that all paths from a given layer \(l\) to the output layer have been taken into account
+    when \(l\) is visited. We initialize \(r_L=1\), \(S_L=1\) and \(P_L = 0\), and update \(r_l\), \(S_l\), \(P_l\) as layers are visited, until finally obtaining
+    \(r_0\), \(S_0\), \(P_0\).
+  </p>
+  <p>
+    As each layer \(l\) is visited, we can compute the receptive field size \(r'\), effective stride \(S'\)
+    and effective padding \(P'\) at the input of \(l\) with respect to \(f_L\).
+    This computation can be performed by using the parameters of layer \(l\) and
+    expressions \eqref{eq:rf_recurrence}, \eqref{eq:effective_stride_recurrence} and
+    \eqref{eq:effective_padding_recurrence}, respectively.
+  </p>
+  <p>
+    Note that layer \(l\) might have several feature maps at its input.
+    Denote one of the layers that produces a feature map at the input of \(l\) as \(k\).
+    At this point, we obtained the receptive field size \(r'\), effective stride \(S'\)
+    and effective padding \(P'\) for \(f_k\), considering all the paths which immediately go through \(l\) to reach layer \(L\).
+    But note that \(f_k\) may also be connected to \(L\) using paths which do not go directly through \(l\),
+    so \(r_k, S_k, P_k\) may be different from \(r', S', P'\).
   </p>
 
-  <p>TODO: write the algorithm using latex/mathjax</p>
+  <p>
+    So, once \(r', S', P'\) are obtained, there are two possibilities for layer \(k\): either it has been visited before, or not.
+    In the latter case, we will update \(r_k=r'\), \(S_k=S'\) and \(P_k=P'\) since no other paths
+    from \(k\) to \(L\) have so far been discovered.
+    In the former case, \(r'\) is compared to the current value of \(r_k\). If \(r' > r_k\),
+    i.e., a path was found with larger receptive field than the previous found ones,
+    \(r_k, S_k, P_k\) are updated to \(r',S', P'\). Otherwise, \(r_k, S_k, P_k\) are
+    unchanged.
+  </p>
+
+  <p>
+    Note that it is also important to check that the network is aligned, as discussed above.
+    This can be done by making sure that \(r', S', P'\) and \(r_k, S_k, P_k\) satisfy
+    \eqref{eq:align_crit_1} and \eqref{eq:align_crit_2}.
+  </p>
+
+  <p>
+    Once we reach layer \(0\) (the input image), all
+    nodes have been visited and all possible paths to the input image have been
+    analyzed, so \(r_0, S_0, P_0\) are obtained. The complexity of this algorithm is linear on the number of nodes
+    (\(L\)) and on the number of edges (\(M\)): \(O(L+M)\).
+  </p>
+
+  <p>
+    To introduce the algorithm more concretely, we present here a simplified python function that performs this computation.
+    It relies on an external `topological_sort` function.
+    The algorithm can also report if the input
+    graph is not aligned. We release our concrete implementation as part of the tensorflow codebase, under
+    <dt-cite key="araujo2017receptive">tf.contrib.receptive_field</dt-cite>.
+  </p>
+
+  <p>TODO: write the python algorithm using latex/mathjax</p>
 
   <p>
     ```
@@ -745,46 +802,6 @@
   </p>
 
   <p>
-    The first step in the algorithm is to topologically sort the computation graph.
-      This will ensure that, by visiting the layers from the last to the first, all
-      paths from a given layer \(l\) to the output layer have been taken into account
-      when \(l\) is visited.
-  </p>
-
-  <p>
-    Then, each layer \(l\) is visited, from the last to the first, in reverse
-      topological order. We can compute the receptive field size, effective padding
-      and effective stride at the input of \(l\). These values are propagated to the
-      lower layers that connect to \(l\) if the layer has not been previously
-      discovered, or if it has been previously discovered but the receptive field for
-      the previous analyzed paths are smaller than the receptive field using the path
-      under consideration.
-  </p>
-
-  <p>
-    Every time a layer that had already been discovered is re-discovered, we perform
-      checks to make sure that the different paths that reach it are aligned, by
-      checking the criteria from \eqref{eq:align_crit_1} and \eqref{eq:align_crit_2}.
-  </p>
-
-  <p>TODO: update notation in next paragraph</p>
-
-  <p>
-    During the computation, we keep track of the largest receptive field found for
-      each feature map in
-    <code>r[]</code>
-    , and their effective padding and effective stride in
-    <code>P[]</code>
-    and
-    <code>S[]</code>
-    , respectively. Once we reach layer \(0\) (the input image), all
-      nodes have been visited and all possible paths to the input image have been
-      analyzed. The algorithm only reaches this point if the network is aligned for
-      all layers. The complexity of this algorithm is linear on the number of nodes
-      (\(L\)) and on the number of edges (\(M\)): \(O(L+M)\).
-  </p>
-
-  <p>
     After running this algorithm, it is simple to map an output feature to its
       receptive field region in the input image, by using
       \eqref{eq:rf_loc_recurrence_final_left_effective} and
@@ -806,7 +823,7 @@
 <dt-appendix>
   <h3>Acknowledgments</h3>
   <p>
-    We would like to thank Yuning Chai and George Papandreou for their careful revision of early drafts of this manuscript. We also thank Mark Sandler for helping with the open-source library.
+    We would like to thank Yuning Chai and George Papandreou for their careful revision of early drafts of this manuscript. We also thank Mark Sandler for helping with the starter code for the open-source library, and Till Hoffman for improving upon the original release.
   </p>
 
 </dt-appendix>

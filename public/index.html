@@ -817,8 +817,8 @@
         href="https://docs.google.com/spreadsheets/d/1lHZPE8uD9-8t21aMjsXk76E1SGnKwEr1IAIWNqAuVuo/edit?usp=sharing">
       this spreadsheet
     </a>. It is interesting to analyze the relationship between receptive field
-    size and performance. The figure below presents a semi-log plot of ImageNet
-    top-1 accuracy as a function of the network's receptive field size, for the
+    size and recognition performance. The figure below presents a semi-log plot of ImageNet
+    top-1 accuracy as a function of the network's receptive field size, for
     recent popular networks.
   </p>
   <p>
@@ -837,22 +837,21 @@
     This figure shows that, as models evolved, from
     <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>, to
     <dt-cite key="simonyan2015very">VGG</dt-cite>,
-    to <dt-cite key="szegedy2016inception">Inception</dt-cite> and
-    <dt-cite key="he2016deep">ResNet</dt-cite>, the receptive fields increased
+    to <dt-cite key="he2016deep">ResNet</dt-cite> and
+    <dt-cite key="szegedy2016inception">Inception</dt-cite>, the receptive fields increased
     (which is a natural consequence of the increased number of layers), along
     classification accuracy. We observe a logarithmic relationship between the
-    receptive field size and classification accuracy, which validates the
+    classification accuracy and receptive field size. This validates the
     intuition that larger receptive fields are necessary for high-level
-    recognition tasks.
+    recognition tasks, but with diminishing rewards.
   </p>
   <p>
-    More recently, very efficient architectures such as
+    Recently, efficient network architectures such as
     <dt-cite key="howard2017mobilenets">MobileNet</dt-cite>
     were introduced. It is interesting to notice that MobileNet has a larger
     receptive field than VGG-16, even if using 27X fewer multiply-adds. This is
     because MobileNet relies on depth-wise convolutions, which effectively
-    increase the network's receptive field while keeping a low number of
-    operations.
+    increase the network's receptive field with a low number of operations.
   </p>
 
 </dt-article>

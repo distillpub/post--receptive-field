@@ -808,50 +808,82 @@
       \eqref{eq:rf_loc_recurrence_final_right_rewrite}.
   </p>
 
-  <h2>Receptive fields of modern networks</h2>
+  <h2>Discussion: receptive fields of modern networks</h2>
 
-  <p>In this section, we use the new open-source library to compute the
-    receptive field parameters for modern convolutional neural networks.</p>
-  <p>We pre-compute and make publicly available the exact parameters in
-    <a
-        href="https://docs.google.com/spreadsheets/d/1lHZPE8uD9-8t21aMjsXk76E1SGnKwEr1IAIWNqAuVuo/edit?usp=sharing">
-      this spreadsheet
-    </a>. It is interesting to analyze the relationship between receptive field
-    size and recognition performance. The figure below presents a semi-log plot of ImageNet
-    top-1 accuracy as a function of the network's receptive field size, for
-    recent popular networks.
+  <p>
+    In this section, we present the receptive field parameters of modern
+    convolutional networks
+    <dt-fn>
+      The models used for receptive field computations, as well as the accuracy reported on Imagenet experiments,
+      are drawn from the <a href="https://github.com/tensorflow/models/tree/master/research/slim">TF-Slim repository</a>.
+    </dt-fn>
+    , which were computed using the new open-source
+    library (script
+    <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/python/util/examples/rf_benchmark.py">TODO here</a>).
+    The pre-computed parameters for
+    <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>,
+    <dt-cite key="simonyan2015very">VGG</dt-cite>,
+    <dt-cite key="he2016deep">ResNet</dt-cite>,
+    <dt-cite key="szegedy2016inception">Inception</dt-cite>
+    and
+    <dt-cite key="howard2017mobilenets">MobileNet</dt-cite>
+    are presented in the table below.
+    For a more
+    comprehensive list, including intermediate network end-points, see
+    <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/rf_benchmark_results.md">TODO this table</a>.
   </p>
   <p>
-    TODO: make spreadsheet publicly available by link outside of Google.
+    TODO: include table listing RF for only final feature map, for the networks mentioned below.
+    Make table in chronological order.
+  </p>
+
+  <p>
+    As models evolved, from
+    AlexNet, to VGG, to ResNet and Inception, the receptive fields increased
+    (which is a natural consequence of the increased number of layers).
+    In the most recent networks, the receptive field usually covers the entire input image:
+    this means that the context used by each feature in the final output feature map
+    includes all of the input pixels.
+  </p>
+  <p>
+    We can also relate the growth in receptive fields to increased
+    classification accuracy. The figure below presents a semi-log plot of ImageNet
+    top-1 accuracy as a function of the network's receptive field size, for
+    the same networks listed above.
   </p>
 
   <figure>
     <img src="assets/chart_acc_rf.png">
   </figure>
 
-  
   <p>
     TODO: improve plot. In particular, include network names in points.
   </p>
   <p>
-    This figure shows that, as models evolved, from
-    <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>, to
-    <dt-cite key="simonyan2015very">VGG</dt-cite>,
-    to <dt-cite key="he2016deep">ResNet</dt-cite> and
-    <dt-cite key="szegedy2016inception">Inception</dt-cite>, the receptive fields increased
-    (which is a natural consequence of the increased number of layers), along
-    classification accuracy. We observe a logarithmic relationship between the
-    classification accuracy and receptive field size. This validates the
-    intuition that larger receptive fields are necessary for high-level
+    We observe a logarithmic relationship between
+    classification accuracy and receptive field size, which suggests
+    that large receptive fields are necessary for high-level
     recognition tasks, but with diminishing rewards.
+    For example, note how MobileNets achieve high recognition performance even
+    if using a very compact architecture: with depth-wise convolutions,
+    the receptive field is increased with a small compute footprint.
+    In comparison, VGG-16 requires 27X more multiply-adds than MobileNets, but produces
+    a smaller receptive field size; even if much more complex, VGG's accuracy
+    is only slightly better than MobileNet's.
+    This suggests that networks which can efficiently generate large receptive
+    fields may benefit from enhanced recognition performance.
   </p>
   <p>
-    Recently, efficient network architectures such as
-    <dt-cite key="howard2017mobilenets">MobileNet</dt-cite>
-    were introduced. It is interesting to notice that MobileNet has a larger
-    receptive field than VGG-16, even if using 27X fewer multiply-adds. This is
-    because MobileNet relies on depth-wise convolutions, which effectively
-    increase the network's receptive field with a low number of operations.
+    Let us emphasize, though, that the receptive field size is not the only factor contributing
+    to the improved performance mentioned above. Other factors play a very important
+    role: network depth (i.e., number of layers) and width (i.e., number of filters per layer),
+    residual connections, batch normalization, to name only a few.
+    In other words, while the network's receptive field seem to be a necessary component,
+    by no means it is sufficient.
+  </p>
+  <p>
+    TODO:
+    talk about effective RF.
   </p>
 
 </dt-article>

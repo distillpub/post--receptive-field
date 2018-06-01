@@ -45,7 +45,8 @@
     Today, receptive field computations are needed in a variety of models but are often done by hand, which is both tedious and error-prone. This is because there are no libraries to compute these parameters automatically.
     This work also bridges this gap by introducing an
     <dt-cite key="araujo2017receptive">open-source library</dt-cite>
-    which handily performs the computations presented here. The library is integrated into the tensorflow codebase and can be easily employed to analyze a variety of models.
+    which handily performs the computations presented here. The library is integrated into the tensorflow codebase and can be easily employed to analyze a variety of models,
+    as presented in this article.
   </p>
   <!-- In order to enable the community to better understand the receptive fields of their models,
        we introduce a library -->
@@ -878,12 +879,20 @@
     to the improved performance mentioned above. Other factors play a very important
     role: network depth (i.e., number of layers) and width (i.e., number of filters per layer),
     residual connections, batch normalization, to name only a few.
-    In other words, while the network's receptive field seem to be a necessary component,
+    In other words, while the network's receptive field seems to be a necessary component,
     by no means it is sufficient.
   </p>
   <p>
-    TODO:
-    talk about effective RF.
+    Finally, note that a given feature is not equally impacted by all input pixels within
+    its receptive field region: the input pixels near the center of the receptive field have more "paths" to influence
+    the feature, and consequently carry more weight.
+    The relative importance of each input pixel defines the
+    <i>effective receptive field</i> of the feature.
+    <dt-cite key="luo2016understanding">Recent work</dt-cite>
+    suggested that effective receptive fields have a Gaussian shape,
+    with the peak at the receptive field center. Better understanding the
+    relative importance of input pixels in convolutional neural networks is
+    an active research topic.
   </p>
 
 </dt-article>
@@ -922,6 +931,13 @@
   booktitle = {Proc. NIPS},
   year = {2012},
   url={https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf},
+  }
+  @inproceedings{luo2016understanding,
+  author = {Luo, Wenjie and Li, Yujia and Urtasun, Raquel and Zemel, Richard},
+  title = {Understanding the Effective Receptive Field in Deep Convolutional Neural Networks},
+  booktitle = {Proc. NIPS},
+  year = {2016},
+  url={https://arxiv.org/abs/1701.04128},
   }
   @inproceedings{noh2017large,
   author = {Noh, Hyeonwoo and Araujo, Andre and Sim, Jack and Weyand, Tobias and Han, Bohyung},

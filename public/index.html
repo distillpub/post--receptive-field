@@ -29,7 +29,6 @@
 <dt-article>
   <h1>Computing Receptive Fields of Convolutional Networks</h1>
 
-  <p>TODO: make this intro a little more concise</p>
   <p>
     Deep neural networks are mysterious machine learning models. While they have
     overwhelmingly established state-of-the-art results in many artificial intelligence problems, they can still be difficult to develop
@@ -45,7 +44,7 @@
     Today, receptive field computations are needed in a variety of models but are often done by hand, which is both tedious and error-prone. This is because there are no libraries to compute these parameters automatically.
     This work also bridges this gap by introducing an
     <dt-cite key="araujo2017receptive">open-source library</dt-cite>
-    which handily performs the computations presented here. The library is integrated into the tensorflow codebase and can be easily employed to analyze a variety of models,
+    which handily performs the computations presented here. The library is integrated into the Tensorflow codebase and can be easily employed to analyze a variety of models,
     as presented in this article.
   </p>
   <!-- In order to enable the community to better understand the receptive fields of their models,
@@ -80,7 +79,7 @@
   </p>
 
   <p>
-    Finally, we analyze the receptive fields of modern convolutional neural networks, showcasing results obtained using our open-sourced library.
+    Finally, we analyze the receptive fields of modern convolutional neural networks, showcasing results obtained using our open-source library.
   </p>
 
   <h2>Problem setup</h2>
@@ -123,12 +122,14 @@
     3\) convolution, followed by ReLU, \(1\times 1\) convolution and max-pooling.
   </p>
 
+  <p>TODO: update figure below</p>
+  
   <figure>
     <img src="assets/notation_network.png" style="height:50%">
   </figure>
 
   <p>
-    To simplify the presentation, the calculations presented in this document assume
+    To simplify the presentation, the derivations presented in this document assume
       the network parameters are the same for the horizontal and vertical directions,
       i.e.: the kernel is square, the horizontal and vertical strides are equal, the
       padding applied to the left side of the image is the same as the padding applied
@@ -136,8 +137,7 @@
       is the same as the padding applied to the bottom of the image. This is the most
       common configuration for state-of-the-art networks. Note that this assumption is
       not necessary for the derivations here to work, this is simply for a more
-      concise presentation&mdash; all calculations can be performed separately for
-      the horizontal and vertical directions.
+      concise presentation.
   </p>
 
   <h2>Single-path networks</h2>
@@ -159,9 +159,7 @@
     Define \(r_l\) as the receptive field size of
      the final output feature map \(f_{L}\), with respect to feature map \(f_l\). In
      other words, \(r_l\) corresponds to the number of features in feature map
-     \(f_l\) which contribute to generate one feature in \(f_{L}\). As mentioned
-     above, we compute the receptive field only for one direction (so, if we say, for
-     example, \(r_l=2\), we mean that it is actually a \(2\times 2\) region). Note
+     \(f_l\) which contribute to generate one feature in \(f_{L}\). Note
      that \(r_{L}=1\).
   </p>
 
@@ -189,6 +187,7 @@
       that \(r_{l}=2\).
   </p>
 
+  <p>TODO: update figure below</p>
   <figure>
     <img src="assets/illustration_rf_1.png" style="height:25%">
   </figure>
@@ -309,9 +308,7 @@
       in the output feature map, in many cases it is also critical to precisely
       localize the region which generated a feature. For example, given feature
       \(f_{L}(i, j)\), what is the region in the input image which generated it? This
-      is addressed in this section. Once again, we will focus here on the calculation
-      only over the horizontal direction, while a similar calculation can be performed
-      for the vertical direction.
+      is addressed in this section.
   </p>
 
   <p>
@@ -328,6 +325,7 @@
      \(u_0=-1, v_0=4\).
   </p>
 
+  <p>TODO: update figure below</p>
   <figure>
     <img src="assets/illustration_feature_location.png" style="height:20%">
   </figure>
@@ -516,7 +514,7 @@
 
   <p>
     These expressions will be handy when deriving an algorithm to solve the case
-      for arbitrary computation graphs, presented below.
+      for arbitrary computation graphs, presented in the next section.
   </p>
 
   <p>
@@ -565,8 +563,7 @@
   <p>
     Most state-of-the-art convolutional neural networks today (eg,
     <dt-cite key="he2016deep">ResNet</dt-cite> or
-    <dt-cite key="szegedy2016inception">Inception</dt-cite>
-    ) rely on networks
+    <dt-cite key="szegedy2016inception">Inception</dt-cite>) rely on networks
       where each layer may have more than one input, which
       means that there might be several different paths from the input image to the
       final output feature map. These architectures are usually represented using
@@ -595,6 +592,7 @@
       in the input image are different for the two paths from input to output.
   </p>
 
+  <p>TODO: update figure below</p>
   <figure>
     <img src="assets/alignment_issues.png" style="height:20%">
   </figure>
@@ -646,6 +644,7 @@
       the effective padding is \(1\).
   </p>
 
+  <p>TODO: update figure below</p>
   <figure>
     <img src="assets/aligned_network.png" style="height:25%">
   </figure>
@@ -775,13 +774,15 @@
     the same networks listed above.
   </p>
 
+  <p>
+    TODO: improve plot. In particular, include network names in points.
+    The plot was generated using the spreadsheet at <a href="http://go/cnn-receptive-fields-public">go/cnn-receptive-fields-public</a>
+    (see the "plot" tab).
+  </p>
   <figure>
     <img src="assets/chart_acc_rf.png">
   </figure>
 
-  <p>
-    TODO: improve plot. In particular, include network names in points.
-  </p>
   <p>
     We observe a logarithmic relationship between
     classification accuracy and receptive field size, which suggests

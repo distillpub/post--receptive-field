@@ -564,8 +564,7 @@
 
   <p>
     Most state-of-the-art convolutional neural networks today (eg,
-    <dt-cite key="he2016deep">ResNet</dt-cite>
-    ,
+    <dt-cite key="he2016deep">ResNet</dt-cite> or
     <dt-cite key="szegedy2016inception">Inception</dt-cite>
     ) rely on networks
       where each layer may have more than one input, which
@@ -672,23 +671,23 @@
 
   <p>
     <strong>Algorithm for computing receptive field parameters.</strong>
-    It is straightforward to develop an algorithm that computes the receptive field size and associated parameters for such computation graphs,
-    in order to understand the spatial span of output features, and precisely localize them.
-    To make it concrete, we need to compute three variables:
+    It is straightforward to develop an efficient algorithm that computes the receptive
+    field size and associated parameters for such computation graphs.
+    Naturally, a brute-force approach is to use the expressions presented above to
+    compute the receptive field parameters for each route from the input to output independently,
+    coupled with some bookkeeping in order to compute the parameters for the entire network.
+    This method has a worst-case complexity of
+    \(\mathcal{O}\left(\left|\mathcal{E}\right| \times \left|\mathcal{L}\right|\right)\).
   </p>
-  <ul>
-    <li>\(r_0\): receptive field of output features with respect to input image (positive integer)</li>
-    <li>\(S_0\): effective stride of output features with respect to input image (positive integer)</li>
-    <li>
-      \(P_0\): effective padding of output features with respect to input image (non-negative integer)
-    </li>
-  </ul>
-
   <p>
-    To make it simple and clear, we can start by topologically sorting the computation graph. Then, we can visit each layer (i.e., each node in the graph)
-    from the last (\(L\)) to the first (\(0\)) -- i.e., in reverse topological order.
+    <!-- People may be tempted to apply DFS to this problem, which fails. To -->
+    <!-- make the article more concise, we do not discuss this here. -->
+    But we can do better. Start by topologically sorting the computation graph. Then, we can visit each layer in reverse topological order,
+    from the last (\(L\)) to the first (\(0\)).
     This ensures that all paths from a given layer \(l\) to the output layer have been taken into account
-    when \(l\) is visited. We initialize \(r_L=1\), \(S_L=1\) and \(P_L = 0\), and update \(r_l\), \(S_l\), \(P_l\) as layers are visited, until finally obtaining
+    when \(l\) is visited.
+    We initialize \(r_L=1\), \(S_L=1\) and \(P_L = 0\), and update \(r_l\),
+    \(S_l\), \(P_l\) as layers are visited, until finally obtaining
     \(r_0\), \(S_0\), \(P_0\).
   </p>
   <p>
@@ -726,87 +725,9 @@
   <p>
     Once we reach layer \(0\) (the input image), all
     nodes have been visited and all possible paths to the input image have been
-    analyzed, so \(r_0, S_0, P_0\) are obtained. The complexity of this algorithm is linear on the number of nodes
-    (\(L\)) and on the number of edges (\(M\)): \(O(L+M)\).
-  </p>
-
-  <p>
-    To introduce the algorithm more concretely, we present here a simplified python function that performs this computation.
-    It relies on an external `topological_sort` function.
-    The algorithm can also report if the input
-    graph is not aligned. We release our concrete implementation as part of the tensorflow codebase, under
-    <dt-cite key="araujo2017receptive">tf.contrib.receptive_field</dt-cite>.
-  </p>
-
-  <p>TODO: write the python algorithm using latex/mathjax</p>
-
-  <p>
-    ```
-      Inputs:
-      - Computation graph (directed and acyclic) of a fully-convolutional network.
-      Nodes are denoted N = {n_1, n_2, ..., n_{L}}.
-      Each node represents a layer. Their parameters are:
-      k[], s[], p[], q[] (each of length L).
-      The edges are encoded within each node with a field "inputs", such that
-      n_l.inputs is a vector of length equal to the number of inputs to n_l.
-      Denote n_0 as the input layer which holds the input image.
-      Outputs:
-      - r_0: receptive field size.
-      - S_0: effective stride.
-      - P_0: effective padding.
-  </p>
-
-  <p>
-    Algorithm:
-      1. TOPOLOGICAL_SORT(N)
-      // In the rest of the algorithm, denote nodes such that {n_1, n_2, ...} are
-      // topologically sorted.
-      2. Define vectors r[], S[] and P[], each of length L+1, and initialize them.
-      FOR l = 0 TO L-1:
-      r[l] = -1
-      S[l] = -1
-      P[l] = -1
-      ENDFOR
-      r[L] = 1
-      S[L] = 1
-      P[L] = 0
-      4. FOR l = L DOWNTO 1: // Nodes are visited in reverse topological order.
-      r_input = s[l]*r[l] + k[l] - s[l] // Eq. (1) in this document
-      S_input = s[l]*S[l]               // Eq. (16) in this document
-      P_input = s[l]*P[l] + p[l]        // Eq. (17) in this document
-      FOR j IN n_l.inputs:
-      // Here, j corresponds to the index of each node that connects to l.
-      IF r[j] != -1:
-      // This node has been discovered before.
-      // Check that center of previous "best" path and this path are aligned
-      // (equations (19) and (20) must hold).
-      IF (S[j] != S_input) OR
-      ((r[j]-1)/2 - P[j] != (r_input-1)/2 - P_input):
-      EXIT_WITH_ERROR("Network is not aligned")
-      ENDIF
-      // Keep track of path with largest receptive field.
-      IF r[j]&lt; r_input:
-      r[j] = r_input
-      S[j] = S_input
-      P[j] = P_input
-      ENDIF
-      ELSE
-      // This is the first time we discover this node.
-      r[j] = r_input
-      S[j] = S_input
-      P[j] = P_input
-      ENDIF
-      ENDFOR
-      ENDFOR
-      5. Return r[0], S[0], P[0]
-      ```
-  </p>
-
-  <p>
-    After running this algorithm, it is simple to map an output feature to its
-      receptive field region in the input image, by using
-      \eqref{eq:rf_loc_recurrence_final_left_effective} and
-      \eqref{eq:rf_loc_recurrence_final_right_rewrite}.
+    analyzed, so \(r_0, S_0, P_0\) are obtained. The complexity of this algorithm is
+    \(\mathcal{O}\left(\left|\mathcal{E}\right| + \left|\mathcal{L}\right|\right)\),
+    which is much better than the brute-force alternative.
   </p>
 
   <h2>Discussion: receptive fields of modern networks</h2>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<svg id="svg" height="800" width="800">
+
+  Sorry, your browser does not support inline SVG.
+</svg>
+
+<script type="text/javascript">
+var svgEl = document.getElementById("svg");
+var globals = {
+  "box_width": 50,
+  "box_height": 50,
+  "box_inner_padding": 5,
+  "row_space": 100,
+  "perspective_shift": 18,
+  "perspective_spacing": 4,
+  "stroke_width": 1
+};
+
+var renderRowFn = function(el, row, width, offset, globals) {
+  var htmlStr = '';
+
+  for (var d = 0; d >= 0; d--) {
+    var xPos = offset * globals.box_width;
+    var yPos = (row - 1) * (globals.box_height + globals.row_space);
+    xPos += d * globals.perspective_shift;
+    yPos += d * globals.perspective_shift;
+
+    var cube_depth = globals.perspective_shift - globals.perspective_spacing;
+    for (var i = 0; i < width; i++) {
+      htmlStr += '<rect x="' + xPos + '" y="' + yPos + '" width="' + globals.box_width + '" height="' + globals.box_height + '" style="fill:rgb(255,255,255);stroke-width:' + globals.stroke_width + ';stroke:rgb(140,140,140)" />';
+      // Draw the bottom slanted face of the cube.
+      htmlStr += '<path stroke="rgb(140,140,140)" d="M' + xPos + ' ' + (yPos + globals.box_height) + ' l' + cube_depth + ' ' + cube_depth + ' l' + globals.box_width + ' 0 l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      // Draw the right side slanted face of the cube.
+      htmlStr += '<path stroke="rgb(140,140,140)" d="M' + (xPos + globals.box_width) + ' ' + yPos + ' l' + cube_depth + ' ' + cube_depth + ' l0 ' + globals.box_height + ' l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      xPos += globals.box_width;
+    }
+  }
+
+  el.innerHTML += htmlStr;  
+};
+
+var renderRowFillFn = function(el, row, width, offset, globals) {
+  var xPos = (offset * globals.box_width) + globals.box_inner_padding;
+  var yPos = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_inner_padding;
+  var boxWidth = globals.box_width - globals.box_inner_padding * 2;
+  var boxHeight = globals.box_height - globals.box_inner_padding * 2;
+  var htmlStr = '';
+  for (var i = 0; i < width; i++) {
+    htmlStr += '<rect x="' + xPos + '" y="' + yPos + '" width="' + boxWidth + '" height="' + boxHeight + '" style="fill:rgb(138,159,236);" rx="5" ry="5" />';
+    xPos += globals.box_width;
+  }
+  el.innerHTML += htmlStr;  
+};
+
+var renderFlowFn = function (el, row, width1, width2, offset1, offset2, globals) {
+  var htmlStr = '';
+
+  var xPos1_1 = offset1 * globals.box_width;
+  var xPos1_2 = xPos1_1 + (globals.box_width * width1);
+  var xPos2_1 = offset2 * globals.box_width;
+  var xPos2_2 = xPos2_1 + (globals.box_width * width2);
+  var yPos1 = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_height;
+  var yPos2 = ((row - 0) * (globals.box_height + globals.row_space));
+
+  htmlStr += '<path stroke="#8a9fec" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(224,234,250)"/>';
+
+  el.innerHTML += htmlStr;  
+};
+
+
+//var renderRowFn = function(el, row, width, offset, globals)
+//var renderFlowFn = function (el, row, width1, width2, offset1, offset2, globals)
+
+renderRowFn(svgEl, 1, 9, 1, globals);
+renderRowFillFn(svgEl, 1, 9, 1, globals);
+//renderFlowFn(svgEl, 1, 3, 1, 0, 3, globals);
+//renderFlowFn(svgEl, 1, 3, 1, 2, 4, globals);
+//renderFlowFn(svgEl, 1, 3, 1, 4, 5, globals);
+//renderFlowFn(svgEl, 1, 3, 1, 6, 6, globals);
+//renderFlowFn(svgEl, 1, 3, 1, 8, 7, globals);
+renderFlowFn(svgEl, 1, 3, 1, 1, 1, globals);
+renderFlowFn(svgEl, 1, 5, 1, 1, 7, globals);
+
+renderRowFn(svgEl, 2, 3, 1, globals);
+renderRowFn(svgEl, 2, 3, 7, globals);
+//renderRowFillFn(svgEl, 2, 5, 3, globals);
+//renderFlowFn(svgEl, 2, 3, 1, 3, 4, globals);
+//renderFlowFn(svgEl, 2, 3, 1, 4, 5, globals);
+//renderFlowFn(svgEl, 2, 3, 1, 5, 6, globals);
+renderFlowFn(svgEl, 2, 1, 1, 1, 4, globals);
+renderFlowFn(svgEl, 2, 1, 1, 7, 4, globals);
+
+renderRowFn(svgEl, 3, 3, 4, globals);
+renderRowFillFn(svgEl, 3, 3, 4, globals);
+//renderFlowFn(svgEl, 3, 1, 1, 4, 4, globals);
+//renderFlowFn(svgEl, 3, 1, 1, 5, 5, globals);
+//renderFlowFn(svgEl, 3, 1, 1, 6, 6, globals);
+renderFlowFn(svgEl, 3, 1, 1, 4, 4, globals);
+
+renderRowFn(svgEl, 4, 3, 4, globals);
+renderRowFillFn(svgEl, 4, 3, 4, globals);
+</script>
+
+</body>
+</html>

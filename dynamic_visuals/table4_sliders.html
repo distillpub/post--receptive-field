@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+[data-tip] {
+	position:relative;
+
+}
+[data-tip]:before {
+	content:'';
+	/* hides the tooltip when not hovered */
+	display:none;
+	content:'';
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 5px solid #1a1a1a;	
+	position:absolute;
+	top:20px;
+	right:20px;
+	z-index:8;
+	font-size:0;
+	line-height:0;
+	width:0;
+	height:0;
+}
+[data-tip]:after {
+	display:none;
+	content:attr(data-tip);
+	position:absolute;
+	top:25px;
+	right:0px;
+	padding:5px 8px;
+	background:#1a1a1a;
+	color:#fff;
+	z-index:9;
+	font-size: 0.75em;
+	height:18px;
+	line-height:18px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	white-space:nowrap;
+	word-wrap:normal;
+}
+[data-tip]:hover:before,
+[data-tip]:hover:after {
+	display:block;
+}
+</style>
+</head>
+<body>
+
+<svg id="svg" height="800" width="800">
+
+  Sorry, your browser does not support inline SVG.
+</svg>
+
+<div style="position: absolute; top: 80px; left: 400px; text-align: right;">
+<span>Convolutional Layer</span><br />
+Kernal Size (k1): <span id="value_k1">1</span> <input id="slider_k1" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
+Padding (p1, q1): <span id="value_p1">0</span> <input id="slider_p1" type="range" style="width: 80px;" min="0" max="2" value="0"><br />
+Stride (s1): <span id="value_s1">1</span> <input id="slider_s1" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
+<span id="value_error_1" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
+</div>
+
+<div style="position: absolute; top: 230px; left: 400px; text-align: right;" data-tip="ReLUs only map features one-to-one.">
+<span>ReLU</span><br />
+Kernal Size (k2): <span id="value_k2">1</span> <input id="slider_k2" type="range" style="width: 80px;" min="1" max="3" value="1" disabled><br />
+Padding (p2, q2): <span id="value_p2">0</span> <input id="slider_p2" type="range" style="width: 80px;" min="0" max="1" value="0" disabled><br />
+Stride (s2): <span id="value_s2">1</span> <input id="slider_s2" type="range" style="width: 80px;" min="1" max="3" value="1" disabled><br />
+</div>
+
+<div style="position: absolute; top: 380px; left: 400px; text-align: right;">
+<span>Convolutional Layer</span><br />
+Kernal Size (k3): <span id="value_k3">1</span> <input id="slider_k3" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
+Padding (p3, q3): <span id="value_p3">0</span> <input id="slider_p3" type="range" style="width: 80px;" min="0" max="1" value="0"><br />
+Stride (s3): <span id="value_s3">1</span> <input id="slider_s3" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
+<span id="value_error3" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
+</div>
+
+<div style="position: absolute; top: 530px; left: 400px; text-align: right;" data-tip="Max pools only map features one-to-one.">
+<span>Max Pool</span><br />
+Kernal Size (k4): <span id="value_k4">1</span> <input id="slider_k4" type="range" style="width: 80px;" min="1" max="3" value="1" disabled><br />
+Padding (p4, q4): <span id="value_p4">0</span> <input id="slider_p4" type="range" style="width: 80px;" min="0" max="1" value="0" disabled><br />
+Stride (s4): <span id="value_s4">1</span> <input id="slider_s4" type="range" style="width: 80px;" min="1" max="3" value="1" disabled><br />
+</div>
+
+<script type="text/javascript">
+var svgEl = document.getElementById("svg");
+var globals = {
+  "box_width": 50,
+  "box_height": 50,
+  "box_inner_padding": 5,
+  "row_space": 100,
+  "perspective_shift": 18,
+  "perspective_spacing": 4,
+  "stroke_width": 1
+};
+
+var renderRowFn = function(el, row, width, offset, globals) {
+  var htmlStr = '';
+
+  for (var d = 0; d >= 0; d--) {
+    var xPos = offset * globals.box_width;
+    var yPos = (row - 1) * (globals.box_height + globals.row_space);
+    xPos += d * globals.perspective_shift;
+    yPos += d * globals.perspective_shift;
+
+    var cube_depth = globals.perspective_shift - globals.perspective_spacing;
+    for (var i = 0; i < width; i++) {
+      htmlStr += '<rect x="' + xPos + '" y="' + yPos + '" width="' + globals.box_width + '" height="' + globals.box_height + '" style="fill:rgb(255,255,255);stroke-width:' + globals.stroke_width + ';stroke:rgb(140,140,140)" />';
+      // Draw the bottom slanted face of the cube.
+      htmlStr += '<path stroke="rgb(140,140,140)" d="M' + xPos + ' ' + (yPos + globals.box_height) + ' l' + cube_depth + ' ' + cube_depth + ' l' + globals.box_width + ' 0 l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      // Draw the right side slanted face of the cube.
+      htmlStr += '<path stroke="rgb(140,140,140)" d="M' + (xPos + globals.box_width) + ' ' + yPos + ' l' + cube_depth + ' ' + cube_depth + ' l0 ' + globals.box_height + ' l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      xPos += globals.box_width;
+    }
+  }
+
+  el.innerHTML += htmlStr;  
+};
+
+var renderRowFillFn = function(el, row, width, offset, globals) {
+  var xPos = (offset * globals.box_width) + globals.box_inner_padding;
+  var yPos = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_inner_padding;
+  var boxWidth = globals.box_width - globals.box_inner_padding * 2;
+  var boxHeight = globals.box_height - globals.box_inner_padding * 2;
+  var htmlStr = '';
+  for (var i = 0; i < width; i++) {
+    htmlStr += '<rect x="' + xPos + '" y="' + yPos + '" width="' + boxWidth + '" height="' + boxHeight + '" style="fill:rgb(138,159,236);" rx="5" ry="5" />';
+    xPos += globals.box_width;
+  }
+  el.innerHTML += htmlStr;  
+};
+
+var renderFlowFn = function (el, row, width1, width2, offset1, offset2, globals) {
+  var htmlStr = '';
+
+  var xPos1_1 = offset1 * globals.box_width;
+  var xPos1_2 = xPos1_1 + (globals.box_width * width1);
+  var xPos2_1 = offset2 * globals.box_width;
+  var xPos2_2 = xPos2_1 + (globals.box_width * width2);
+  var yPos1 = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_height;
+  var yPos2 = ((row - 0) * (globals.box_height + globals.row_space));
+
+  htmlStr += '<path stroke="#8a9fec" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(224,234,250)"/>';
+
+  el.innerHTML += htmlStr;  
+};
+
+
+renderRowFn(svgEl, 1, 3, 3, globals);
+renderRowFillFn(svgEl, 1, 3, 3, globals);
+//renderFlowFn(svgEl, 1, 3, 1, 1, 1, globals);
+//renderFlowFn(svgEl, 1, 5, 1, 1, 7, globals);
+
+renderRowFn(svgEl, 2, 3, 3, globals);
+
+var params;
+
+function redoRendering() {
+  document.getElementById("svg").innerHTML = "";
+  renderRowFn(svgEl, 1, 3, 3, globals);
+
+  // k=kernel size, p=padding size, s=stride, w=feature width, i=indent
+  params = [
+    {"k": -1, "p": -1, "s": -1, "w": 3, "i": 3}
+  ];
+
+  for (var i = 1; i <= 4; i++) {
+    var kernel_size = parseInt(document.getElementById("slider_k" + i).value);
+    document.getElementById("value_k" + i).innerText = kernel_size;
+    var padding = parseInt(document.getElementById("slider_p" + i).value);
+    document.getElementById("value_p" + i).innerText = padding;
+    var stride = parseInt(document.getElementById("slider_s" + i).value);
+    document.getElementById("value_s" + i).innerText = stride;
+
+    var input_fw = params[i-1]["w"];
+    var padded_input_fw = input_fw + (2 * padding);
+    var output_fw = Math.ceil((padded_input_fw-(kernel_size-1))/stride);
+    var output_indent = Math.max(0, params[i-1]["i"] - Math.ceil((output_fw - input_fw)/2));
+    
+    params.push({"k": kernel_size, "p": padding, "s": stride, "w": output_fw, "i": output_indent});
+
+    if (document.getElementById("value_error" + i)) {
+      document.getElementById("value_error" + i).style.display = output_fw < 1 ? "block" : "none";
+    }
+
+    for (var j=0, k=0; kernel_size+k-1 < padded_input_fw; k += stride, j++) {
+      //renderFlowFn = function (el, row, width1, width2, offset1, offset2, globals) {
+      renderFlowFn(svgEl, i, kernel_size, 1, params[i-1]["i"]-padding+k, output_indent+j, globals);
+    } 
+    renderRowFn(svgEl, i+1, output_fw, output_indent, globals);
+  }
+};
+
+var nodes = document.querySelectorAll("input");
+for (var i = 0; i < nodes.length; i++) {
+  nodes[i].setAttribute("onchange", "redoRendering();");
+}
+
+redoRendering();
+
+</script>
+
+</body>
+</html>

@@ -3,6 +3,8 @@
 <head>
 <style>
 body {
+  padding: 0;
+  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
   color: rgba(0, 0, 0, 0.6);
   font-size: 13px;
@@ -55,12 +57,12 @@ body {
 </head>
 <body>
 
-<svg id="svg" height="800" width="1424">
+<svg id="svg" height="580" width="800">
 
   Sorry, your browser does not support inline SVG.
 </svg>
 
-<div style="position: absolute; top: 53px; left: 600px; text-align: right;">
+<div style="position: absolute; top: 53px; right: 0px; text-align: right;">
 <b>Convolution</b><br />
 Kernel Size (k1): <span id="value_k1">1</span> <input id="slider_k1" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
 Padding (p1, q1): <span id="value_p1">0</span> <input id="slider_p1" type="range" style="width: 80px;" min="0" max="2" value="0"><br />
@@ -68,14 +70,14 @@ Stride (s1): <span id="value_s1">1</span> <input id="slider_s1" type="range" sty
 <span id="value_error_1" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
 </div>
 
-<div style="position: absolute; top: 183px; left: 600px; text-align: right;" data-tip="ReLUs only map features one-to-one.">
+<div style="position: absolute; top: 183px; right: 0px; text-align: right;" data-tip="ReLUs only map features one-to-one.">
 <b>ReLU</b><br />
 Kernel Size (k2): <span id="value_k2">1</span> <input id="slider_k2" type="range" style="width: 80px;" min="1" max="3" value="1" disabled><br />
 Padding (p2, q2): <span id="value_p2">0</span> <input id="slider_p2" type="range" style="width: 80px;" min="0" max="1" value="0" disabled><br />
 Stride (s2): <span id="value_s2">1</span> <input id="slider_s2" type="range" style="width: 80px;" min="1" max="2" value="1" disabled><br />
 </div>
 
-<div style="position: absolute; top: 313px; left: 600px; text-align: right;">
+<div style="position: absolute; top: 313px; right: 0px; text-align: right;">
 <b>Convolution</b><br />
 Kernel Size (k3): <span id="value_k3">1</span> <input id="slider_k3" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
 Padding (p3, q3): <span id="value_p3">0</span> <input id="slider_p3" type="range" style="width: 80px;" min="0" max="1" value="0"><br />
@@ -83,7 +85,7 @@ Stride (s3): <span id="value_s3">1</span> <input id="slider_s3" type="range" sty
 <span id="value_error3" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
 </div>
 
-<div style="position: absolute; top: 443px; left: 600px; text-align: right;">
+<div style="position: absolute; top: 443px; right: 0px; text-align: right;">
 <b>Max Pooling</b><br />
 Kernel Size (k4): <span id="value_k4">1</span> <input id="slider_k4" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
 Padding (p4, q4): <span id="value_p4">0</span> <input id="slider_p4" type="range" style="width: 80px;" min="0" max="1" value="0"><br />

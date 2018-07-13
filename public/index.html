@@ -177,12 +177,17 @@
 
   <p>
     First, consider the situation where \(k_l=1\): in this case, the \(r_{l}\)
-      features in \(f_{l}\) will cover \(r_{l-1}=s_l\cdot r_{l} - (s_l - 1)\) features
-      in in \(f_{l-1}\). This can be thought of as follows: the first term \(s_l \cdot
-      r_{l}\) covers the entire region where the features come from, but it will cover
-      \(s_l - 1\) too many features, which is why this needs to be deducted. This is
-      illustrated in the figure below, where we need to compute \(r_{l-1}\), given
-      that \(r_{l}=2\).
+    features in \(f_{l}\) will cover \(r_{l-1}=s_l\cdot r_{l} - (s_l - 1)\) features
+    in in \(f_{l-1}\). This can be thought of as follows: the first term \(s_l \cdot
+    r_{l}\) covers the entire region where the features come from, but it will cover
+    \(s_l - 1\) too many features, which is why this needs to be deducted. This is
+    illustrated in the figure below, where we need to compute \(r_{l-1}\), given
+    that \(r_{l}=2\).
+    <dt-fn>
+      As in the illustration below, note that, in some cases, the receptive
+      field region may contain "holes", i.e., some of the input features may be
+      unused for a given layer.
+    </dt-fn>
   </p>
 
   <p>TODO: update figure below</p>
@@ -196,6 +201,15 @@
       use a \(5\times 5\) kernel (\(k_l=5\)), there would be \(2\) extra features used
       on each side, adding \(4\) in total. If \(k_l\) is even, this works as well,
       since the left and right padding will add to \(k_l-1\).
+    <dt-fn>
+      Due to border effects, note that the size of the region in the original
+      image which is used to compute each output feature may be different. This
+      happens if padding is used, in which case the receptive field for
+      border features includes the padded region. Later in the article, we
+      discuss how to compute the receptive field region for each feature,
+      which can be used to determine exactly which image pixels are used for
+      each output feature.
+    </dt-fn>
   </p>
 
   <p>

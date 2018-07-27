@@ -92,6 +92,13 @@
       corresponds to \(f_{L}\).
   </p>
 
+  <p>
+    To simplify the presentation, the derivations presented in this document consider
+    \(1\)-dimensional input signals and feature maps. For higher-dimensional signals
+    (e.g., \(2\)D images), the
+    derivations can be applied to each dimension independently.
+  </p>
+
   <p>Each layer \(l\)'s spatial configuration is parameterized by 4 variables:</p>
 
   <ul>
@@ -108,7 +115,7 @@
   </ul>
 
   <p>
-    We consider layers whose output features depend locally on its input features:
+    We consider layers whose output features depend locally on input features:
       e.g., convolution, pooling, or elementwise operations such as non-linearities,
       addition, filter concatenation. These are commonly used in state-of-the-art
       networks. With a slight abuse of terminology, we define elementwise operations to
@@ -117,26 +124,14 @@
   </p>
   <p>
     Our notation is illustrated with the simple
-    network below, with \(1\)-dimensional feature maps and \(1\)-dimensional depth,
-    for simplicity. In this case, \(L=4\), and the network consists of a \(1\times
-    3\) convolution, followed by ReLU, \(1\times 1\) convolution and max-pooling.
+    network below, with \(1\)-dimensional depth,
+    for simplicity. In this case, \(L=4\), and the network consists of a 
+    a convolution, followed by ReLU, a second convolution and max-pooling.
   </p>
   
   <figure>
     <iframe src="../dynamic_visuals/fig1.html" width="648" height="600" frameBorder="0" scrolling="no">Browser not compatible.</iframe>
   </figure>
-
-  <p>
-    To simplify the presentation, the derivations presented in this document assume
-      the network parameters are the same for the horizontal and vertical directions,
-      i.e.: the kernel is square, the horizontal and vertical strides are equal, the
-      padding applied to the left side of the image is the same as the padding applied
-      to the top of the image, and the padding applied to the right side of the image
-      is the same as the padding applied to the bottom of the image. This is the most
-      common configuration for state-of-the-art networks. Note that this assumption is
-      not necessary for the derivations here to work, this is simply for a more
-      concise presentation.
-  </p>
 
   <h2>Single-path networks</h2>
 

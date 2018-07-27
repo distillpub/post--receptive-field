@@ -49,6 +49,25 @@ var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals) 
   el.innerHTML += htmlStr;
 };
 
+var renderFlowAnnotationFn = function(el, row, width1, width2, offset1, offset2, direction, globals) {
+  var htmlStr = '';
+
+  var xPos1_1 = offset1 * globals.box_width;
+  var xPos1_2 = xPos1_1 + (globals.box_width * width1);
+  var xPos2_1 = offset2 * globals.box_width;
+  var xPos2_2 = xPos2_1 + (globals.box_width * width2);
+  var yPos1 = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_height;
+  var yPos2 = ((row - 0) * (globals.box_height + globals.row_space)) - (globals.row_space / 2);
+  if (direction != 0) {
+    yPos1 += globals.box_height + globals.perspective_shift + 2;
+    yPos2 += globals.box_height + globals.perspective_shift + 2;
+  }
+
+  htmlStr += '<path id="flow_' + (row + 1) + '_' + offset2 + '" class="flow" data-offset1="' + offset1 + '" data-width1="' + width1 + '" stroke="rgb(140,140,140)" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="1.0" fill-opacity="0.4" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(140,140,140)"/>';
+
+  el.innerHTML += htmlStr;
+};
+
 var recursiveFlowUnhide = function(row, offset) {
   var featureEl = document.querySelector("#feature_" + row + "_" + offset);
   if (featureEl) { featureEl.style.fill = "rgb(224,234,250)"; }

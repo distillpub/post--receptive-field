@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<svg id="svg" height="580" width="800">
+
+  Sorry, your browser does not support inline SVG.
+</svg>
+
+<div style="position: absolute; top: 183px; right: 0px; text-align: right;">
+<div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span id="value_k1">1</span></div>
+<div style="height: 20px;">Padding (p<sub>l</sub>, q<sub>l</sub>): <span id="value_p1">0</span></div>
+<div style="height: 20px;">Stride (s<sub>l</sub>): <span id="value_s1">3</span></div>
+</div>
+<div style="position: absolute; top: 55px; left: 170px;">s<sub>l</sub>⋅rl</div>
+<div style="position: absolute; top: 55px; left: 228px;">s<sub>l</sub>-1</div>
+<div style="position: absolute; top: 140px; left: 40px;">f<sub>l-1</sub></div>
+<div style="position: absolute; top: 270px; left: 40px;">f<sub>l</sub></div>
+<div style="position: absolute; top: 345px; left: 170px;">r<sub>l</sub>=2</div>
+
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript">
+var svgEl = document.getElementById("svg");
+var globals = {
+  "box_width": 30,
+  "box_height": 30,
+  "box_inner_padding": 5,
+  "row_space": 100,
+  "perspective_shift": 18,
+  "perspective_spacing": 4,
+  "stroke_width": 1
+};
+
+// function(el, row, width, offset, globals)
+renderRowFn(svgEl, 2, 8, 3, globals);
+// function(el, row, width1, width2, offset1, offset2, globals)
+renderFlowFn(svgEl, 2, 1, 1, 3, 5, globals);
+renderFlowFn(svgEl, 2, 1, 1, 6, 6, globals);
+renderFlowFn(svgEl, 2, 1, 1, 9, 7, globals);
+renderRowFn(svgEl, 3, 3, 5, globals);
+renderFlowAnnotationFn(svgEl, 3, 2, 0, 5, 6, 0, globals);
+renderFlowAnnotationFn(svgEl, 1, 0, 6, 6, 3, 1, globals);
+renderFlowAnnotationFn(svgEl, 1, 0, 2, 8, 7, 1, globals);
+
+//var featureNodes = document.querySelectorAll(".feature");
+//for (var i=0; i < featureNodes.length; i++) {
+//  featureNodes[i].addEventListener("mouseenter", renderSingleFlowStack);
+//}
+
+</script>
+
+</body>
+</html>

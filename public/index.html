@@ -38,7 +38,7 @@
   </p>
 
   <p>
-    In this work, we analyze deep neural networks from a complementary perspective. We present a detailed mathematical derivation to compute receptive fields of modern convolutional neural networks. This can be used to understand the extent to which input signals affect output features. One can also use these expressions to map specific features at any part of the network to the input signal. We are not aware of any existing resources which present these derivations, which motivated us to develop them.
+    In this work, we analyze deep neural networks from a complementary perspective. We present a detailed mathematical derivation to compute receptive fields of modern convolutional neural networks. This can be used to understand the extent to which input signals affect output features. One can also use these expressions to map specific features at any part of the network to the input signal.
   </p>
   <p>
     Today, receptive field computations are needed in a variety of models but are often done by hand, which is both tedious and error-prone. This is because there are no libraries to compute these parameters automatically.
@@ -59,7 +59,7 @@
     We consider fully-convolutional neural networks, and derive their receptive
       field size and receptive field locations for output features with respect to the
       input signal.
-      While the derivations presented here are general enough for any type of signal used at the input of neural networks, we use images as a running example, referring to modern computer vision architectures when appropriate.
+      While the derivations presented here are general enough for any type of signal used at the input of convolutional neural networks, we use images as a running example, referring to modern computer vision architectures when appropriate.
   </p>
   <p>
     First, we derive closed-form expressions when the network has a
@@ -73,9 +73,9 @@
     <dt-cite key="he2016deep">ResNet</dt-cite>
     or
     <dt-cite key="szegedy2016inception">Inception</dt-cite>
-    ). In the latter case, we discuss
-      potential alignment issues and present an algorithm to compute the receptive
-      field size and locations.
+    ). We consider
+    potential alignment issues that arise in this context, and explain
+    an algorithm to compute the receptive field size and locations.
   </p>
 
   <p>

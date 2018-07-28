@@ -192,7 +192,7 @@
   <p>
     For the case where \(k_l > 1\), we just need to add \(k_l-1\) features, which
       will cover those from the left and the right of the region. For example, if we
-      use a \(5\times 5\) kernel (\(k_l=5\)), there would be \(2\) extra features used
+      use a kernel size of \(5\) (\(k_l=5\)), there would be \(2\) extra features used
       on each side, adding \(4\) in total. If \(k_l\) is even, this works as well,
       since the left and right padding will add to \(k_l-1\).
     <dt-fn>
@@ -302,9 +302,9 @@
       special cases. For example, if all kernels are of size 1, naturally the
       receptive field is also of size 1. If all strides are 1, then the receptive
       field will simply be the sum of \((k_l-1)\) over all layers, plus 1, which is
-      simple to see. If the stride is not 1 for a particular layer, the region
+      simple to see. If the stride is greater than 1 for a particular layer, the region
       increases proportionally for all layers below that one. Finally, note that
-      padding is not taken into account into this derivation.
+      padding does not need to be taken into account for this derivation.
   </p>
 
   <h3>Computing receptive field region in input image</h3>
@@ -529,8 +529,7 @@
      expression for the center of the receptive field region which influences a
      particular output feature. This can be used as the location of the feature in
      the input image (as done for recent
-    <dt-cite key="noh2017large">deep learning-based local features</dt-cite>
-    , for
+    <dt-cite key="noh2017large">deep learning-based local features</dt-cite>, for
       example).
   </p>
 

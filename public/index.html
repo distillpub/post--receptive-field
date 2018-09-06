@@ -16,14 +16,16 @@
 </script>
 
 <script type="text/front-matter">
-  title: "Computing Receptive Fields of Convolutional Networks"
+  title: "Computing Receptive Fields of Convolutional Neural Networks"
   description: Detailed derivations and open-source code to analyze the receptive fields of convnets.
   authors:
   - Andre Araujo: http://andrefaraujo.github.io
+  - Wade Norris
   - Jack Sim
   affiliations:
-  - Google Research
-  - Google Research
+  - Google AI
+  - Google AI
+  - Google AI
 </script>
 
 <dt-article>
@@ -601,20 +603,12 @@
   </figure>
 
   <p>
-    In this example, padding is used only for the left (green) branch. Layers 1, 2
-      and 3 are convolutional, and layer 4 performs a simple addition. The input 1D
-      "image" is illustrated on the right. The receptive field regions for the green
-      and orange paths (left and right, respectively) are illustrated above and below
-      the image.
-  </p>
-
-  <p>
-    One can see that the regions used for the different paths are not aligned. For
-      example, the first output feature will take into account the two left-most
-      regions illustrated above and below the image. In contrast, the last feature
-      will use the two right-most regions. The relative position between the green and
-      orange regions is inconsistent for different output features, which leads to a
-      lack of alignment. Also, note that the receptive field size for each output
+    In this example, padding is used only for the left branch. The first three layers
+    are convolutional, while the last layer performs a simple addition.
+    The relative position between the receptive field regions of the left and
+      right paths is inconsistent for different output features, which leads to a
+    lack of alignment (this can be seen by hovering over the different output features).
+    Also, note that the receptive field size for each output
       feature may be different. For the second feature from the left, \(6\) input
       samples are used, while only \(5\) are used for the third feature. This means
       that the receptive field may not be shift-invariant when the network is not

@@ -27,7 +27,7 @@
 </script>
 
 <dt-article>
-  <h1>Computing Receptive Fields of Convolutional Networks</h1>
+  <h1>Computing Receptive Fields of Conv Nets</h1>
 
   <p>
     Deep neural networks are mysterious machine learning models. While they have
@@ -755,10 +755,101 @@
     comprehensive list, including intermediate network end-points, see
     <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/RECEPTIVE_FIELD_TABLE.md">this table</a>.
   </p>
+
   <p>
-    TODO: include table listing RF for only final feature map, for the networks mentioned below.
-    Make table in order of receptive field size (ascending).
-    This will be similar to the table <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/README.md">here</a>).
+<style>
+#model_table > table, th, td {
+  border: 1px solid #dfe2e5;
+  border-collapse: collapse;
+  padding: 6px 13px !important;
+}
+tr:nth-child(even) > td {
+  background-color: rgb(246, 248, 250);
+}
+</style>
+TODO(wnorris): Center table, order by receptive field size?, add column with model year
+<table class="model_table">
+<thead>
+<tr>
+<th align="center">ConvNet Model</th>
+<th align="center">Receptive <br />Field (r)</th>
+<th align="center">Effective <br />Stride (S)</th>
+<th align="center">Effective <br />Padding (P)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">alexnet_v2</td>
+<td align="center">195</td>
+<td align="center">32</td>
+<td align="center">64</td>
+</tr>
+<tr>
+<td align="center">vgg_16</td>
+<td align="center">212</td>
+<td align="center">32</td>
+<td align="center">90</td>
+</tr>
+<tr>
+<td align="center">inception_v2</td>
+<td align="center">699</td>
+<td align="center">32</td>
+<td align="center">318</td>
+</tr>
+<tr>
+<td align="center">inception_v3</td>
+<td align="center">1311</td>
+<td align="center">32</td>
+<td align="center">618</td>
+</tr>
+<tr>
+<td align="center">inception_v4</td>
+<td align="center">2071</td>
+<td align="center">32</td>
+<td align="center">998</td>
+</tr>
+<tr>
+<td align="center">inception_resnet_v2</td>
+<td align="center">3039</td>
+<td align="center">32</td>
+<td align="center">1482</td>
+</tr>
+<tr>
+<td align="center">mobilenet_v1</td>
+<td align="center">315</td>
+<td align="center">32</td>
+<td align="center">126</td>
+</tr>
+<tr>
+<td align="center">mobilenet_v1_075</td>
+<td align="center">315</td>
+<td align="center">32</td>
+<td align="center">126</td>
+</tr>
+<tr>
+<td align="center">resnet_v1_50</td>
+<td align="center">483</td>
+<td align="center">32</td>
+<td align="center">241</td>
+</tr>
+<tr>
+<td align="center">resnet_v1_101</td>
+<td align="center">1027</td>
+<td align="center">32</td>
+<td align="center">513</td>
+</tr>
+<tr>
+<td align="center">resnet_v1_152</td>
+<td align="center">1507</td>
+<td align="center">32</td>
+<td align="center">753</td>
+</tr>
+<tr>
+<td align="center">resnet_v1_200</td>
+<td align="center">1763</td>
+<td align="center">32</td>
+<td align="center">881</td>
+</tr></tbody></table>
   </p>
 
   <p>
@@ -777,13 +868,41 @@
   </p>
 
   <p>
-    TODO: improve plot. In particular, include network names in points.
-    The plot was generated using the spreadsheet at <a href="http://go/cnn-receptive-fields-public">go/cnn-receptive-fields-public</a>
-    (see the "plot" tab).
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Receptive field size (pixels)', 'ImageNet top-1 accuracy'],
+          [195, 57.20], //, 'alexnet_v2'],
+          [212, 71.50], //, 'vgg_16'],
+          [699, 73.90], //, 'inception_v2'],
+          [1311, 78.00], //, 'inception_v3'],
+          [2071, 80.20], //, 'inception_v4'],
+          [3039, 80.40], //, 'inception_resnet_v2'],
+          [483, 75.20], //, 'resnet_v1_50'],
+          [1027, 76.40], //, 'resnet_v1_101'],
+          [1507, 76.80], //, 'resnet_v1_152'],
+          [315, 70.90] //, 'mobilenet_v1']
+        ]);
+
+        var options = {
+          title: '',
+          hAxis: {title: 'Receptive field size (pixels)', minValue: 0, maxValue: 3000},
+          vAxis: {title: 'ImageNet top-1 accuracy', minValue: 50, maxValue: 100},
+          legend: 'none'
+        };
+
+        var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <div id="chart_div" style="width: 700px; height: 500px;"></div>
+TODO(wnorris): Add log scale, add to hoverbox actual model title, add percent symbols, inline model names / put on right legend
   </p>
-  <figure>
-    <img src="assets/chart_acc_rf.png">
-  </figure>
 
   <p>
     We observe a logarithmic relationship between

@@ -878,40 +878,37 @@ tr:nth-child(even) > td {
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawSeriesChart);
 
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Receptive field size (pixels)', 'ImageNet top-1 accuracy'],
-          [195, 57.20], //, 'alexnet_v2'],
-          [212, 71.50], //, 'vgg_16'],
-          [699, 73.90], //, 'inception_v2'],
-          [1311, 78.00], //, 'inception_v3'],
-          [2071, 80.20], //, 'inception_v4'],
-          [3039, 80.40], //, 'inception_resnet_v2'],
-          [483, 75.20], //, 'resnet_v1_50'],
-          [1027, 76.40], //, 'resnet_v1_101'],
-          [1507, 76.80], //, 'resnet_v1_152'],
-          [315, 70.90] //, 'mobilenet_v1']
-        ]);
+    function drawSeriesChart() {
 
-        var options = {
-          title: '',
-          hAxis: {title: 'Receptive field size (pixels)', minValue: 0, maxValue: 3000},
-          vAxis: {title: 'ImageNet top-1 accuracy', minValue: 50, maxValue: 100},
-          legend: 'none'
-        };
+      var data = google.visualization.arrayToDataTable([
+        ['ID', 'Receptive field size (pixels)', 'ImageNet top-1 accuracy', 'Family'],
+        ['alexnet_v2', 195, 0.5720, 'alexnet'],
+        ['vgg_16', 212, 0.7150, 'vgg_16'],
+        ['inception_v2', 699, 0.7390, 'inception'],
+        ['inception_v3', 1311, 0.7800, 'inception'],
+        ['inception_v4', 2071, 0.8020, 'inception'],
+        ['inception_resnet_v2', 3039, 0.8040, 'inception_resnet'],
+        ['resnet_v1_50', 483, 0.7520, 'resnet'],
+        ['resnet_v1_101', 1027, 0.7640, 'resnet'],
+        ['resnet_v1_152', 1507, 0.7680, 'resnet'],
+        ['mobilenet_v1', 315, 0.7090, 'mobilenet']
+      ]);
 
-        var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+      var options = {
+        title: '',
+        hAxis: {title: 'Receptive field size (pixels)', logScale: true, gridlines: {count: 10}, minorGridlines: {count: 10}},
+        vAxis: {title: 'ImageNet top-1 accuracy', format: 'percent'},
+        sizeAxis: {maxSize: 10},
+        bubble: {textStyle: {fontSize: 11}}
+      };
 
-        chart.draw(data, options);
-      }
+      var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
+      chart.draw(data, options);
+    }
     </script>
-    <div id="chart_div" style="width: 700px; height: 500px;"></div>
-  </p>
-
-  <p>
-    TODO(wnorris): Add log scale, add to hoverbox actual model title, add percent symbols, inline model names / put on right legend
+    <div id="series_chart_div" style="width: 900px; height: 500px;"></div>
   </p>
 
   <p>

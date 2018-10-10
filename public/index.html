@@ -898,9 +898,10 @@ tr:nth-child(even) > td {
 
       var options = {
         title: '',
-        hAxis: {title: 'Receptive field size (pixels)', logScale: true, gridlines: {count: 10}, minorGridlines: {count: 10}},
+        hAxis: {title: 'Receptive field size (pixels)', gridlines: {count: 10}},
         vAxis: {title: 'ImageNet top-1 accuracy', format: 'percent'},
         sizeAxis: {maxSize: 10},
+        legend: {position: 'right', textStyle: {fontSize: 12}},
         bubble: {textStyle: {fontSize: 11}}
       };
 
@@ -908,13 +909,12 @@ tr:nth-child(even) > td {
       chart.draw(data, options);
     }
     </script>
-    <div id="series_chart_div" style="width: 650px; height: 500px;"></div>
+    <div style="width: 680px; height: 500px; position: relative;">
+      <div id="series_chart_div" style="width: 680px; height: 500px;"></div>
+      <img style="position: absolute; top: 30px; right: 0px; z-index: 1;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+    </div>
   </p>
 
-  <p>
-    TODO(wnorris): Final touches in this fig. Fix horizontal markers, legend text size. Add little icon that indicates reader can interact with plot.
-  </p>
-  
   <p>
     We observe a logarithmic relationship between
     classification accuracy and receptive field size, which suggests

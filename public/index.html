@@ -35,11 +35,11 @@
     While deep neural networks have overwhelmingly established state-of-the-art
     results in many artificial intelligence problems, they can still be difficult to develop
     and debug. One of the important ways to make progress in this area is to
-    <dt-cite key="olah2017feature">visualize the features learned by the network</dt-cite>.
+    <dt-cite key="olah2017feature">visualize features learned by the network</dt-cite>.
   </p>
 
   <p>
-    In this work, we analyze deep neural networks from a complementary perspective. We present a detailed mathematical derivation to compute receptive fields of convolutional neural networks. This can be used to understand the extent to which input signals affect output features. One can also use these expressions to map specific features at any part of the network to the input signal.
+    In this work, we analyze deep neural networks from a complementary perspective. We present a detailed mathematical derivation to compute receptive fields of convolutional neural networks. This can be used to understand the extent to which input signals affect output features, or to map features at any part of the network to the input signal.
   </p>
   <p>
     Today, receptive field computations are needed in a variety of models but are often done by hand, which is both tedious and error-prone. This is because there are no libraries to compute these parameters automatically.
@@ -67,14 +67,12 @@
     single path from input to output (as in
     <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>
     or
-    <dt-cite key="simonyan2015very">VGG</dt-cite>
-    ). Then, we discuss the
+    <dt-cite key="simonyan2015very">VGG</dt-cite>). Then, we discuss the
       more general case of arbitrary computation graphs with multiple paths from the
       input to the output (as in
     <dt-cite key="he2016deep">ResNet</dt-cite>
     or
-    <dt-cite key="szegedy2016inception">Inception</dt-cite>
-    ). We consider
+    <dt-cite key="szegedy2016inception">Inception</dt-cite>). We consider
     potential alignment issues that arise in this context, and explain
     an algorithm to compute the receptive field size and locations.
   </p>
@@ -148,8 +146,7 @@
       (eg,
     <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>
     or
-    <dt-cite key="simonyan2015very">VGG</dt-cite>
-    ).
+    <dt-cite key="simonyan2015very">VGG</dt-cite>).
   </p>
 
   <h3>Computing receptive field size</h3>
@@ -319,7 +316,7 @@
     <dt-fn>
       Detailed derivations provided in the Appendix.
     </dt-fn>    
-    for \(u_0,v_0\) and obtain its closed-form expression in terms of the
+    for \(u_0,v_0\) and obtain closed-form expressions in terms of the
     network parameters:
   </p>
 
@@ -338,8 +335,7 @@
   </p>
 
   <p>
-    To compute the right-most feature location \(v_0\), a very similar derivation
-      can be performed, to obtain:
+    And for the right-most feature location \(v_0\):
   </p>
 
   <p>
@@ -780,7 +776,7 @@ tr:nth-child(even) > td {
   </p>
   <p>
     We can also relate the growth in receptive fields to increased
-    classification accuracy. The figure below presents a semi-log plot of ImageNet
+    classification accuracy. The figure below plots ImageNet
     top-1 accuracy as a function of the network's receptive field size, for
     the same networks listed above.
   </p>

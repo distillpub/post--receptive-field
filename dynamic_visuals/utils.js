@@ -53,7 +53,7 @@ var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, 
   el.innerHTML += htmlStr;
 };
 
-var renderFlowAnnotationFn = function(el, row, width1, width2, offset1, offset2, direction, globals) {
+var renderFlowAnnotationFn = function(el, row, width1, width2, offset1, offset2, direction, color, globals) {
   var htmlStr = '';
 
   var xPos1_1 = offset1 * globals.box_width;
@@ -67,7 +67,7 @@ var renderFlowAnnotationFn = function(el, row, width1, width2, offset1, offset2,
     yPos2 += globals.box_height + globals.perspective_shift + 2;
   }
 
-  htmlStr += '<path stroke="rgb(140,140,140)" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="1.0" fill-opacity="0.4" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(140,140,140)"/>';
+  htmlStr += '<path stroke="' + color + '" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="1.0" fill-opacity="0.0" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="' + color + '"/>';
 
   el.innerHTML += htmlStr;
 };
@@ -82,7 +82,7 @@ var renderArrowFn = function(el, row, offset, globals) {
   var yPos2 = ((row - 1) * (globals.box_height + globals.row_space)) - (globals.box_height / 2) - 10;
   var yPos3 = ((row - 1) * (globals.box_height + globals.row_space)) - 10;
 
-  htmlStr += '<path stroke="rgb(140,140,140)" d="M' + (xPos2 - 3) + ' ' + yPos1 + ' L ' + (xPos2 - 3) + ' ' + yPos2 + ' L' + xPos1 +' ' + yPos2 + ' L ' + xPos2 + ' ' + yPos3 + ' L ' + xPos3 + ' ' + yPos2 + ' L ' + (xPos2 + 3) + ' ' + yPos2 + ' L ' + (xPos2 + 3) + ' ' + yPos1 + ' Z" opacity="1.0" fill-opacity="0.4" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(140,140,140)"/>';
+  htmlStr += '<path stroke="rgb(89,89,89)" d="M' + (xPos2 - 1) + ' ' + yPos1 + ' L ' + (xPos2 - 1) + ' ' + yPos2 + ' L' + (xPos1 + 10) +' ' + yPos2 + ' L ' + xPos2 + ' ' + (yPos3 - 3) + ' L ' + (xPos3 - 10) + ' ' + yPos2 + ' L ' + (xPos2 + 1) + ' ' + yPos2 + ' L ' + (xPos2 + 1) + ' ' + yPos1 + ' Z" opacity="1.0" fill-opacity="1.0" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(89,89,89)"/>';
 
   el.innerHTML += htmlStr;
 };

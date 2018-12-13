@@ -167,7 +167,7 @@
   <p>
     In this section, we compute recurrence and closed-form expressions for
       fully-convolutional networks with a single path from input to output
-      (eg,
+      (e.g.,
     <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>
     or
     <dt-cite key="simonyan2015very">VGG</dt-cite>).
@@ -429,7 +429,7 @@
     Note the resemblance between \eqref{eq:rf_loc_recurrence_final_left_effective}
       and \eqref{eq:rf_loc_recurrence_u}. By using \(S_l\) and \(P_l\), one can
       compute the locations \(u_l,v_l\) for feature map \(f_l\) given the location at
-      the last feature \(u_{L}\). When one is interested in computing feature
+      the output feature map \(u_{L}\). When one is interested in computing feature
       locations for a given network, it is handy to pre-compute three variables:
       \(P_0,S_0,r_0\). Using these three, one can obtain \(u_0\) using
       \eqref{eq:rf_loc_recurrence_final_left_effective} and \(v_0\) using
@@ -498,9 +498,9 @@
   <h2>Arbitrary computation graphs</h2>
 
   <p>
-    Most state-of-the-art convolutional neural networks today (eg,
+    Most state-of-the-art convolutional neural networks today (e.g.,
     <dt-cite key="he2016deep">ResNet</dt-cite> or
-    <dt-cite key="szegedy2016inception">Inception</dt-cite>) rely on networks
+    <dt-cite key="szegedy2016inception">Inception</dt-cite>) rely on models
       where each layer may have more than one input, which
       means that there might be several different paths from the input image to the
       final output feature map. These architectures are usually represented using
@@ -548,7 +548,7 @@
 
   <p>
     For many computer vision tasks, it is highly desirable that output features be aligned:
-      "image-to-image translation" tasks (eg, semantic segmentation, edge detection,
+      "image-to-image translation" tasks (e.g., semantic segmentation, edge detection,
       surface normal estimation, colorization, etc), local feature matching and
       retrieval, among others.
   </p>

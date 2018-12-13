@@ -33,18 +33,25 @@
 
   <p>
     While deep neural networks have overwhelmingly established state-of-the-art
-    results in many artificial intelligence problems, they can still be difficult to develop
-    and debug. One of the important ways to make progress in this area is to
-    <dt-cite key="olah2017feature">visualize features learned by the network</dt-cite>.
+    results in many artificial intelligence problems, they can still be
+    difficult to develop and debug.
+    Recent research on deep learning understanding has focused on
+    <dt-cite key="olah2017feature">feature visualization</dt-cite>,
+    <dt-cite key="haeffele2017global">theoretical guarantees</dt-cite>,
+    model <dt-cite key="zhou2018interpreting">interpretability</dt-cite> and
+    <dt-cite key="zhang2017understanding">generalization</dt-cite>.
   </p>
 
   <p>
     In this work, we analyze deep neural networks from a complementary
-    perspective. As a first contribution, we present a detailed mathematical
-    derivation to compute
-    receptive fields of convolutional neural networks. This can be used to
-    understand the extent to which input signals affect output features,
-    or to map features at any part of the network to the input signal.
+    perspective, focusing on convolutional models. As our first contribution, we
+    present a mathematical derivation and an efficient algorithm to compute
+    receptive fields of modern
+    convolutional neural networks. This can be used to understand the extent to
+    which input signals affect output features, or to map features at any part
+    of the network to the input signal.
+    To the best of our knowledge, this is the first exposition of receptive
+    field computation for modern convolutional models.
   </p>
   <p>
     Today, receptive field computations are needed in a variety of models. For example,
@@ -53,9 +60,9 @@
     objects over multiple scales.
     However, these computations are often done by hand, which is both tedious and error-prone.
     This is because there are no libraries to compute these parameters automatically.
-    As our second contribution, this work bridges this gap by introducing an
+    As our second contribution, we fill the void by introducing an
     <dt-cite key="araujo2017receptive">open-source library</dt-cite>
-    which handily performs the computations presented here. The library is integrated into the Tensorflow codebase and can be easily employed to analyze a variety of models,
+    which handily performs the computations described here. The library is integrated into the Tensorflow codebase and can be easily employed to analyze a variety of models,
     as presented in this article.
   </p>
   <!-- In order to enable the community to better understand the receptive fields of their models,
@@ -132,7 +139,7 @@
   <p>
     We consider layers whose output features depend locally on input features:
       e.g., convolution, pooling, or elementwise operations such as non-linearities,
-      addition, filter concatenation. These are commonly used in state-of-the-art
+      addition and filter concatenation. These are commonly used in state-of-the-art
       networks. We define elementwise operations to
       have a "kernel size" of \(1\), since each output feature depends on a single
       location of the input feature maps.
@@ -981,6 +988,13 @@ tr:nth-child(even) > td {
   year = {2017},
   url={https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/receptive_field},
   }
+  @inproceedings{haeffele2017global,
+                 author = {Haeffele, B. and Vidal, R.},
+                 title = {Global Optimality in Neural Network Training},
+                 booktitle = {Proc. CVPR},
+                 year = {2017},
+                 url={http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeffele_Global_Optimality_in_CVPR_2017_paper.pdf},
+  }
   @inproceedings{he2016deep,
   author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
   title = {Deep Residual Learning for Image Recognition},
@@ -1035,5 +1049,20 @@ tr:nth-child(even) > td {
   title = {Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning},
   year = {2016},
   url={https://arxiv.org/abs/1602.07261},
+  }
+  @inproceedings{zhang2017understanding,
+                 author = { Zhang, Chiyuan and Bengio, Samy and Hardt, Moritz and Recht, Benjamin and Vinyals, Oriol},
+                 title = {
+                 Understanding Deep Learning Requires Rethinking Generalization},
+                 booktitle = {Proc. ICLR},
+                 year = {2017},
+                 url={https://arxiv.org/abs/1611.03530},
+  }
+  @article{zhou2018interpreting,
+           author = {Zhou, B. and Bau, D. and Oliva, A. and Torralba, A.},
+           title = {Interpreting Deep Visual Representations via Network Dissection},
+           journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+           year = {2018},
+           url={https://arxiv.org/abs/1711.05611}
   }
 </script>

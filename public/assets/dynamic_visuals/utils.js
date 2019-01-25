@@ -11,9 +11,9 @@ var renderRowFn = function(el, row, width, offset, globals) {
     for (var i = 0; i < width; i++) {
       htmlStr += '<rect data-id="feature_' + row + '_' + (offset+i) + '" class="feature feature_' + row + '_' + (offset+i) + '" x="' + xPos + '" y="' + yPos + '" width="' + globals.box_width + '" height="' + globals.box_height + '" style="fill:rgb(255,255,255);stroke-width:' + globals.stroke_width + ';stroke:rgb(140,140,140)" />';
       // Draw the bottom slanted face of the cube.
-      //htmlStr += '<path data-id="featurebottom_' + row + '_' + (offset+i) + '" class="feature featurebottom_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + xPos + ' ' + (yPos + globals.box_height) + ' l' + cube_depth + ' ' + cube_depth + ' l' + globals.box_width + ' 0 l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      htmlStr += '<path data-id="featurebottom_' + row + '_' + (offset+i) + '" class="feature featurebottom_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + xPos + ' ' + (yPos + globals.box_height) + ' l' + cube_depth + ' ' + cube_depth + ' l' + globals.box_width + ' 0 l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
       // Draw the right side slanted face of the cube.
-      //htmlStr += '<path data-id="featureside_' + row + '_' + (offset+i) + '" class="feature featureside_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + (xPos + globals.box_width) + ' ' + yPos + ' l' + cube_depth + ' ' + cube_depth + ' l0 ' + globals.box_height + ' l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      htmlStr += '<path data-id="featureside_' + row + '_' + (offset+i) + '" class="feature featureside_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + (xPos + globals.box_width) + ' ' + yPos + ' l' + cube_depth + ' ' + cube_depth + ' l0 ' + globals.box_height + ' l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
       xPos += globals.box_width;
     }
   }

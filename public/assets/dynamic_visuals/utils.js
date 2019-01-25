@@ -55,6 +55,31 @@ var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, 
   el.innerHTML += htmlStr;
 };
 
+var renderAnnotationFn = function(el, row, width, offset, direction, margin, color, globals) {
+  var htmlStr = '';
+
+  var annotation_height = 10;
+
+  var xPos1 = offset * globals.box_width;
+  var xPos2 = xPos1 + (globals.box_width * width);
+  var yPos1 = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_height;
+  var yPos2 = ((row - 0) * (globals.box_height + globals.row_space)) - (globals.row_space / 2);
+  if (direction != 0) {
+    yPos1 += globals.box_height + globals.perspective_shift + 2;
+    yPos2 += globals.box_height + globals.perspective_shift + 2;
+
+    yPos2 = yPos2 - margin;
+    yPos1 = yPos2 - annotation_height;
+  } else {
+    yPos1 = yPos1 + margin;
+    yPos2 = yPos1 + annotation_height;
+  }
+
+  htmlStr += '<path stroke="' + color + '" d="M' + xPos1 + ' ' + yPos1 + ' L ' + xPos1 + ' ' + yPos2 + ' L ' + xPos1 + ' ' + (yPos1 + yPos2) / 2 + ' L ' + xPos2 + ' ' + (yPos1 + yPos2) / 2 + ' L ' + xPos2 + ' ' + yPos1 + ' L ' + xPos2 + ' ' + yPos2 + '" opacity="1.0" fill-opacity="0.0" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="' + color + '"/>';
+
+  el.innerHTML += htmlStr;
+};
+
 var renderFlowAnnotationFn = function(el, row, width1, width2, offset1, offset2, direction, color, globals) {
   var htmlStr = '';
 

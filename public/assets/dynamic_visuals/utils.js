@@ -11,9 +11,9 @@ var renderRowFn = function(el, row, width, offset, globals) {
     for (var i = 0; i < width; i++) {
       htmlStr += '<rect data-id="feature_' + row + '_' + (offset+i) + '" class="feature feature_' + row + '_' + (offset+i) + '" x="' + xPos + '" y="' + yPos + '" width="' + globals.box_width + '" height="' + globals.box_height + '" style="fill:rgb(255,255,255);stroke-width:' + globals.stroke_width + ';stroke:rgb(140,140,140)" />';
       // Draw the bottom slanted face of the cube.
-      htmlStr += '<path data-id="featurebottom_' + row + '_' + (offset+i) + '" class="feature featurebottom_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + xPos + ' ' + (yPos + globals.box_height) + ' l' + cube_depth + ' ' + cube_depth + ' l' + globals.box_width + ' 0 l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      //htmlStr += '<path data-id="featurebottom_' + row + '_' + (offset+i) + '" class="feature featurebottom_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + xPos + ' ' + (yPos + globals.box_height) + ' l' + cube_depth + ' ' + cube_depth + ' l' + globals.box_width + ' 0 l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
       // Draw the right side slanted face of the cube.
-      htmlStr += '<path data-id="featureside_' + row + '_' + (offset+i) + '" class="feature featureside_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + (xPos + globals.box_width) + ' ' + yPos + ' l' + cube_depth + ' ' + cube_depth + ' l0 ' + globals.box_height + ' l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
+      //htmlStr += '<path data-id="featureside_' + row + '_' + (offset+i) + '" class="feature featureside_' + row + '_' + (offset+i) + '" stroke="rgb(140,140,140)" d="M' + (xPos + globals.box_width) + ' ' + yPos + ' l' + cube_depth + ' ' + cube_depth + ' l0 ' + globals.box_height + ' l-' + cube_depth + ' -' + cube_depth + ' Z" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(255,255,255)"/>'
       xPos += globals.box_width;
     }
   }
@@ -34,7 +34,7 @@ var renderRowFillFn = function(el, row, width, offset, globals) {
   el.innerHTML += htmlStr;  
 };
 
-var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, opt_row_height) {
+var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, opt_row_height, opt_render_dotted_lines) {
   if (opt_row_height === undefined) {
     opt_row_height = 1;
   }
@@ -48,7 +48,9 @@ var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, 
   var yPos1 = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_height;
   var yPos2 = ((row + (opt_row_height - 1)) * (globals.box_height + globals.row_space));
 
-  htmlStr += '<path data-id="flow_' + (row + opt_row_height) + '_' + offset2 + '" class="flow flow_' + (row + opt_row_height) + '_' + offset2 + '" data-offset1="' + offset1 + '" data-width1="' + width1 + '" data-rowheight="' + opt_row_height + '" stroke="#8a9fec" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(224,234,250)"/>';
+  var dashed_str = opt_render_dotted_lines ? ' stroke-dasharray="4"' : '';
+
+  htmlStr += '<path data-id="flow_' + (row + opt_row_height) + '_' + offset2 + '" class="flow flow_' + (row + opt_row_height) + '_' + offset2 + '" data-offset1="' + offset1 + '" data-width1="' + width1 + '" data-rowheight="' + opt_row_height + '" stroke="#8a9fec" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '"' + dashed_str + '" fill="rgb(224,234,250)"/>';
 
   el.innerHTML += htmlStr;
 };

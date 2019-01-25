@@ -34,7 +34,7 @@ var renderRowFillFn = function(el, row, width, offset, globals) {
   el.innerHTML += htmlStr;  
 };
 
-var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, opt_row_height) {
+var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, opt_row_height, opt_render_dotted_lines) {
   if (opt_row_height === undefined) {
     opt_row_height = 1;
   }
@@ -48,7 +48,9 @@ var renderFlowFn = function(el, row, width1, width2, offset1, offset2, globals, 
   var yPos1 = ((row - 1) * (globals.box_height + globals.row_space)) + globals.box_height;
   var yPos2 = ((row + (opt_row_height - 1)) * (globals.box_height + globals.row_space));
 
-  htmlStr += '<path data-id="flow_' + (row + opt_row_height) + '_' + offset2 + '" class="flow flow_' + (row + opt_row_height) + '_' + offset2 + '" data-offset1="' + offset1 + '" data-width1="' + width1 + '" data-rowheight="' + opt_row_height + '" stroke="#8a9fec" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '" fill="rgb(224,234,250)"/>';
+  var dashed_str = opt_render_dotted_lines ? ' stroke-dasharray="4"' : '';
+
+  htmlStr += '<path data-id="flow_' + (row + opt_row_height) + '_' + offset2 + '" class="flow flow_' + (row + opt_row_height) + '_' + offset2 + '" data-offset1="' + offset1 + '" data-width1="' + width1 + '" data-rowheight="' + opt_row_height + '" stroke="#8a9fec" d="M' + xPos1_1 + ' ' + yPos1 + ' C ' + xPos1_1 + ' ' + (yPos1 + 50) + ', ' + xPos2_1 + ' ' + (yPos2 - 50) + ', ' + xPos2_1 + ' ' + yPos2 + ' L' + xPos2_2 +' ' + yPos2 + ' C ' + xPos2_2 + ' ' + (yPos2 - 50) + ', ' + xPos1_2 + ' ' + (yPos1 + 50) + ', ' + xPos1_2 + ' ' + yPos1 + ' Z" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="' + globals.stroke_width + '"' + dashed_str + '" fill="rgb(224,234,250)"/>';
 
   el.innerHTML += htmlStr;
 };

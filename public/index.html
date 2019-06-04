@@ -36,28 +36,49 @@
     results in many artificial intelligence problems, they can still be
     difficult to develop and debug.
     Recent research on deep learning understanding has focused on
-    <dt-cite key="olah2017feature">feature visualization</dt-cite>,
-    <dt-cite key="haeffele2017global">theoretical guarantees</dt-cite>,
-    model <dt-cite key="zhou2018interpreting">interpretability</dt-cite> and
-    <dt-cite key="zhang2017understanding">generalization</dt-cite>.
+    feature visualization (<dt-cite key="olah2017feature">Olah et al.</dt-cite>,
+    <dt-cite key="zeiler2014visualizing">Zeiler & Fergus</dt-cite>),
+    theoretical guarantees (<dt-cite key="haeffele2017global">Haeffele & Vidal</dt-cite>,
+    <dt-cite key="chizat2018onthe">Chizat & Bach</dt-cite>),
+    model interpretability (<dt-cite key="zhou2018interpreting">Zhou et al.</dt-cite>,
+    <dt-cite key="zhou2015object">Zhou et al.</dt-cite>)
+    and generalization
+    (<dt-cite key="zhang2017understanding">Zhang et al.</dt-cite>,
+    <dt-cite key="neyshabur2014insearch">Neyshabur et al.</dt-cite>).
   </p>
 
   <p>
     In this work, we analyze deep neural networks from a complementary
-    perspective, focusing on convolutional models. As our first contribution, we
-    present a mathematical derivation and an efficient algorithm to compute
-    receptive fields of modern
-    convolutional neural networks. This can be used to understand the extent to
-    which input signals affect output features, or to map features at any part
-    of the network to the input signal.
-    To the best of our knowledge, this is the first exposition of receptive
-    field computation for modern convolutional networks.
+    perspective, focusing on convolutional models.
+    We are interested in understanding the extent to
+    which input signals may affect output features, and mapping
+    features at any part of the network to the region in the input that
+    produces them. The key parameter to associate an output feature to an input
+    region is the <i>receptive field</i> of the convolutional network, which is
+    defined as the size of the region in the input that produces the feature.
   </p>
   <p>
-    Today, receptive field computations are needed in a variety of models. For example,
-    for the computer vision application of object detection, it is important
-    to understand a convolutional feature's spatial span in order to represent
-    objects over multiple scales.
+    As our first contribution, we
+    present a mathematical derivation and an efficient algorithm to compute
+    receptive fields of modern convolutional neural networks.
+    Previous work (<dt-cite key="hien2017aguide">Dang-Ha</dt-cite>,
+    <dt-cite key="le2017what">Le and Borji</dt-cite>) discussed receptive field
+    computation for simple convolutional
+    networks where there is a single path from the input to the output,
+    providing recurrence equations that apply to this case.
+    In this work, we revisit these derivations to obtain a closed-form
+    expression for receptive field computation in the single-path case.
+    Furthermore, we extend receptive field computation to modern convolutional
+    networks where there may be multiple paths from the input to the output.
+    To the best of our knowledge, this is the first exposition of receptive
+    field computation for such recent convolutional architectures.
+  </p>
+  <p>
+    Today, receptive field computations are needed in a variety of applications. For example,
+    for the computer vision task of object detection, it is important
+    to represent objects at multiple scales in order to recognize small and large instances;
+    understanding a convolutional feature's spatial span is often required for that goal
+    (e.g., if the receptive field of the network is small, it may not be able to recognize large objects).
     However, these computations are often done by hand, which is both tedious and error-prone.
     This is because there are no libraries to compute these parameters automatically.
     As our second contribution, we fill the void by introducing an
@@ -850,7 +871,8 @@ tr:nth-child(even) > td {
     The relative importance of each input pixel defines the
     <i>effective receptive field</i> of the feature.
     <dt-cite key="luo2016understanding">Recent work</dt-cite>
-    suggested that effective receptive fields have a Gaussian shape,
+    provides a mathematical formulation and a procedure to measure effective
+    receptive fields, experimentally observing a Gaussian shape,
     with the peak at the receptive field center. Better understanding the
     relative importance of input pixels in convolutional neural networks is
     an active research topic.
@@ -988,12 +1010,25 @@ tr:nth-child(even) > td {
   year = {2017},
   url={https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/receptive_field},
   }
+  @inproceedings{chizat2018onthe,
+                 author = {Lenaic Chizat and Francis Bach},
+                 title = {On the Global Convergence of Gradient Descent for Over-parameterized Models using Optimal Transport},
+                 booktitle = {Proc. NIPS},
+                 year = {2018},
+                 url={http://papers.nips.cc/paper/7567-on-the-global-convergence-of-gradient-descent-for-over-parameterized-models-using-optimal-transport.pdf},
+  }
   @inproceedings{haeffele2017global,
                  author = {Haeffele, B. and Vidal, R.},
                  title = {Global Optimality in Neural Network Training},
                  booktitle = {Proc. CVPR},
                  year = {2017},
                  url={http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeffele_Global_Optimality_in_CVPR_2017_paper.pdf},
+  }
+  @article{hien2017aguide,
+  author = {The-Hien Dang-Ha},
+  title = {A Guide to Receptive Field Arithmetic for Convolutional Neural Networks},
+  year = {2017},
+  url={https://medium.com/mlreview/a-guide-to-receptive-field-arithmetic-for-convolutional-neural-networks-e0f514068807},
   }
   @inproceedings{he2016deep,
   author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
@@ -1015,12 +1050,25 @@ tr:nth-child(even) > td {
   year = {2012},
   url={https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf},
   }
+  @article{le2017what,
+  author = {Hung Le and Ali Borji},
+  title = {What are the Receptive, Effective Receptive, and Projective Fields of Neurons in Convolutional Neural Networks?},
+  year = {2017},
+  url={https://arxiv.org/abs/1705.07049},
+  }
   @inproceedings{luo2016understanding,
   author = {Luo, Wenjie and Li, Yujia and Urtasun, Raquel and Zemel, Richard},
   title = {Understanding the Effective Receptive Field in Deep Convolutional Neural Networks},
   booktitle = {Proc. NIPS},
   year = {2016},
   url={https://arxiv.org/abs/1701.04128},
+  }
+  @article{neyshabur2014insearch,
+  author = {Behnam Neyshabur and Ryota Tomioka and Nathan Srebro},
+  title = {In Search of the Real Inductive Bias: On the
+           Role of Implicit Regularization in Deep Learning},
+  year = {2014},
+  url={https://arxiv.org/abs/1412.6614},
   }
   @inproceedings{noh2017large,
   author = {Noh, Hyeonwoo and Araujo, Andre and Sim, Jack and Weyand, Tobias and Han, Bohyung},
@@ -1058,11 +1106,26 @@ tr:nth-child(even) > td {
                  year = {2017},
                  url={https://arxiv.org/abs/1611.03530},
   }
+  @inproceedings{zhou2015object,
+                 author = {B. Zhou, A. Khosla, A. Lapedriza, A. Oliva, and A. Torralba},
+                 title = {Object Detectors Emerge in Deep Scene CNNs},
+                 booktitle = {Proc. ICLR},
+                 year = {2015},
+                 url={https://arxiv.org/abs/1412.6856},
+  }
   @article{zhou2018interpreting,
            author = {Zhou, B. and Bau, D. and Oliva, A. and Torralba, A.},
            title = {Interpreting Deep Visual Representations via Network Dissection},
            journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
            year = {2018},
            url={https://arxiv.org/abs/1711.05611}
+  }
+  @inproceedings{zeiler2014visualizing,
+                 author = {M. D. Zeiler and R. Fergus},
+                 title = {
+                 Visualizing and Understanding Convolutional Networks},
+                 booktitle = {Proc. ECCV},
+                 year = {2014},
+                 url={https://arxiv.org/abs/1311.2901},
   }
 </script>

@@ -62,7 +62,7 @@
     present a mathematical derivation and an efficient algorithm to compute
     receptive fields of modern convolutional neural networks.
     Previous work (<dt-cite key="hien2017aguide">Dang-Ha</dt-cite>,
-    <dt-cite key="le2017what">Le and Borji</dt-cite>) discussed receptive field
+    <dt-cite key="le2017what">Le & Borji</dt-cite>) discussed receptive field
     computation for simple convolutional
     networks where there is a single path from the input to the output,
     providing recurrence equations that apply to this case.
@@ -516,6 +516,14 @@
       case all \(k_l\)'s must be odd).
   </p>
 
+  <p>
+    <strong>Other network operations.</strong>
+    The derivations provided in this section cover most basic operations at the
+    core of convolutional neural networks. A curious reader may be wondering
+    about other commonly-used operations, such as dilation, upsampling, etc. See
+    the appendix for a discussion on these.
+  </p>
+  
   <h2>Arbitrary computation graphs</h2>
 
   <p>
@@ -861,8 +869,15 @@ tr:nth-child(even) > td {
     to the improved performance mentioned above. Other factors play a very important
     role: network depth (i.e., number of layers) and width (i.e., number of filters per layer),
     residual connections, batch normalization, to name only a few.
-    In other words, while the network's receptive field seems to be a necessary component,
+    In other words, while we conjecture that a large receptive field is necessary,
     by no means it is sufficient.
+    <dt-fn>
+      Additional experimentation is needed to confirm this hypothesis: for
+      example, researchers may experimentally investigate how classification
+      accuracy changes as kernel sizes and strides vary for different
+      architectures. This may indicate if, at least for those architectures, a
+      large receptive field is necessary.
+    </dt-fn>
   </p>
   <p>
     Finally, note that a given feature is not equally impacted by all input pixels within
@@ -994,13 +1009,55 @@ tr:nth-child(even) > td {
       \end{align}\)
   </p>
 
+  <h3>Other network operations</h3>
+  <p>
+    <strong>Dilated (atrous) convolution.</strong>
+    Dilations introduce "holes" in a convolutional kernel. While the number of
+    weights in the kernel is unchanged, they are no longer applied to spatially
+    adjacent
+    samples. Dilating a kernel by a factor of \(\alpha\) introduces striding of
+    \(\alpha\) between the samples used when computing the convolution. This
+    means that the spatial span of the kernel (\(k>0\)) is increased to \(\alpha (k-1) + 1\).
+    The above derivations can be reused by simply replacing the kernel size
+    \(k\) by \(\alpha (k-1) + 1\) for all layers using dilations.
+  </p>
+    
+  <p>
+    <strong>Upsampling.</strong>
+    Upsampling is frequently done using interpolation (e.g., bilinear, bicubic
+    or nearest-neighbor methods), resulting in an equal or larger receptive
+    field &mdash; since it relies on one or multiple features from the input.
+    Upsampling layers generally produce output features which depend locally on
+    input features, and for receptive field computation purposes can be
+    considered to have a kernel size equal to the number of input features
+    involved in the computation of an output feature.
+  </p>
+    
+  <p>
+    <strong>Separable convolutions.</strong>
+    Convolutions may be separable in terms of spatial or channel dimensions.
+    The receptive field properties of the separable convolution are
+    identical to its corresponding equivalent non-separable convolution. For
+    example, a \(3 \times 3\) depth-wise separable convolution has a kernel
+    size of \(3\) for receptive field computation purposes.    
+  </p>
+  
+  <p>
+    <strong>Batch normalization.</strong>
+    At inference time, batch normalization consists of feature-wise operations
+    which do not alter the receptive field of the network. During training,
+    however, batch normalization parameters are computed based on all
+    activations from a specific layer, which means that its receptive field is
+    the whole input image.
+  </p>
+
   <h3>Acknowledgments</h3>
   <p>
     We would like to thank Yuning Chai and George Papandreou for their careful review of early drafts of this manuscript.
     Regarding the open-source library, we thank Mark Sandler for helping with the starter code, Liang-Chieh Chen for careful
     code review, and Till Hoffman for improving upon the original code release.
   </p>
-
+  
 </dt-appendix>
 
 <script type="text/bibliography">

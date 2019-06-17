@@ -779,7 +779,7 @@ tr:nth-child(even) > td {
 <td align="center">resnet_v1_200</td>
 <td align="center">1763</td>
 <td align="center">32</td>
-<td align="center">881</td>
+<td align="center">879</td>
 <td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
 </tr>
 <tr>
@@ -823,17 +823,17 @@ tr:nth-child(even) > td {
     function drawSeriesChart() {
 
       var data = google.visualization.arrayToDataTable([
-        ['ID', 'Receptive field size (pixels)', 'ImageNet top-1 accuracy', 'Family', 'Mult-Adds (Billion)'],
-        ['alexnet_v2', 195, 0.5720, 'alexnet', 0.690],
-        ['vgg_16', 212, 0.7150, 'vgg_16', 15.356],
-        ['inception_v2', 699, 0.7390, 'inception', 1.942],
-        ['inception_v3', 1311, 0.7800, 'inception', 2.844],
-        ['inception_v4', 2071, 0.8020, 'inception', 6.135],
-        ['inception_resnet_v2', 3039, 0.8040, 'inception_resnet', 6.482],
-        ['resnet_v1_50', 483, 0.7520, 'resnet', 3.484],
-        ['resnet_v1_101', 1027, 0.7640, 'resnet', 7.197],
-        ['resnet_v1_152', 1507, 0.7680, 'resnet', 10.912],
-        ['mobilenet_v1', 315, 0.7090, 'mobilenet', 0.570]
+        ['ID', 'Receptive field size (pixels)', 'ImageNet top-1 accuracy', 'Family', 'FLOPS (Billion)'],
+        ['alexnet_v2', 195, 0.5720, 'alexnet', 1.38],
+        ['vgg_16', 212, 0.7150, 'vgg_16', 30.71],
+        ['inception_v2', 699, 0.7390, 'inception', 3.88],
+        ['inception_v3', 1311, 0.7800, 'inception', 5.69],
+        ['inception_v4', 2071, 0.8020, 'inception', 12.27],
+        ['inception_resnet_v2', 3039, 0.8040, 'inception_resnet', 12.96],
+        ['resnet_v1_50', 483, 0.7520, 'resnet', 6.97],
+        ['resnet_v1_101', 1027, 0.7640, 'resnet', 14.40],
+        ['resnet_v1_152', 1507, 0.7680, 'resnet', 21.82],
+        ['mobilenet_v1', 315, 0.7090, 'mobilenet', 1.14]
       ]);
 
       var options = {

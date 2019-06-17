@@ -206,7 +206,15 @@
 
   <p>
     As a simple example, consider layer \(L\), which takes features \(f_{L-1}\) as
-      input, and generates \(f_{L}\) as output. It is easy to see that \(k_{L}\)
+      input, and generates \(f_{L}\) as output. Here is an illustration:
+  </p>
+
+  <figure style="height: 200px">
+    <iframe src="assets/dynamic_visuals/fig2b.html" width="500" height="350" frameBorder="0" scrolling="no" style="position: relative; top: -100px;">Browser not compatible.</iframe>
+  </figure>
+
+  <p>
+    It is easy to see that \(k_{L}\)
       features from \(f_{L-1}\) can influence one feature from \(f_{L}\), since each
       feature from \(f_{L}\) is directly connected to \(k_{L}\) features from
       \(f_{L-1}\). So, \(r_{L-1} = k_{L}\).
@@ -233,8 +241,8 @@
     </dt-fn>
   </p>
 
-  <figure>
-    <iframe src="assets/dynamic_visuals/fig2.html" width="500" height="400" frameBorder="0" scrolling="no">Browser not compatible.</iframe>
+  <figure style="height: 250px">
+    <iframe src="assets/dynamic_visuals/fig2.html" width="500" height="350" frameBorder="0" scrolling="no" style="position: relative; top: -80px;">Browser not compatible.</iframe>
   </figure>
 
   <p>
@@ -253,6 +261,10 @@
       each output feature.
     </dt-fn>
   </p>
+
+  <figure style="height: 250px">
+    <iframe src="assets/dynamic_visuals/fig2c.html" width="500" height="350" frameBorder="0" scrolling="no" style="position: relative; top: -80px;">Browser not compatible.</iframe>
+  </figure>
 
   <p>
     So, we obtain the general recurrence equation (which is
@@ -775,7 +787,7 @@ tr:nth-child(even) > td {
 <td align="center">resnet_v1_200</td>
 <td align="center">1763</td>
 <td align="center">32</td>
-<td align="center">881</td>
+<td align="center">879</td>
 <td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
 </tr>
 <tr>
@@ -819,17 +831,17 @@ tr:nth-child(even) > td {
     function drawSeriesChart() {
 
       var data = google.visualization.arrayToDataTable([
-        ['ID', 'Receptive field size (pixels)', 'ImageNet top-1 accuracy', 'Family', 'Mult-Adds (Billion)'],
-        ['alexnet_v2', 195, 0.5720, 'alexnet', 0.690],
-        ['vgg_16', 212, 0.7150, 'vgg_16', 15.356],
-        ['inception_v2', 699, 0.7390, 'inception', 1.942],
-        ['inception_v3', 1311, 0.7800, 'inception', 2.844],
-        ['inception_v4', 2071, 0.8020, 'inception', 6.135],
-        ['inception_resnet_v2', 3039, 0.8040, 'inception_resnet', 6.482],
-        ['resnet_v1_50', 483, 0.7520, 'resnet', 3.484],
-        ['resnet_v1_101', 1027, 0.7640, 'resnet', 7.197],
-        ['resnet_v1_152', 1507, 0.7680, 'resnet', 10.912],
-        ['mobilenet_v1', 315, 0.7090, 'mobilenet', 0.570]
+        ['ID', 'Receptive field size (pixels)', 'ImageNet top-1 accuracy', 'Family', 'FLOPS (Billion)'],
+        ['alexnet_v2', 195, 0.5720, 'alexnet', 1.38],
+        ['vgg_16', 212, 0.7150, 'vgg_16', 30.71],
+        ['inception_v2', 699, 0.7390, 'inception', 3.88],
+        ['inception_v3', 1311, 0.7800, 'inception', 5.69],
+        ['inception_v4', 2071, 0.8020, 'inception', 12.27],
+        ['inception_resnet_v2', 3039, 0.8040, 'inception_resnet', 12.96],
+        ['resnet_v1_50', 483, 0.7520, 'resnet', 6.97],
+        ['resnet_v1_101', 1027, 0.7640, 'resnet', 14.40],
+        ['resnet_v1_152', 1507, 0.7680, 'resnet', 21.82],
+        ['mobilenet_v1', 315, 0.7090, 'mobilenet', 1.14]
       ]);
 
       var options = {

@@ -133,10 +133,11 @@
     To simplify the presentation, the derivations presented in this document consider
     \(1\)-dimensional input signals and feature maps. For higher-dimensional signals
     (e.g., \(2\)D images), the
-    derivations can be applied to each dimension independently.
+    derivations can be applied to each dimension independently. Similarly, the figures
+    depict \(1\)-dimensional depth, since this does not affect the receptive field computation.
   </p>
 
-  <p>Each layer \(l\)'s spatial configuration is parameterized by 4 variables:</p>
+  <p>Each layer \(l\)'s spatial configuration is parameterized by 4 variables, as illustrated in the following figure:</p>
 
   <ul>
     <li>\(k_l\): kernel size (positive integer)</li>
@@ -170,9 +171,8 @@
       location of the input feature maps.
   </p>
   <p>
-    Our notation is illustrated with the simple
-    network below, with \(1\)-dimensional depth,
-    for simplicity. In this case, \(L=4\), and the network consists of a 
+    Our notation is further illustrated with the simple
+    network below. In this case, \(L=4\), and the network consists of a 
     a convolution, followed by ReLU, a second convolution and max-pooling
       <dt-fn>
         We adopt the convention where the first output feature for each layer is

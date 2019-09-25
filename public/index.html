@@ -1,469 +1,532 @@
-<meta charset="utf-8">
-<script src="https://distill.pub/template.v1.js"></script>
+<!DOCTYPE html>
 
-<!-- - Small mathjax addition to support equation numbering. -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://distill.pub/template.v2.js"></script>
 
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
+  <!-- - Small mathjax addition to support equation numbering. -->
 
-<script
-    async
-    type="text/javascript"
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
+  </script>
+
+  <script async type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+    </script>
 
-<script type="text/front-matter">
-  title: "Computing Receptive Fields of Convolutional Neural Networks"
-  description: Detailed derivations and open-source code to analyze the receptive fields of convnets.
-  authors:
-  - Andre Araujo: http://andrefaraujo.github.io
-  - Wade Norris
-  - Jack Sim
-  affiliations:
-  - Google AI
-  - Google AI
-  - Google AI
-</script>
+  <style id="iframe-mobile-fix">
+    figure.iframe-fix {
+      overflow: auto visible;
+    }
+  </style>
 
-<dt-article>
-  <h1>Computing Receptive Fields of Convolutional Neural Networks</h1>
+  <style id="distill-manual-toc">
+    /* TOC */
+    #contents nav a {
+      color: rgba(0, 0, 0, 0.8);
+      border-bottom: none;
+      text-decoration: none;
+    }
 
-  <p>
-    While deep neural networks have overwhelmingly established state-of-the-art
-    results in many artificial intelligence problems, they can still be
-    difficult to develop and debug.
-    Recent research on deep learning understanding has focused on
-    feature visualization (<dt-cite key="olah2017feature">Olah et al.</dt-cite>,
-    <dt-cite key="zeiler2014visualizing">Zeiler & Fergus</dt-cite>),
-    theoretical guarantees (<dt-cite key="haeffele2017global">Haeffele & Vidal</dt-cite>,
-    <dt-cite key="chizat2018onthe">Chizat & Bach</dt-cite>),
-    model interpretability (<dt-cite key="zhou2018interpreting">Zhou et al.</dt-cite>,
-    <dt-cite key="zhou2015object">Zhou et al.</dt-cite>)
-    and generalization
-    (<dt-cite key="zhang2017understanding">Zhang et al.</dt-cite>,
-    <dt-cite key="neyshabur2014insearch">Neyshabur et al.</dt-cite>).
-  </p>
+    #contents nav ul li {
+      margin-bottom: .25em;
+    }
 
-  <p>
-    In this work, we analyze deep neural networks from a complementary
-    perspective, focusing on convolutional models.
-    We are interested in understanding the extent to
-    which input signals may affect output features, and mapping
-    features at any part of the network to the region in the input that
-    produces them. The key parameter to associate an output feature to an input
-    region is the <i>receptive field</i> of the convolutional network, which is
-    defined as the size of the region in the input that produces the feature.
-  </p>
-  <p>
-    As our first contribution, we
-    present a mathematical derivation and an efficient algorithm to compute
-    receptive fields of modern convolutional neural networks.
-    Previous work (<dt-cite key="hien2017aguide">Dang-Ha</dt-cite>,
-    <dt-cite key="le2017what">Le & Borji</dt-cite>) discussed receptive field
-    computation for simple convolutional
-    networks where there is a single path from the input to the output,
-    providing recurrence equations that apply to this case.
-    In this work, we revisit these derivations to obtain a closed-form
-    expression for receptive field computation in the single-path case.
-    Furthermore, we extend receptive field computation to modern convolutional
-    networks where there may be multiple paths from the input to the output.
-    To the best of our knowledge, this is the first exposition of receptive
-    field computation for such recent convolutional architectures.
-  </p>
-  <p>
-    Today, receptive field computations are needed in a variety of applications. For example,
-    for the computer vision task of object detection, it is important
-    to represent objects at multiple scales in order to recognize small and large instances;
-    understanding a convolutional feature's spatial span is often required for that goal
-    (e.g., if the receptive field of the network is small, it may not be able to recognize large objects).
-    However, these computations are often done by hand, which is both tedious and error-prone.
-    This is because there are no libraries to compute these parameters automatically.
-    As our second contribution, we fill the void by introducing an
-    <dt-cite key="araujo2017receptive">open-source library</dt-cite>
-    which handily performs the computations described here. The library is integrated into the Tensorflow codebase and can be easily employed to analyze a variety of models,
-    as presented in this article.
-  </p>
-  <!-- In order to enable the community to better understand the receptive fields of their models,
+    #contents nav a:hover {
+      text-decoration: underline solid rgba(0, 0, 0, 0.6);
+    }
+
+    #contents nav ul {
+      margin-top: 0;
+    }
+
+
+    #contents nav>div {
+      display: block;
+      outline: none;
+      margin-bottom: 0.5em;
+    }
+
+    #contents nav>div>a {
+      font-size: 13px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <d-front-matter>
+    <script id="distill-front-matter" type="text/json">{
+      "title": "Computing Receptive Fields of Convolutional Neural Networks",
+      "description": "Detailed derivations and open-source code to analyze the receptive fields of convnets.",
+      "authors": [
+        {"author": "Andre Araujo", "authorURL": "http://andrefaraujo.github.io", "affiliation": "Google AI", "affiliationURL": "https://ai.google"},
+        {"author": "Wade Norris", "affiliation": "Google AI", "affiliationURL": "https://ai.google"},
+        {"author": "Jack Sim", "affiliation": "Google AI", "affiliationURL": "https://ai.google"}
+      ]
+    }</script>
+  </d-front-matter>
+
+  <d-title>
+    <h1>Computing Receptive Fields of Convolutional Neural Networks</h1>
+  </d-title>
+
+  <d-byline></d-byline>
+
+  <div id="contents" class="base-grid" style="border-top: 1px solid #eee; padding: 1.5rem 0;">
+    <nav class="l-text toc figcaption">
+      <h3>Contents</h3>
+      <div><a href="#overview">Overview of the article</a></div>
+      <div><a href="#problem-setup">Problem setup</a></div>
+      <div><a href="#single-path-networks">Single-path networks</a></div>
+      <ul>
+        <li><a href="#computing-receptive-field-size">Computing receptive field size</a></li>
+        <li><a href="#computing-receptive-field-region">Computing receptive field region in input image</a></li>
+      </ul>
+      <div><a href="#arbitrary-computation-graphs">Arbitrary computation graphs</a></div>
+      <div><a href="#discussion">Discussion: receptive fields of modern networks</a></div>
+    </nav>
+  </div>
+
+
+  <d-article>
+
+    <p>
+      While deep neural networks have overwhelmingly established state-of-the-art
+      results in many artificial intelligence problems, they can still be
+      difficult to develop and debug.
+      Recent research on deep learning understanding has focused on
+      feature visualization <d-cite key="zeiler2014visualizing,olah2017feature"></d-cite>,
+      theoretical guarantees <d-cite key="haeffele2017global,chizat2018onthe"></d-cite>,
+      model interpretability <d-cite key="zhou2015object,zhou2018interpreting"></d-cite>,
+      and generalization <d-cite key="neyshabur2014insearch,zhang2017understanding"></d-cite>.
+    </p>
+
+    <p>
+      In this work, we analyze deep neural networks from a complementary
+      perspective, focusing on convolutional models.
+      We are interested in understanding the extent to
+      which input signals may affect output features, and mapping
+      features at any part of the network to the region in the input that
+      produces them. The key parameter to associate an output feature to an input
+      region is the <i>receptive field</i> of the convolutional network, which is
+      defined as the size of the region in the input that produces the feature.
+    </p>
+    <p>
+      As our first contribution, we
+      present a mathematical derivation and an efficient algorithm to compute
+      receptive fields of modern convolutional neural networks.
+      Previous work <d-cite key="hien2017aguide,le2017what"></d-cite>
+      discussed receptive field
+      computation for simple convolutional
+      networks where there is a single path from the input to the output,
+      providing recurrence equations that apply to this case.
+      In this work, we revisit these derivations to obtain a closed-form
+      expression for receptive field computation in the single-path case.
+      Furthermore, we extend receptive field computation to modern convolutional
+      networks where there may be multiple paths from the input to the output.
+      To the best of our knowledge, this is the first exposition of receptive
+      field computation for such recent convolutional architectures.
+    </p>
+    <p>
+      Today, receptive field computations are needed in a variety of applications. For example,
+      for the computer vision task of object detection, it is important
+      to represent objects at multiple scales in order to recognize small and large instances;
+      understanding a convolutional feature's spatial span is often required for that goal
+      (e.g., if the receptive field of the network is small, it may not be able to recognize large objects).
+      However, these computations are often done by hand, which is both tedious and error-prone.
+      This is because there are no libraries to compute these parameters automatically.
+      As our second contribution, we fill the void by introducing an
+      <d-cite key="araujo2017receptive">open-source library</d-cite>
+      which handily performs the computations described here. The library is integrated into the Tensorflow codebase and
+      can be easily employed to analyze a variety of models,
+      as presented in this article.
+    </p>
+    <!-- In order to enable the community to better understand the receptive fields of their models,
        we introduce a library -->
-  <p>
-    We expect these derivations and open-source code to improve the understanding of complex deep learning models, leading to more productive machine learning research.
-  </p>
+    <p>
+      We expect these derivations and open-source code to improve the understanding of complex deep learning models,
+      leading to more productive machine learning research.
+    </p>
 
-  <h2>Overview of the article</h2>
+    <h2 id="overview">Overview of the article</h2>
 
-  <p>
-    We consider fully-convolutional neural networks, and derive their receptive
+    <p>
+      We consider fully-convolutional neural networks, and derive their receptive
       field size and receptive field locations for output features with respect to the
       input signal.
-      While the derivations presented here are general enough for any type of signal used at the input of convolutional neural networks, we use images as a running example, referring to modern computer vision architectures when appropriate.
-  </p>
-  <p>
-    First, we derive closed-form expressions when the network has a
-    single path from input to output (as in
-    <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>
-    or
-    <dt-cite key="simonyan2015very">VGG</dt-cite>). Then, we discuss the
+      While the derivations presented here are general enough for any type of signal used at the input of convolutional
+      neural networks, we use images as a running example, referring to modern computer vision architectures when
+      appropriate.
+    </p>
+    <p>
+      First, we derive closed-form expressions when the network has a
+      single path from input to output (as in
+      <d-cite key="krizhevsky2012imagenet">AlexNet</d-cite>
+      or
+      <d-cite key="simonyan2015very">VGG</d-cite>). Then, we discuss the
       more general case of arbitrary computation graphs with multiple paths from the
       input to the output (as in
-    <dt-cite key="he2016deep">ResNet</dt-cite>
-    or
-    <dt-cite key="szegedy2016inception">Inception</dt-cite>). We consider
-    potential alignment issues that arise in this context, and explain
-    an algorithm to compute the receptive field size and locations.
-  </p>
+      <d-cite key="he2016deep">ResNet</d-cite>
+      or
+      <d-cite key="szegedy2016inception">Inception</d-cite>). We consider
+      potential alignment issues that arise in this context, and explain
+      an algorithm to compute the receptive field size and locations.
+    </p>
 
-  <p>
-    Finally, we analyze the receptive fields of modern convolutional neural networks, showcasing results obtained using our open-source library.
-  </p>
+    <p>
+      Finally, we analyze the receptive fields of modern convolutional neural networks, showcasing results obtained
+      using our open-source library.
+    </p>
 
-  <h2>Problem setup</h2>
+    <h2 id="problem-setup">Problem setup</h2>
 
-  <p>
-    Consider a fully-convolutional network (FCN) with \(L\) layers, \(l = 1,2,\ldots
+    <p>
+      Consider a fully-convolutional network (FCN) with \(L\) layers, \(l = 1,2,\ldots
       ,L\). Define feature map \(f_l \in R^{h_l\times w_l\times d_l}\) to denote the
       output of the \(l\)-th layer, with height \(h_l\), width \(w_l\) and depth
       \(d_l\). We denote the input image by \(f_0\). The final output feature map
       corresponds to \(f_{L}\).
-  </p>
+    </p>
 
-  <p>
-    To simplify the presentation, the derivations presented in this document consider
-    \(1\)-dimensional input signals and feature maps. For higher-dimensional signals
-    (e.g., \(2\)D images), the
-    derivations can be applied to each dimension independently. Similarly, the figures
-    depict \(1\)-dimensional depth, since this does not affect the receptive field computation.
-  </p>
+    <p>
+      To simplify the presentation, the derivations presented in this document consider
+      \(1\)-dimensional input signals and feature maps. For higher-dimensional signals
+      (e.g., \(2\)D images), the
+      derivations can be applied to each dimension independently. Similarly, the figures
+      depict \(1\)-dimensional depth, since this does not affect the receptive field computation.
+    </p>
 
-  <p>Each layer \(l\)'s spatial configuration is parameterized by 4 variables, as illustrated in the following figure:</p>
+    <p>Each layer \(l\)'s spatial configuration is parameterized by 4 variables, as illustrated in the following figure:
+    </p>
 
-  <ul>
-    <li>\(k_l\): kernel size (positive integer)</li>
-    <li>\(s_l\): stride (positive integer)</li>
-    <li>
-      \(p_l\): padding applied to the left side of the input feature map
-      (non-negative integer)
-      <dt-fn>
-        A more general definition of padding may also be considered: negative
-        padding, interpreted as cropping, can be used in our derivations
-        without any changes. In order to make the article more concise, our
-        presentation focuses solely on non-negative padding.
-      </dt-fn>
-    </li>
-    <li>
-      \(q_l\): padding applied to the right side of the input feature map
-          (non-negative integer)
-    </li>
-  </ul>
+    <ul>
+      <li>\(k_l\): kernel size (positive integer)</li>
+      <li>\(s_l\): stride (positive integer)</li>
+      <li>
+        \(p_l\): padding applied to the left side of the input feature map
+        (non-negative integer)
+        <d-fn>
+          A more general definition of padding may also be considered: negative
+          padding, interpreted as cropping, can be used in our derivations
+          without any changes. In order to make the article more concise, our
+          presentation focuses solely on non-negative padding.
+        </d-fn>
+      </li>
+      <li>
+        \(q_l\): padding applied to the right side of the input feature map
+        (non-negative integer)
+      </li>
+    </ul>
 
-  <figure style="height: 210px;">
-    <iframe src="assets/dynamic_visuals/fig0.html" width="500" height="350" frameBorder="0" scrolling="no" style="position: relative; top: -75px;">Browser not compatible.</iframe>
-  </figure>
+    <figure class="iframe-fix" style="height: 210px;">
+      <iframe src="assets/dynamic_visuals/fig0.html" width="500" height="350" frameBorder="0" scrolling="no"
+        style="position: relative; top: -75px;">Browser not compatible.</iframe>
+    </figure>
 
-  <p>
-    We consider layers whose output features depend locally on input features:
+    <p>
+      We consider layers whose output features depend locally on input features:
       e.g., convolution, pooling, or elementwise operations such as non-linearities,
       addition and filter concatenation. These are commonly used in state-of-the-art
       networks. We define elementwise operations to
       have a "kernel size" of \(1\), since each output feature depends on a single
       location of the input feature maps.
-  </p>
-  <p>
-    Our notation is further illustrated with the simple
-    network below. In this case, \(L=4\), and the network consists of a 
-    a convolution, followed by ReLU, a second convolution and max-pooling
-      <dt-fn>
+    </p>
+    <p>
+      Our notation is further illustrated with the simple
+      network below. In this case, \(L=4\), and the network consists of a
+      a convolution, followed by ReLU, a second convolution and max-pooling
+      <d-fn>
         We adopt the convention where the first output feature for each layer is
         computed by placing the kernel on the left-most position of the input,
         including padding. This convention is adopted by all major deep learning
         libraries.
-      </dt-fn>    
-    .
-  </p>
-  
-  <figure>
-    <iframe src="assets/dynamic_visuals/fig1.html" width="648" height="600" frameBorder="0" scrolling="no">Browser not compatible.</iframe>
-  </figure>
+      </d-fn>
+      .
+    </p>
 
-  <h2>Single-path networks</h2>
+    <figure class="iframe-fix">
+      <iframe src="assets/dynamic_visuals/fig1.html" width="648" height="600" frameBorder="0" scrolling="no">Browser not
+        compatible.</iframe>
+    </figure>
 
-  <p>
-    In this section, we compute recurrence and closed-form expressions for
+    <h2 id="single-path-networks">Single-path networks</h2>
+
+    <p>
+      In this section, we compute recurrence and closed-form expressions for
       fully-convolutional networks with a single path from input to output
       (e.g.,
-    <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>
-    or
-    <dt-cite key="simonyan2015very">VGG</dt-cite>).
-  </p>
+      <d-cite key="krizhevsky2012imagenet">AlexNet</d-cite>
+      or
+      <d-cite key="simonyan2015very">VGG</d-cite>).
+    </p>
 
-  <h3>Computing receptive field size</h3>
+    <h3 id="computing-receptive-field-size">Computing receptive field size</h3>
 
-  <p>
-    Define \(r_l\) as the receptive field size of
-     the final output feature map \(f_{L}\), with respect to feature map \(f_l\). In
-     other words, \(r_l\) corresponds to the number of features in feature map
-     \(f_l\) which contribute to generate one feature in \(f_{L}\). Note
-     that \(r_{L}=1\).
-  </p>
+    <p>
+      Define \(r_l\) as the receptive field size of
+      the final output feature map \(f_{L}\), with respect to feature map \(f_l\). In
+      other words, \(r_l\) corresponds to the number of features in feature map
+      \(f_l\) which contribute to generate one feature in \(f_{L}\). Note
+      that \(r_{L}=1\).
+    </p>
 
-  <p>
-    As a simple example, consider layer \(L\), which takes features \(f_{L-1}\) as
+    <p>
+      As a simple example, consider layer \(L\), which takes features \(f_{L-1}\) as
       input, and generates \(f_{L}\) as output. Here is an illustration:
-  </p>
+    </p>
 
-  <figure style="height: 200px">
-    <iframe src="assets/dynamic_visuals/fig2b.html" width="500" height="350" frameBorder="0" scrolling="no" style="position: relative; top: -100px;">Browser not compatible.</iframe>
-  </figure>
+    <figure class="iframe-fix" style="height: 200px">
+      <iframe src="assets/dynamic_visuals/fig2b.html" width="500" height="350" frameBorder="0" scrolling="no"
+        style="position: relative; top: -100px;">Browser not compatible.</iframe>
+    </figure>
 
-  <p>
-    It is easy to see that \(k_{L}\)
+    <p>
+      It is easy to see that \(k_{L}\)
       features from \(f_{L-1}\) can influence one feature from \(f_{L}\), since each
       feature from \(f_{L}\) is directly connected to \(k_{L}\) features from
       \(f_{L-1}\). So, \(r_{L-1} = k_{L}\).
-  </p>
+    </p>
 
-  <p>
-    Now, consider the more general case where we know \(r_{l}\) and want to compute
+    <p>
+      Now, consider the more general case where we know \(r_{l}\) and want to compute
       \(r_{l-1}\). Each feature \(f_{l}\) is connected to \(k_{l}\) features from
       \(f_{l-1}\).
-  </p>
+    </p>
 
-  <p>
-    First, consider the situation where \(k_l=1\): in this case, the \(r_{l}\)
-    features in \(f_{l}\) will cover \(r_{l-1}=s_l\cdot r_{l} - (s_l - 1)\) features
-    in in \(f_{l-1}\). This is illustrated in the figure below, where \(r_{l}=2\)
-    (highlighted in red). The first term \(s_l \cdot r_{l}\) (green) covers the
-    entire region where the
-    features come from, but it will cover \(s_l - 1\) too many features (purple),
-    which is why it needs to be deducted.
-    <dt-fn>
-      As in the illustration below, note that, in some cases, the receptive
-      field region may contain "holes", i.e., some of the input features may be
-      unused for a given layer.
-    </dt-fn>
-  </p>
+    <p>
+      First, consider the situation where \(k_l=1\): in this case, the \(r_{l}\)
+      features in \(f_{l}\) will cover \(r_{l-1}=s_l\cdot r_{l} - (s_l - 1)\) features
+      in in \(f_{l-1}\). This is illustrated in the figure below, where \(r_{l}=2\)
+      (highlighted in red). The first term \(s_l \cdot r_{l}\) (green) covers the
+      entire region where the
+      features come from, but it will cover \(s_l - 1\) too many features (purple),
+      which is why it needs to be deducted.
+      <d-fn>
+        As in the illustration below, note that, in some cases, the receptive
+        field region may contain "holes", i.e., some of the input features may be
+        unused for a given layer.
+      </d-fn>
+    </p>
 
-  <figure style="height: 250px">
-    <iframe src="assets/dynamic_visuals/fig2.html" width="500" height="350" frameBorder="0" scrolling="no" style="position: relative; top: -80px;">Browser not compatible.</iframe>
-  </figure>
+    <figure class="iframe-fix" style="height: 250px">
+      <iframe src="assets/dynamic_visuals/fig2.html" width="500" height="350" frameBorder="0" scrolling="no"
+        style="position: relative; top: -80px;">Browser not compatible.</iframe>
+    </figure>
 
-  <p>
-    For the case where \(k_l > 1\), we just need to add \(k_l-1\) features, which
+    <p>
+      For the case where \(k_l > 1\), we just need to add \(k_l-1\) features, which
       will cover those from the left and the right of the region. For example, if we
       use a kernel size of \(5\) (\(k_l=5\)), there would be \(2\) extra features used
       on each side, adding \(4\) in total. If \(k_l\) is even, this works as well,
       since the left and right padding will add to \(k_l-1\).
-    <dt-fn>
-      Due to border effects, note that the size of the region in the original
-      image which is used to compute each output feature may be different. This
-      happens if padding is used, in which case the receptive field for
-      border features includes the padded region. Later in the article, we
-      discuss how to compute the receptive field region for each feature,
-      which can be used to determine exactly which image pixels are used for
-      each output feature.
-    </dt-fn>
-  </p>
+      <d-fn>
+        Due to border effects, note that the size of the region in the original
+        image which is used to compute each output feature may be different. This
+        happens if padding is used, in which case the receptive field for
+        border features includes the padded region. Later in the article, we
+        discuss how to compute the receptive field region for each feature,
+        which can be used to determine exactly which image pixels are used for
+        each output feature.
+      </d-fn>
+    </p>
 
-  <figure style="height: 250px">
-    <iframe src="assets/dynamic_visuals/fig2c.html" width="500" height="350" frameBorder="0" scrolling="no" style="position: relative; top: -80px;">Browser not compatible.</iframe>
-  </figure>
+    <figure class="iframe-fix" style="height: 250px">
+      <iframe src="assets/dynamic_visuals/fig2c.html" width="500" height="350" frameBorder="0" scrolling="no"
+        style="position: relative; top: -80px;">Browser not compatible.</iframe>
+    </figure>
 
-  <p>
-    So, we obtain the general recurrence equation (which is
-    <a
+    <p>
+      So, we obtain the general recurrence equation (which is
+      <a
         href="https://en.wikipedia.org/wiki/Recurrence_relation#Solving_first-order_non-homogeneous_recurrence_relations_with_variable_coefficients">
-      first-order,
-          non-homogeneous, with variable
-          coefficients
-    </a>
-    ):
-  </p>
+        first-order,
+        non-homogeneous, with variable
+        coefficients
+      </a>
+      ):
+    </p>
 
-  <p>
-    \(\begin{align}
-    r_{l-1} = s_l \cdot r_{l} + (k_l - s_l)
-    \label{eq:rf_recurrence}\
-    \end{align}\)
-  </p>
+    <p>
+      \(\begin{align}
+      r_{l-1} = s_l \cdot r_{l} + (k_l - s_l)
+      \label{eq:rf_recurrence}\
+      \end{align}\)
+    </p>
 
-  <p>
-    This equation can be used in a recursive algorithm to compute the receptive
-    field size of the network, \(r_0\). However, we can do even better: we can solve
-    the recurrence equation
-    <dt-fn>
-      Detailed derivations provided in the Appendix.
-    </dt-fn>
-    and obtain a solution in terms of the \(k_l\)'s and
-    \(s_l\)'s:
-  </p>
+    <p>
+      This equation can be used in a recursive algorithm to compute the receptive
+      field size of the network, \(r_0\). However, we can do even better: we can <a href="#solving-receptive-field-size" id="return-from-solving-receptive-field-size">solve
+      the recurrence equation</a> and obtain a solution in terms of the \(k_l\)'s and
+      \(s_l\)'s:
+    </p>
 
-  <p>
-    \begin{equation}
+    <p>
+      \begin{equation}
       r_0 = \sum_{l=1}^{L} \left((k_l-1)\prod_{i=1}^{l-1}
       s_i\right) + 1 \label{eq:rf_recurrence_final} \end{equation}
-  </p>
+    </p>
 
-  <p>
-    This expression makes intuitive sense, which can be seen by considering some
-    special cases. For example, if all kernels are of size 1, naturally the
-    receptive field is also of size 1. If all strides are 1, then the receptive
-    field will simply be the sum of \((k_l-1)\) over all layers, plus 1, which is
-    simple to see. If the stride is greater than 1 for a particular layer, the region
-    increases proportionally for all layers below that one. Finally, note that
-    padding does not need to be taken into account for this derivation.
-  </p>
+    <p>
+      This expression makes intuitive sense, which can be seen by considering some
+      special cases. For example, if all kernels are of size 1, naturally the
+      receptive field is also of size 1. If all strides are 1, then the receptive
+      field will simply be the sum of \((k_l-1)\) over all layers, plus 1, which is
+      simple to see. If the stride is greater than 1 for a particular layer, the region
+      increases proportionally for all layers below that one. Finally, note that
+      padding does not need to be taken into account for this derivation.
+    </p>
 
-  <h3>Computing receptive field region in input image</h3>
+    <h3 id="computing-receptive-field-region">Computing receptive field region in input image</h3>
 
-  <p>
-    While it is important to know the size of the region which generates one feature
+    <p>
+      While it is important to know the size of the region which generates one feature
       in the output feature map, in many cases it is also critical to precisely
       localize the region which generated a feature. For example, given feature
       \(f_{L}(i, j)\), what is the region in the input image which generated it? This
       is addressed in this section.
-  </p>
+    </p>
 
-  <p>
-    Let's denote \(u_l\) and \(v_l\) the left-most
-     and right-most coordinates (in \(f_l\)) of the region which is used to compute the
-     desired feature in \(f_{L}\). In these derivations, the coordinates are zero-indexed (i.e., the first feature in each map is at coordinate \(0\)).
+    <p>
+      Let's denote \(u_l\) and \(v_l\) the left-most
+      and right-most coordinates (in \(f_l\)) of the region which is used to compute the
+      desired feature in \(f_{L}\). In these derivations, the coordinates are zero-indexed (i.e., the first feature in
+      each map is at coordinate \(0\)).
 
-     Note that \(u_{L} = v_{L}\) corresponds to the
-     location of the desired feature in \(f_{L}\). The figure below illustrates a
-     simple 2-layer network, where we highlight the region in \(f_0\) which is used
-     to compute the first feature from \(f_2\). Note that in this case the region
-     includes some padding. In this example, \(u_2=v_2=0\), \(u_1=0,v_1=1\), and
-     \(u_0=-1, v_0=4\).
-  </p>
+      Note that \(u_{L} = v_{L}\) corresponds to the
+      location of the desired feature in \(f_{L}\). The figure below illustrates a
+      simple 2-layer network, where we highlight the region in \(f_0\) which is used
+      to compute the first feature from \(f_2\). Note that in this case the region
+      includes some padding. In this example, \(u_2=v_2=0\), \(u_1=0,v_1=1\), and
+      \(u_0=-1, v_0=4\).
+    </p>
 
-  <figure>
-    <iframe src="assets/dynamic_visuals/fig3.html" width="500" height="500" frameBorder="0" scrolling="no">Browser not compatible.</iframe>
-  </figure>
+    <figure class="iframe-fix">
+      <iframe src="assets/dynamic_visuals/fig3.html" width="500" height="500" frameBorder="0" scrolling="no">Browser not
+        compatible.</iframe>
+    </figure>
 
-  <p>
-    We'll start by asking the following question: given \(u_{l}, v_{l}\), can we
+    <p>
+      We'll start by asking the following question: given \(u_{l}, v_{l}\), can we
       compute \(u_{l-1},v_{l-1}\)?
-  </p>
+    </p>
 
-  <p>
-    Start with a simple case: let's say \(u_{l}=0\) (this corresponds to the first
+    <p>
+      Start with a simple case: let's say \(u_{l}=0\) (this corresponds to the first
       position in \(f_{l}\)). In this case, the left-most feature \(u_{l-1}\) will
       clearly be located at \(-p_l\), since the first feature will be generated by
       placing the left end of the kernel over that position. If \(u_{l}=1\), we're
       interested in the second feature, whose left-most position \(u_{l-1}\) is \(-p_l
       + s_l\); for \(u_{l}=2\), \(u_{l-1}=-p_l + 2\cdot s_l\); and so on. In general:
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       u_{l-1}&amp;= -p_l + u_{l}\cdot s_l \label{eq:rf_loc_recurrence_u} \\
       v_{l-1}&amp;= -p_l + v_{l}\cdot s_l + k_l -1
       \label{eq:rf_loc_recurrence_v}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    where the computation of \(v_l\) differs only by adding \(k_l-1\), which is
+    <p>
+      where the computation of \(v_l\) differs only by adding \(k_l-1\), which is
       needed since in this case we want to find the right-most position.
-  </p>
+    </p>
 
-  <p>
-    Note that these expressions are very similar to the recursion derived for the
-    receptive field size \eqref{eq:rf_recurrence}. Again, we could implement a
-    recursion over the network to obtain \(u_l,v_l\) for each layer; but we can also
-    solve 
-    <dt-fn>
-      Detailed derivations provided in the Appendix.
-    </dt-fn>    
-    for \(u_0,v_0\) and obtain closed-form expressions in terms of the
-    network parameters:
-  </p>
+    <p>
+      Note that these expressions are very similar to the recursion derived for the
+      receptive field size \eqref{eq:rf_recurrence}. Again, we could implement a
+      recursion over the network to obtain \(u_l,v_l\) for each layer; but we can also
+      <a href="#solving-receptive-field-region" id="return-from-solving-receptive-field-region">solve for \(u_0,v_0\)</a> and obtain closed-form expressions in terms of the
+      network parameters:
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       u_0&amp;= u_{L}\prod_{i=1}^{L}s_i - \sum_{l=1}^{L}
       p_l\prod_{i=1}^{l-1} s_i
       \label{eq:rf_loc_recurrence_final_left}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    This gives us the left-most feature position in the input image as a function of
+    <p>
+      This gives us the left-most feature position in the input image as a function of
       the padding (\(p_l\)) and stride (\(s_l\)) applied in each layer of the network,
       and of the feature location in the output feature map (\(u_{L}\)).
-  </p>
+    </p>
 
-  <p>
-    And for the right-most feature location \(v_0\):
-  </p>
+    <p>
+      And for the right-most feature location \(v_0\):
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       v_0&amp;= v_{L}\prod_{i=1}^{L}s_i -\sum_{l=1}^{L}(1 + p_l -
       k_l)\prod_{i=1}^{l-1} s_i
       \label{eq:rf_loc_recurrence_final_right}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    Note that, different from \eqref{eq:rf_loc_recurrence_final_left}, this
+    <p>
+      Note that, different from \eqref{eq:rf_loc_recurrence_final_left}, this
       expression also depends on the kernel sizes (\(k_l\)) of each layer.
-  </p>
-  
-  <p>
-    <strong>Relation between receptive field size and region.</strong>
-    You may be wondering that
-     the receptive field size \(r_0\) must be directly related to \(u_0\) and
-     \(v_0\). Indeed, this is the case; it is easy to show that \(r_0 = v_0 - u_0 +
-     1\), which we leave as a follow-up exercise for the curious reader. To
-     emphasize, this means that we can rewrite
-     \eqref{eq:rf_loc_recurrence_final_right} as:
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      <strong>Relation between receptive field size and region.</strong>
+      You may be wondering that
+      the receptive field size \(r_0\) must be directly related to \(u_0\) and
+      \(v_0\). Indeed, this is the case; it is easy to show that \(r_0 = v_0 - u_0 +
+      1\), which we leave as a follow-up exercise for the curious reader. To
+      emphasize, this means that we can rewrite
+      \eqref{eq:rf_loc_recurrence_final_right} as:
+    </p>
+
+    <p>
+      \(\begin{align}
       v_0&amp;= u_0 + r_0 - 1
       \label{eq:rf_loc_recurrence_final_right_rewrite}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    <strong>Effective stride and effective padding.</strong>
-    To compute \(u_0\) and \(v_0\) in practice, it
-     is convenient to define two other variables, which depend only on the paddings
-     and strides of the different layers:
-  </p>
+    <p>
+      <strong>Effective stride and effective padding.</strong>
+      To compute \(u_0\) and \(v_0\) in practice, it
+      is convenient to define two other variables, which depend only on the paddings
+      and strides of the different layers:
+    </p>
 
-  <ul>
-    <li>
-      <em>effective stride</em>
-      \(S_l = \prod_{i=l+1}^{L}s_i\): the stride between a
-         given feature map \(f_l\) and the output feature map \(f_{L}\)
-    </li>
-    <li>
-      <em>effective padding</em>
-      \(P_l = \sum_{m=l+1}^{L}p_m\prod_{i=l+1}^{m-1} s_i\):
-         the padding between a given feature map \(f_l\) and the output feature map
-         \(f_{L}\)
-    </li>
-  </ul>
+    <ul>
+      <li>
+        <em>effective stride</em>
+        \(S_l = \prod_{i=l+1}^{L}s_i\): the stride between a
+        given feature map \(f_l\) and the output feature map \(f_{L}\)
+      </li>
+      <li>
+        <em>effective padding</em>
+        \(P_l = \sum_{m=l+1}^{L}p_m\prod_{i=l+1}^{m-1} s_i\):
+        the padding between a given feature map \(f_l\) and the output feature map
+        \(f_{L}\)
+      </li>
+    </ul>
 
-  <p>
-    With these definitions, we can rewrite \eqref{eq:rf_loc_recurrence_final_left}
+    <p>
+      With these definitions, we can rewrite \eqref{eq:rf_loc_recurrence_final_left}
       as:
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       u_0&amp;= -P_0 + u_{L}\cdot S_0
       \label{eq:rf_loc_recurrence_final_left_effective}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    Note the resemblance between \eqref{eq:rf_loc_recurrence_final_left_effective}
+    <p>
+      Note the resemblance between \eqref{eq:rf_loc_recurrence_final_left_effective}
       and \eqref{eq:rf_loc_recurrence_u}. By using \(S_l\) and \(P_l\), one can
       compute the locations \(u_l,v_l\) for feature map \(f_l\) given the location at
       the output feature map \(u_{L}\). When one is interested in computing feature
@@ -473,43 +536,43 @@
       \eqref{eq:rf_loc_recurrence_final_right_rewrite}. This allows us to obtain the
       mapping from any output feature location to the input region which influences
       it.
-  </p>
+    </p>
 
-  <p>
-    It is also possible to derive recurrence equations for the effective stride and
+    <p>
+      It is also possible to derive recurrence equations for the effective stride and
       effective padding. It is straightforward to show that:
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       S_{l-1}&amp;= s_l \cdot S_l \label{eq:effective_stride_recurrence} \\
       P_{l-1}&amp;= s_l \cdot P_l + p_l \label{eq:effective_padding_recurrence}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    These expressions will be handy when deriving an algorithm to solve the case
+    <p>
+      These expressions will be handy when deriving an algorithm to solve the case
       for arbitrary computation graphs, presented in the next section.
-  </p>
+    </p>
 
-  <p>
-    <strong>Center of receptive field region.</strong>
-    It is also interesting to derive an
-     expression for the center of the receptive field region which influences a
-     particular output feature. This can be used as the location of the feature in
-     the input image (as done for recent
-    <dt-cite key="noh2017large">deep learning-based local features</dt-cite>, for
+    <p>
+      <strong>Center of receptive field region.</strong>
+      It is also interesting to derive an
+      expression for the center of the receptive field region which influences a
+      particular output feature. This can be used as the location of the feature in
+      the input image (as done for recent
+      <d-cite key="noh2017large">deep learning-based local features</d-cite>, for
       example).
-  </p>
+    </p>
 
-  <p>
-    We define the center of the receptive field region for each layer \(l\) as
+    <p>
+      We define the center of the receptive field region for each layer \(l\) as
       \(c_l = \frac{u_l + v_l}{2}\). Given the above expressions for \(u_0,v_0,r_0\),
       it is straightforward to derive \(c_0\) (remember that \(u_{L}=v_{L}\)):
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       c_0&amp;= u_{L}\prod_{i=1}^{L}s_i
       - \sum_{l=1}^{L}
       \left(p_l - \frac{k_l - 1}{2}\right)\prod_{i=1}^{l-1} s_i \nonumber \\&amp;= u_{L}\cdot S_0
@@ -518,10 +581,10 @@
       \nonumber \\&amp;= -P_0 + u_{L}\cdot S_0 + \left(\frac{r_0 - 1}{2}\right)
       \label{eq:rf_loc_recurrence_final_center_effective}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    This expression can be compared to
+    <p>
+      This expression can be compared to
       \eqref{eq:rf_loc_recurrence_final_left_effective} to observe that the center is
       shifted from the left-most pixel by \(\frac{r_0 - 1}{2}\), which makes sense.
       Note that the receptive field centers for the different output features are
@@ -530,76 +593,77 @@
       receptive field regions for the output features will be aligned to the first
       image pixel and located at \({0, S_0, 2S_0, 3S_0, \ldots}\) (note that in this
       case all \(k_l\)'s must be odd).
-  </p>
+    </p>
 
-  <p>
-    <strong>Other network operations.</strong>
-    The derivations provided in this section cover most basic operations at the
-    core of convolutional neural networks. A curious reader may be wondering
-    about other commonly-used operations, such as dilation, upsampling, etc. See
-    the appendix for a discussion on these.
-  </p>
-  
-  <h2>Arbitrary computation graphs</h2>
+    <p>
+      <strong>Other network operations.</strong>
+      The derivations provided in this section cover most basic operations at the
+      core of convolutional neural networks. A curious reader may be wondering
+      about other commonly-used operations, such as dilation, upsampling, etc. You
+      can find a discussion on these <a href="#other-network-operations">in the appendix</a>.
+    </p>
 
-  <p>
-    Most state-of-the-art convolutional neural networks today (e.g.,
-    <dt-cite key="he2016deep">ResNet</dt-cite> or
-    <dt-cite key="szegedy2016inception">Inception</dt-cite>) rely on models
+    <h2 id="arbitrary-computation-graphs">Arbitrary computation graphs</h2>
+
+    <p>
+      Most state-of-the-art convolutional neural networks today (e.g.,
+      <d-cite key="he2016deep">ResNet</d-cite> or
+      <d-cite key="szegedy2016inception">Inception</d-cite>) rely on models
       where each layer may have more than one input, which
       means that there might be several different paths from the input image to the
       final output feature map. These architectures are usually represented using
       directed acyclic computation graphs, where the set of nodes \(\mathcal{L}\)
       represents the layers and the set of edges \(\mathcal{E}\) encodes the
       connections between them (the feature maps flow through the edges).
-  </p>
+    </p>
 
-  <p>
-    The computation presented in the previous section can be used for each of the
+    <p>
+      The computation presented in the previous section can be used for each of the
       possible paths from input to output independently. The situation becomes
       trickier when one wants to take into account all different paths to find the
       receptive field size of the network and the receptive field regions which
       correspond to each of the output features.
-  </p>
+    </p>
 
-  <p>
-    <strong>Alignment issues.</strong>
-    The first potential issue is that one output feature may
-     be computed using misaligned regions of the input image, depending on the
-     path from input to output. Also, the relative position between the image regions
-     used for the computation of each output feature may vary. As a consequence,
-    <strong>the receptive field may not be shift-invariant</strong>
-    . This is illustrated in the
+    <p>
+      <strong>Alignment issues.</strong>
+      The first potential issue is that one output feature may
+      be computed using misaligned regions of the input image, depending on the
+      path from input to output. Also, the relative position between the image regions
+      used for the computation of each output feature may vary. As a consequence,
+      <strong>the receptive field may not be shift-invariant</strong>
+      . This is illustrated in the
       figure below with a toy example, in which case the centers of the regions used
       in the input image are different for the two paths from input to output.
-  </p>
+    </p>
 
-  <figure>
-    <iframe src="assets/dynamic_visuals/fig4.html" width="600" height="450" frameBorder="0" scrolling="no">Browser not compatible.</iframe>
-  </figure>
+    <figure class="iframe-fix">
+      <iframe src="assets/dynamic_visuals/fig4.html" width="600" height="450" frameBorder="0" scrolling="no">Browser not
+        compatible.</iframe>
+    </figure>
 
-  <p>
-    In this example, padding is used only for the left branch. The first three layers
-    are convolutional, while the last layer performs a simple addition.
-    The relative position between the receptive field regions of the left and
+    <p>
+      In this example, padding is used only for the left branch. The first three layers
+      are convolutional, while the last layer performs a simple addition.
+      The relative position between the receptive field regions of the left and
       right paths is inconsistent for different output features, which leads to a
-    lack of alignment (this can be seen by hovering over the different output features).
-    Also, note that the receptive field size for each output
+      lack of alignment (this can be seen by hovering over the different output features).
+      Also, note that the receptive field size for each output
       feature may be different. For the second feature from the left, \(6\) input
       samples are used, while only \(5\) are used for the third feature. This means
       that the receptive field may not be shift-invariant when the network is not
       aligned.
-  </p>
+    </p>
 
-  <p>
-    For many computer vision tasks, it is highly desirable that output features be aligned:
+    <p>
+      For many computer vision tasks, it is highly desirable that output features be aligned:
       "image-to-image translation" tasks (e.g., semantic segmentation, edge detection,
       surface normal estimation, colorization, etc), local feature matching and
       retrieval, among others.
-  </p>
+    </p>
 
-  <p>
-    When the network is aligned, all different paths lead to output features being
+    <p>
+      When the network is aligned, all different paths lead to output features being
       centered consistently in the same locations. All different paths must have the
       same effective stride. It is easy to see that the receptive field size will be
       the largest receptive field among all possible paths. Also, the effective
@@ -608,602 +672,496 @@
       \eqref{eq:rf_loc_recurrence_final_left_effective},
       \eqref{eq:rf_loc_recurrence_final_center_effective} to localize the region which
       generated an output feature.
-  </p>
+    </p>
 
-  <p>
-    The figure below gives one simple example of an aligned network. In this case,
+    <p>
+      The figure below gives one simple example of an aligned network. In this case,
       the two different paths lead to the features being centered at the same
       locations. The receptive field size is \(3\), the effective stride is \(4\) and
       the effective padding is \(1\).
-  </p>
+    </p>
 
-  <figure>
-    <iframe src="assets/dynamic_visuals/fig5.html" width="600" height="450" frameBorder="0" scrolling="no">Browser not compatible.</iframe>
-  </figure>
+    <figure class="iframe-fix">
+      <iframe src="assets/dynamic_visuals/fig5.html" width="600" height="450" frameBorder="0" scrolling="no">Browser not
+        compatible.</iframe>
+    </figure>
 
-  <p>
-    <strong>Alignment criteria</strong>
-    . More precisely, for a network to be aligned at every
+    <p>
+      <strong>Alignment criteria</strong>
+      . More precisely, for a network to be aligned at every
       layer, we need every possible pair of paths \(i\) and \(j\) to have
       \(c_l^{(i)} = c_l^{(j)}\) for any layer \(l\) and output feature \(u_{L}\). For
       this to happen, we can see from
       \eqref{eq:rf_loc_recurrence_final_center_effective} that two conditions must be
       satisfied:
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       S_l^{(i)}&amp;= S_l^{(j)} \label{eq:align_crit_1} \\
-      -P_l^{(i)} + \left(\frac{r_l^{(i)} - 1}{2}\right)&amp;= -P_l^{(j)} + \left(\frac{r_l^{(j)} - 1}{2}\right) \label{eq:align_crit_2}
+      -P_l^{(i)} + \left(\frac{r_l^{(i)} - 1}{2}\right)&amp;= -P_l^{(j)} + \left(\frac{r_l^{(j)} - 1}{2}\right)
+      \label{eq:align_crit_2}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>for all \(i,j,l\).</p>
+    <p>for all \(i,j,l\).</p>
 
-  <p>
-    <strong>Algorithm for computing receptive field parameters: sketch.</strong>
-    It is straightforward to develop an efficient algorithm that computes the receptive
-    field size and associated parameters for such computation graphs.
-    Naturally, a brute-force approach is to use the expressions presented above to
-    compute the receptive field parameters for each route from the input to output independently,
-    coupled with some bookkeeping in order to compute the parameters for the entire network.
-    This method has a worst-case complexity of
-    \(\mathcal{O}\left(\left|\mathcal{E}\right| \times \left|\mathcal{L}\right|\right)\).
-  </p>
-  <p>
-    <!-- People may be tempted to apply DFS to this problem, which fails. To -->
-    <!-- make the article more concise, we do not discuss this here. -->    
-    But we can do better. Start by topologically sorting the computation graph.
-    The sorted representation arranges the layers in order of dependence: each
-    layer's output only depends on layers that appear before it.
-    By visiting layers in reverse topological order, we ensure that all paths
-    from a given layer \(l\) to the output layer \(L\) have been taken into account
-    when \(l\) is visited. Once the input layer \(l=0\) is reached, all paths
-    have been considered and the receptive field parameters of the entire model
-    are obtained. The complexity of this algorithm is
-    \(\mathcal{O}\left(\left|\mathcal{E}\right| + \left|\mathcal{L}\right|\right)\),
-    which is much better than the brute-force alternative.
-  </p>
-  <p>
-    As each layer is visited, some bookkeeping must be done in order to keep
-    track of the network's receptive field parameters. In particular, note that
-    there might be several different paths from layer \(l\) to the output layer
-    \(L\). In order to handle this situation, we keep track of the parameters
-    for \(l\) and update them if a new path with larger receptive field is found,
-    using expressions \eqref{eq:rf_recurrence}, \eqref{eq:effective_stride_recurrence}
-    and \eqref{eq:effective_padding_recurrence}.
-    Similarly, as the graph is traversed, it is important to check that the network is aligned.
-    This can be done by making sure that the receptive field parameters of different paths satisfy
-    \eqref{eq:align_crit_1} and \eqref{eq:align_crit_2}.
-  </p>
-  
-  <h2>Discussion: receptive fields of modern networks</h2>
+    <p>
+      <strong>Algorithm for computing receptive field parameters: sketch.</strong>
+      It is straightforward to develop an efficient algorithm that computes the receptive
+      field size and associated parameters for such computation graphs.
+      Naturally, a brute-force approach is to use the expressions presented above to
+      compute the receptive field parameters for each route from the input to output independently,
+      coupled with some bookkeeping in order to compute the parameters for the entire network.
+      This method has a worst-case complexity of
+      \(\mathcal{O}\left(\left|\mathcal{E}\right| \times \left|\mathcal{L}\right|\right)\).
+    </p>
+    <p>
+      <!-- People may be tempted to apply DFS to this problem, which fails. To -->
+      <!-- make the article more concise, we do not discuss this here. -->
+      But we can do better. Start by topologically sorting the computation graph.
+      The sorted representation arranges the layers in order of dependence: each
+      layer's output only depends on layers that appear before it.
+      By visiting layers in reverse topological order, we ensure that all paths
+      from a given layer \(l\) to the output layer \(L\) have been taken into account
+      when \(l\) is visited. Once the input layer \(l=0\) is reached, all paths
+      have been considered and the receptive field parameters of the entire model
+      are obtained. The complexity of this algorithm is
+      \(\mathcal{O}\left(\left|\mathcal{E}\right| + \left|\mathcal{L}\right|\right)\),
+      which is much better than the brute-force alternative.
+    </p>
+    <p>
+      As each layer is visited, some bookkeeping must be done in order to keep
+      track of the network's receptive field parameters. In particular, note that
+      there might be several different paths from layer \(l\) to the output layer
+      \(L\). In order to handle this situation, we keep track of the parameters
+      for \(l\) and update them if a new path with larger receptive field is found,
+      using expressions \eqref{eq:rf_recurrence}, \eqref{eq:effective_stride_recurrence}
+      and \eqref{eq:effective_padding_recurrence}.
+      Similarly, as the graph is traversed, it is important to check that the network is aligned.
+      This can be done by making sure that the receptive field parameters of different paths satisfy
+      \eqref{eq:align_crit_1} and \eqref{eq:align_crit_2}.
+    </p>
 
-  <p>
-    In this section, we present the receptive field parameters of modern
-    convolutional networks
-    <dt-fn>
-      The models used for receptive field computations, as well as the accuracy reported on Imagenet experiments,
-      are drawn from the <a href="https://github.com/tensorflow/models/tree/master/research/slim">TF-Slim repository</a>.
-    </dt-fn>
-    , which were computed using the new open-source
-    library (script
-    <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/python/util/examples/rf_benchmark.py">here</a>).
-    The pre-computed parameters for
-    <dt-cite key="krizhevsky2012imagenet">AlexNet</dt-cite>,
-    <dt-cite key="simonyan2015very">VGG</dt-cite>,
-    <dt-cite key="he2016deep">ResNet</dt-cite>,
-    <dt-cite key="szegedy2016inception">Inception</dt-cite>
-    and
-    <dt-cite key="howard2017mobilenets">MobileNet</dt-cite>
-    are presented in the table below.
-    For a more
-    comprehensive list, including intermediate network end-points, see
-    <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/RECEPTIVE_FIELD_TABLE.md">this table</a>.
-  </p>
+    <h2 id="discussion">Discussion: receptive fields of modern networks</h2>
 
-  <p>
-<style>
-#model_table > table, th, td {
-  border: 1px solid #dfe2e5;
-  border-collapse: collapse;
-  padding: 6px 13px !important;
-}
-tr:nth-child(even) > td {
-  background-color: rgb(246, 248, 250);
-}
-</style>
-<table class="model_table" style="margin: 0px auto;">
-<thead>
-<tr>
-<th align="center">ConvNet Model</th>
-<th align="center">Receptive <br />Field (r)</th>
-<th align="center">Effective <br />Stride (S)</th>
-<th align="center">Effective <br />Padding (P)</th>
-<th align="center">Model Year</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">alexnet_v2</td>
-<td align="center">195</td>
-<td align="center">32</td>
-<td align="center">64</td>
-<td align="center"><a href="https://arxiv.org/abs/1404.5997v2" target="_new">2014</a></td>
-</tr>
-<tr>
-<td align="center">vgg_16</td>
-<td align="center">212</td>
-<td align="center">32</td>
-<td align="center">90</td>
-<td align="center"><a href="https://arxiv.org/abs/1409.1556" target="_new">2014</a></td>
-</tr>
-<tr>
-<td align="center">mobilenet_v1</td>
-<td align="center">315</td>
-<td align="center">32</td>
-<td align="center">126</td>
-<td align="center"><a href="https://arxiv.org/abs/1704.04861" target="_new">2017</a></td>
-</tr>
-<tr>
-<td align="center">mobilenet_v1_075</td>
-<td align="center">315</td>
-<td align="center">32</td>
-<td align="center">126</td>
-<td align="center"><a href="https://arxiv.org/abs/1704.04861" target="_new">2017</a></td>
-</tr>
-<tr>
-<td align="center">resnet_v1_50</td>
-<td align="center">483</td>
-<td align="center">32</td>
-<td align="center">239</td>
-<td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
-</tr>
-<tr>
-<td align="center">inception_v2</td>
-<td align="center">699</td>
-<td align="center">32</td>
-<td align="center">318</td>
-<td align="center"><a href="https://arxiv.org/abs/1502.03167" target="_new">2015</a></td>
-</tr>
-<tr>
-<td align="center">resnet_v1_101</td>
-<td align="center">1027</td>
-<td align="center">32</td>
-<td align="center">511</td>
-<td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
-</tr>
-<tr>
-<td align="center">inception_v3</td>
-<td align="center">1311</td>
-<td align="center">32</td>
-<td align="center">618</td>
-<td align="center"><a href="https://arxiv.org/abs/1512.00567" target="_new">2015</a></td>
-</tr>
-<tr>
-<td align="center">resnet_v1_152</td>
-<td align="center">1507</td>
-<td align="center">32</td>
-<td align="center">751</td>
-<td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
-</tr>
-<tr>
-<td align="center">resnet_v1_200</td>
-<td align="center">1763</td>
-<td align="center">32</td>
-<td align="center">879</td>
-<td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
-</tr>
-<tr>
-<td align="center">inception_v4</td>
-<td align="center">2071</td>
-<td align="center">32</td>
-<td align="center">998</td>
-<td align="center"><a href="https://arxiv.org/abs/1602.07261" target="_new">2016</a></td>
-</tr>
-<tr>
-<td align="center">inception_resnet_v2</td>
-<td align="center">3039</td>
-<td align="center">32</td>
-<td align="center">1482</td>
-<td align="center"><a href="https://arxiv.org/abs/1602.07261" target="_new">2016</a></td>
-</tr>
-</tbody></table>
-  </p>
+    <p>
+      In this section, we present the receptive field parameters of modern
+      convolutional networks
+      <d-fn>
+        The models used for receptive field computations, as well as the accuracy reported on Imagenet experiments,
+        are drawn from the <a href="https://github.com/tensorflow/models/tree/master/research/slim">TF-Slim
+          repository</a>.
+      </d-fn>
+      , which were computed using the new open-source
+      library (script
+      <a
+        href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/python/util/examples/rf_benchmark.py">here</a>).
+      The pre-computed parameters for
+      <d-cite key="krizhevsky2012imagenet">AlexNet</d-cite>,
+      <d-cite key="simonyan2015very">VGG</d-cite>,
+      <d-cite key="he2016deep">ResNet</d-cite>,
+      <d-cite key="szegedy2016inception">Inception</d-cite>
+      and
+      <d-cite key="howard2017mobilenets">MobileNet</d-cite>
+      are presented in the table below.
+      For a more
+      comprehensive list, including intermediate network end-points, see
+      <a
+        href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/RECEPTIVE_FIELD_TABLE.md">this
+        table</a>.
+    </p>
 
-  <p>
-    As models evolved, from
-    AlexNet, to VGG, to ResNet and Inception, the receptive fields increased
-    (which is a natural consequence of the increased number of layers).
-    In the most recent networks, the receptive field usually covers the entire input image:
-    this means that the context used by each feature in the final output feature map
-    includes all of the input pixels.
-  </p>
-  <p>
-    We can also relate the growth in receptive fields to increased
-    classification accuracy. The figure below plots ImageNet
-    top-1 accuracy as a function of the network's receptive field size, for
-    the same networks listed above. The circle size for each data point is
-    proportional to the number of floating-point operations for each
-    architecture.
-  </p>
+    <p>
+      <style>
+        #model_table>table,
+        th,
+        td {
+          border: 1px solid #dfe2e5;
+          border-collapse: collapse;
+          padding: 6px 13px !important;
+        }
 
-  <p>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawSeriesChart);
+        tr:nth-child(even)>td {
+          background-color: rgb(246, 248, 250);
+        }
+      </style>
+      <table class="model_table" style="margin: 0px auto;">
+        <thead>
+          <tr>
+            <th align="center">ConvNet Model</th>
+            <th align="center">Receptive <br />Field (r)</th>
+            <th align="center">Effective <br />Stride (S)</th>
+            <th align="center">Effective <br />Padding (P)</th>
+            <th align="center">Model Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="center">alexnet_v2</td>
+            <td align="center">195</td>
+            <td align="center">32</td>
+            <td align="center">64</td>
+            <td align="center"><a href="https://arxiv.org/abs/1404.5997v2" target="_new">2014</a></td>
+          </tr>
+          <tr>
+            <td align="center">vgg_16</td>
+            <td align="center">212</td>
+            <td align="center">32</td>
+            <td align="center">90</td>
+            <td align="center"><a href="https://arxiv.org/abs/1409.1556" target="_new">2014</a></td>
+          </tr>
+          <tr>
+            <td align="center">mobilenet_v1</td>
+            <td align="center">315</td>
+            <td align="center">32</td>
+            <td align="center">126</td>
+            <td align="center"><a href="https://arxiv.org/abs/1704.04861" target="_new">2017</a></td>
+          </tr>
+          <tr>
+            <td align="center">mobilenet_v1_075</td>
+            <td align="center">315</td>
+            <td align="center">32</td>
+            <td align="center">126</td>
+            <td align="center"><a href="https://arxiv.org/abs/1704.04861" target="_new">2017</a></td>
+          </tr>
+          <tr>
+            <td align="center">resnet_v1_50</td>
+            <td align="center">483</td>
+            <td align="center">32</td>
+            <td align="center">239</td>
+            <td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
+          </tr>
+          <tr>
+            <td align="center">inception_v2</td>
+            <td align="center">699</td>
+            <td align="center">32</td>
+            <td align="center">318</td>
+            <td align="center"><a href="https://arxiv.org/abs/1502.03167" target="_new">2015</a></td>
+          </tr>
+          <tr>
+            <td align="center">resnet_v1_101</td>
+            <td align="center">1027</td>
+            <td align="center">32</td>
+            <td align="center">511</td>
+            <td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
+          </tr>
+          <tr>
+            <td align="center">inception_v3</td>
+            <td align="center">1311</td>
+            <td align="center">32</td>
+            <td align="center">618</td>
+            <td align="center"><a href="https://arxiv.org/abs/1512.00567" target="_new">2015</a></td>
+          </tr>
+          <tr>
+            <td align="center">resnet_v1_152</td>
+            <td align="center">1507</td>
+            <td align="center">32</td>
+            <td align="center">751</td>
+            <td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
+          </tr>
+          <tr>
+            <td align="center">resnet_v1_200</td>
+            <td align="center">1763</td>
+            <td align="center">32</td>
+            <td align="center">879</td>
+            <td align="center"><a href="https://arxiv.org/abs/1512.03385" target="_new">2015</a></td>
+          </tr>
+          <tr>
+            <td align="center">inception_v4</td>
+            <td align="center">2071</td>
+            <td align="center">32</td>
+            <td align="center">998</td>
+            <td align="center"><a href="https://arxiv.org/abs/1602.07261" target="_new">2016</a></td>
+          </tr>
+          <tr>
+            <td align="center">inception_resnet_v2</td>
+            <td align="center">3039</td>
+            <td align="center">32</td>
+            <td align="center">1482</td>
+            <td align="center"><a href="https://arxiv.org/abs/1602.07261" target="_new">2016</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
 
-    function drawSeriesChart() {
+    <p>
+      As models evolved, from
+      AlexNet, to VGG, to ResNet and Inception, the receptive fields increased
+      (which is a natural consequence of the increased number of layers).
+      In the most recent networks, the receptive field usually covers the entire input image:
+      this means that the context used by each feature in the final output feature map
+      includes all of the input pixels.
+    </p>
+    <p>
+      We can also relate the growth in receptive fields to increased
+      classification accuracy. The figure below plots ImageNet
+      top-1 accuracy as a function of the network's receptive field size, for
+      the same networks listed above. The circle size for each data point is
+      proportional to the number of floating-point operations for each
+      architecture.
+    </p>
 
-      var data = google.visualization.arrayToDataTable([
-        ['ID', 'Receptive field size (pixels)', 'ImageNet top-1 accuracy', 'Family', 'FLOPS (Billion)'],
-        ['alexnet_v2', 195, 0.5720, 'alexnet', 1.38],
-        ['vgg_16', 212, 0.7150, 'vgg_16', 30.71],
-        ['inception_v2', 699, 0.7390, 'inception', 3.88],
-        ['inception_v3', 1311, 0.7800, 'inception', 5.69],
-        ['inception_v4', 2071, 0.8020, 'inception', 12.27],
-        ['inception_resnet_v2', 3039, 0.8040, 'inception_resnet', 12.96],
-        ['resnet_v1_50', 483, 0.7520, 'resnet', 6.97],
-        ['resnet_v1_101', 1027, 0.7640, 'resnet', 14.40],
-        ['resnet_v1_152', 1507, 0.7680, 'resnet', 21.82],
-        ['mobilenet_v1', 315, 0.7090, 'mobilenet', 1.14]
-      ]);
+    <p>
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawSeriesChart);
 
-      var options = {
-        title: '',
-        hAxis: {title: 'Receptive field size (pixels)', gridlines: {count: 10}},
-        vAxis: {title: 'ImageNet top-1 accuracy', format: 'percent'},
-        sizeAxis: {maxSize: 10},
-        legend: {position: 'right', textStyle: {fontSize: 12}},
-        bubble: {textStyle: {fontSize: 11}}
-      };
+        function drawSeriesChart() {
 
-      var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
-      chart.draw(data, options);
-    }
-    </script>
-    <div style="width: 680px; height: 500px; position: relative;">
-      <div id="series_chart_div" style="position: relative; left: -30px; width: 680px; height: 500px;"></div>
-    </div>
-  </p>
+          var data = google.visualization.arrayToDataTable([
+            ['ID', 'Receptive field size (pixels)', 'ImageNet top-1 accuracy', 'Family', 'FLOPS (Billion)'],
+            ['alexnet_v2', 195, 0.5720, 'alexnet', 1.38],
+            ['vgg_16', 212, 0.7150, 'vgg_16', 30.71],
+            ['inception_v2', 699, 0.7390, 'inception', 3.88],
+            ['inception_v3', 1311, 0.7800, 'inception', 5.69],
+            ['inception_v4', 2071, 0.8020, 'inception', 12.27],
+            ['inception_resnet_v2', 3039, 0.8040, 'inception_resnet', 12.96],
+            ['resnet_v1_50', 483, 0.7520, 'resnet', 6.97],
+            ['resnet_v1_101', 1027, 0.7640, 'resnet', 14.40],
+            ['resnet_v1_152', 1507, 0.7680, 'resnet', 21.82],
+            ['mobilenet_v1', 315, 0.7090, 'mobilenet', 1.14]
+          ]);
 
-  <p>
-    We observe a logarithmic relationship between
-    classification accuracy and receptive field size, which suggests
-    that large receptive fields are necessary for high-level
-    recognition tasks, but with diminishing rewards.
-    For example, note how MobileNets achieve high recognition performance even
-    if using a very compact architecture: with depth-wise convolutions,
-    the receptive field is increased with a small compute footprint.
-    In comparison, VGG-16 requires 27X more multiply-adds than MobileNets, but produces
-    a smaller receptive field size; even if much more complex, VGG's accuracy
-    is only slightly better than MobileNet's.
-    This suggests that networks which can efficiently generate large receptive
-    fields may enjoy enhanced recognition performance.
-  </p>
-  <p>
-    Let us emphasize, though, that the receptive field size is not the only factor contributing
-    to the improved performance mentioned above. Other factors play a very important
-    role: network depth (i.e., number of layers) and width (i.e., number of filters per layer),
-    residual connections, batch normalization, to name only a few.
-    In other words, while we conjecture that a large receptive field is necessary,
-    by no means it is sufficient.
-    <dt-fn>
-      Additional experimentation is needed to confirm this hypothesis: for
-      example, researchers may experimentally investigate how classification
-      accuracy changes as kernel sizes and strides vary for different
-      architectures. This may indicate if, at least for those architectures, a
-      large receptive field is necessary.
-    </dt-fn>
-  </p>
-  <p>
-    Finally, note that a given feature is not equally impacted by all input pixels within
-    its receptive field region: the input pixels near the center of the receptive field have more "paths" to influence
-    the feature, and consequently carry more weight.
-    The relative importance of each input pixel defines the
-    <i>effective receptive field</i> of the feature.
-    <dt-cite key="luo2016understanding">Recent work</dt-cite>
-    provides a mathematical formulation and a procedure to measure effective
-    receptive fields, experimentally observing a Gaussian shape,
-    with the peak at the receptive field center. Better understanding the
-    relative importance of input pixels in convolutional neural networks is
-    an active research topic.
-  </p>
+          var options = {
+            title: '',
+            hAxis: { title: 'Receptive field size (pixels)', gridlines: { count: 10 } },
+            vAxis: { title: 'ImageNet top-1 accuracy', format: 'percent' },
+            sizeAxis: { maxSize: 10 },
+            legend: { position: 'right', textStyle: { fontSize: 12 } },
+            bubble: { textStyle: { fontSize: 11 } }
+          };
 
-</dt-article>
+          var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
+          chart.draw(data, options);
+        }
+      </script>
+      <div style="width: 680px; height: 500px; position: relative;">
+        <div id="series_chart_div" style="position: relative; left: -30px; width: 680px; height: 500px;"></div>
+      </div>
+    </p>
 
-<dt-appendix>
-  <h3>Solving recurrence equations: receptive field size</h3>
-  <p>
-    The first trick to solve
-     \eqref{eq:rf_recurrence} is to multiply it by \(\prod_{i=1}^{l-1} s_i\):
-  </p>
+    <p>
+      We observe a logarithmic relationship between
+      classification accuracy and receptive field size, which suggests
+      that large receptive fields are necessary for high-level
+      recognition tasks, but with diminishing rewards.
+      For example, note how MobileNets achieve high recognition performance even
+      if using a very compact architecture: with depth-wise convolutions,
+      the receptive field is increased with a small compute footprint.
+      In comparison, VGG-16 requires 27X more multiply-adds than MobileNets, but produces
+      a smaller receptive field size; even if much more complex, VGG's accuracy
+      is only slightly better than MobileNet's.
+      This suggests that networks which can efficiently generate large receptive
+      fields may enjoy enhanced recognition performance.
+    </p>
+    <p>
+      Let us emphasize, though, that the receptive field size is not the only factor contributing
+      to the improved performance mentioned above. Other factors play a very important
+      role: network depth (i.e., number of layers) and width (i.e., number of filters per layer),
+      residual connections, batch normalization, to name only a few.
+      In other words, while we conjecture that a large receptive field is necessary,
+      by no means it is sufficient.
+      <d-fn>
+        Additional experimentation is needed to confirm this hypothesis: for
+        example, researchers may experimentally investigate how classification
+        accuracy changes as kernel sizes and strides vary for different
+        architectures. This may indicate if, at least for those architectures, a
+        large receptive field is necessary.
+      </d-fn>
+    </p>
+    <p>
+      Finally, note that a given feature is not equally impacted by all input pixels within
+      its receptive field region: the input pixels near the center of the receptive field have more "paths" to influence
+      the feature, and consequently carry more weight.
+      The relative importance of each input pixel defines the
+      <i>effective receptive field</i> of the feature.
+      <d-cite key="luo2016understanding">Recent work</d-cite>
+      provides a mathematical formulation and a procedure to measure effective
+      receptive fields, experimentally observing a Gaussian shape,
+      with the peak at the receptive field center. Better understanding the
+      relative importance of input pixels in convolutional neural networks is
+      an active research topic.
+    </p>
 
-  <p>
-    \(\begin{align}
+  </d-article>
+
+  <d-appendix>
+    <h3 id="solving-receptive-field-size">Solving recurrence equations: receptive field size</h3>
+    <p>
+      The first trick to solve
+      \eqref{eq:rf_recurrence} is to multiply it by \(\prod_{i=1}^{l-1} s_i\):
+    </p>
+
+    <p>
+      \(\begin{align}
       r_{l-1}\prod_{i=1}^{l-1} s_i&amp; = s_l \cdot r_{l}\prod_{i=1}^{l-1} s_i + (k_l - s_l)\prod_{i=1}^{l-1} s_i
       \nonumber \\&amp; = r_{l}\prod_{i=1}^{l} s_i + k_l\prod_{i=1}^{l-1} s_i - \prod_{i=1}^{l} s_i
       \label{eq:rf_recurrence_mult}\
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    Then, define \(A_l = r_l\prod_{i=1}^{l}s_i\), and note that
+    <p>
+      Then, define \(A_l = r_l\prod_{i=1}^{l}s_i\), and note that
       \(\prod_{i=1}^{0}s_i = 1\) (since \(1\) is the neutral element for
       multiplication), so \(A_0 = r_0\). Using this definition,
       \eqref{eq:rf_recurrence_mult} can be rewritten as:
-  </p>
+    </p>
 
-  <p>
-    \begin{equation}
+    <p>
+      \begin{equation}
       A_{l} - A_{l-1} = \prod_{i=1}^{l} s_i - k_l\prod_{i=1}^{l-1} s_i
       \label{eq:rf_recurrence_adef}
       \end{equation}
-  </p>
+    </p>
 
-  <p>Now, sum it from \(l=1\) to \(l=L\):</p>
+    <p>Now, sum it from \(l=1\) to \(l=L\):</p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       \sum_{l=1}^{L} \left(A_{l} - A_{l-1} \right) = A_{L} - A_0 = \sum_{l=1}^{L}
       \left(\prod_{i=1}^{l} s_i - k_l\prod_{i=1}^{l-1} s_i \right)
       \label{eq:rf_recurrence_sum_a}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    Note that \(A_0 = r_0\) and \(A_{L} = r_{L}\prod_{i=1}^{L}s_i =
+    <p>
+      Note that \(A_0 = r_0\) and \(A_{L} = r_{L}\prod_{i=1}^{L}s_i =
       \prod_{i=1}^{L}s_i\). Thus, we can compute:
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       r_0&amp;= \prod_{i=1}^{L}s_i + \sum_{l=1}^{L} \left(k_l\prod_{i=1}^{l-1} s_i
-      - \prod_{i=1}^{l} s_i \right) \nonumber \\&amp;= \sum_{l=1}^{L}k_l\prod_{i=1}^{l-1} s_i-\sum_{l=1}^{L-1}\prod_{i=1}^{l} s_i
+      - \prod_{i=1}^{l} s_i \right) \nonumber \\&amp;= \sum_{l=1}^{L}k_l\prod_{i=1}^{l-1}
+      s_i-\sum_{l=1}^{L-1}\prod_{i=1}^{l} s_i
       \nonumber \\&amp;= \sum_{l=1}^{L}k_l\prod_{i=1}^{l-1} s_i-\sum_{l=1}^{L}\prod_{i=1}^{l-1}s_i
-      + 1  \label{eq:rf_recurrence_almost_final}
+      + 1 \label{eq:rf_recurrence_almost_final}
       \end{align}\)
-  </p>
+    </p>
 
-  <p>where the last step is done by a change of variables for the right term.</p>
+    <p>where the last step is done by a change of variables for the right term.</p>
 
-  <p>
-    Finally, rewriting \eqref{eq:rf_recurrence_almost_final}, we obtain the
+    <p>
+      Finally, rewriting \eqref{eq:rf_recurrence_almost_final}, we obtain the
       expression for the receptive field size \(r_0\) of an FCN at the input image,
       given the parameters of each layer:
-  </p>
+    </p>
 
-  <p>
-    \begin{equation}
+    <p>
+      \begin{equation}
       r_0 = \sum_{l=1}^{L} \left((k_l-1)\prod_{i=1}^{l-1} s_i\right) + 1
-    \end{equation}
-  </p>
+      \end{equation}
+    </p>
 
-  <h3>Solving recurrence equations: receptive field region</h3>
-  <p>
-    The derivations are similar to the one we use
-     to solve \eqref{eq:rf_recurrence}. Let's consider the computation of \(u_0\).
-     First, multiply \eqref{eq:rf_loc_recurrence_u} by \(\prod_{i=1}^{l-1} s_i\).
-  </p>
+    <p><a href="#return-from-solving-receptive-field-size">Navigate back to the main text</a><p>
 
-  <p>
-    \(\begin{align}
-      u_{l-1}\prod_{i=1}^{l-1} s_i&amp; = u_{l} \cdot s_l\prod_{i=1}^{l-1} s_i - p_l\prod_{i=1}^{l-1} s_i\nonumber \\&amp; = u_{l}\prod_{i=1}^{l} s_i - p_l\prod_{i=1}^{l-1} s_i
+    <h3 id="solving-receptive-field-region">Solving recurrence equations: receptive field region</h3>
+    <p>
+      The derivations are similar to the one we use
+      to solve \eqref{eq:rf_recurrence}. Let's consider the computation of \(u_0\).
+      First, multiply \eqref{eq:rf_loc_recurrence_u} by \(\prod_{i=1}^{l-1} s_i\).
+    </p>
+
+    <p>
+      \(\begin{align}
+      u_{l-1}\prod_{i=1}^{l-1} s_i&amp; = u_{l} \cdot s_l\prod_{i=1}^{l-1} s_i - p_l\prod_{i=1}^{l-1} s_i\nonumber
+      \\&amp; = u_{l}\prod_{i=1}^{l} s_i - p_l\prod_{i=1}^{l-1} s_i
       \label{eq:rf_loc_recurrence_mult}\
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    Then, define \(B_l = u_l\prod_{i=1}^{l}s_i\), and rewrite
+    <p>
+      Then, define \(B_l = u_l\prod_{i=1}^{l}s_i\), and rewrite
       \eqref{eq:rf_loc_recurrence_mult} as:
-  </p>
+    </p>
 
-  <p>
-    \begin{equation}
+    <p>
+      \begin{equation}
       B_{l} - B_{l-1} = p_l\prod_{i=1}^{l-1} s_i
       \label{eq:rf_loc_recurrence_adef}
       \end{equation}
-  </p>
+    </p>
 
-  <p>And sum it from \(l=1\) to \(l=L\):</p>
+    <p>And sum it from \(l=1\) to \(l=L\):</p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       \sum_{l=1}^{L} \left(B_{l} - B_{l-1} \right) = B_{L} - B_0 =
       \sum_{l=1}^{L} p_l\prod_{i=1}^{l-1} s_i \label{eq:rf_loc_recurrence_sum_a}\
       \end{align}\)
-  </p>
+    </p>
 
-  <p>
-    Note that \(B_0 = u_0\) and \(B_{L} = u_{L}\prod_{i=1}^{L}s_i\). Thus, we can
+    <p>
+      Note that \(B_0 = u_0\) and \(B_{L} = u_{L}\prod_{i=1}^{L}s_i\). Thus, we can
       compute:
-  </p>
+    </p>
 
-  <p>
-    \(\begin{align}
+    <p>
+      \(\begin{align}
       u_0&amp;= u_{L}\prod_{i=1}^{L}s_i - \sum_{l=1}^{L}
       p_l\prod_{i=1}^{l-1} s_i
       \end{align}\)
-  </p>
+    </p>
 
-  <h3>Other network operations</h3>
-  <p>
-    <strong>Dilated (atrous) convolution.</strong>
-    Dilations introduce "holes" in a convolutional kernel. While the number of
-    weights in the kernel is unchanged, they are no longer applied to spatially
-    adjacent
-    samples. Dilating a kernel by a factor of \(\alpha\) introduces striding of
-    \(\alpha\) between the samples used when computing the convolution. This
-    means that the spatial span of the kernel (\(k>0\)) is increased to \(\alpha (k-1) + 1\).
-    The above derivations can be reused by simply replacing the kernel size
-    \(k\) by \(\alpha (k-1) + 1\) for all layers using dilations.
-  </p>
-    
-  <p>
-    <strong>Upsampling.</strong>
-    Upsampling is frequently done using interpolation (e.g., bilinear, bicubic
-    or nearest-neighbor methods), resulting in an equal or larger receptive
-    field &mdash; since it relies on one or multiple features from the input.
-    Upsampling layers generally produce output features which depend locally on
-    input features, and for receptive field computation purposes can be
-    considered to have a kernel size equal to the number of input features
-    involved in the computation of an output feature.
-  </p>
-    
-  <p>
-    <strong>Separable convolutions.</strong>
-    Convolutions may be separable in terms of spatial or channel dimensions.
-    The receptive field properties of the separable convolution are
-    identical to its corresponding equivalent non-separable convolution. For
-    example, a \(3 \times 3\) depth-wise separable convolution has a kernel
-    size of \(3\) for receptive field computation purposes.    
-  </p>
-  
-  <p>
-    <strong>Batch normalization.</strong>
-    At inference time, batch normalization consists of feature-wise operations
-    which do not alter the receptive field of the network. During training,
-    however, batch normalization parameters are computed based on all
-    activations from a specific layer, which means that its receptive field is
-    the whole input image.
-  </p>
+    <p><a href="#return-from-solving-receptive-field-region">Navigate back to the main text</a><p>
 
-  <h3>Acknowledgments</h3>
-  <p>
-    We would like to thank Yuning Chai and George Papandreou for their careful
-    review of early drafts of this manuscript.
-    Regarding the open-source library, we thank Mark Sandler for helping with
-    the starter code, Liang-Chieh Chen and Iaroslav Tymchenko for careful
-    code review, and Till Hoffman for improving upon the original code release.
-    Thanks also to Mark Sandler for assistance with model profiling.
-  </p>
-  
-</dt-appendix>
+    <h3 id="other-network-operations">Other network operations</h3>
+    <p>
+      <strong>Dilated (atrous) convolution.</strong>
+      Dilations introduce "holes" in a convolutional kernel. While the number of
+      weights in the kernel is unchanged, they are no longer applied to spatially
+      adjacent
+      samples. Dilating a kernel by a factor of \(\alpha\) introduces striding of
+      \(\alpha\) between the samples used when computing the convolution. This
+      means that the spatial span of the kernel (\(k>0\)) is increased to \(\alpha (k-1) + 1\).
+      The above derivations can be reused by simply replacing the kernel size
+      \(k\) by \(\alpha (k-1) + 1\) for all layers using dilations.
+    </p>
 
-<script type="text/bibliography">
-  @article{araujo2017receptive,
-  author = {Araujo, Andre and Sandler, Mark},
-  title = {Receptive Field Computation for Convnets},
-  year = {2017},
-  url={https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/receptive_field},
-  }
-  @inproceedings{chizat2018onthe,
-                 author = {Lenaic Chizat and Francis Bach},
-                 title = {On the Global Convergence of Gradient Descent for Over-parameterized Models using Optimal Transport},
-                 booktitle = {Proc. NIPS},
-                 year = {2018},
-                 url={http://papers.nips.cc/paper/7567-on-the-global-convergence-of-gradient-descent-for-over-parameterized-models-using-optimal-transport.pdf},
-  }
-  @inproceedings{haeffele2017global,
-                 author = {Haeffele, B. and Vidal, R.},
-                 title = {Global Optimality in Neural Network Training},
-                 booktitle = {Proc. CVPR},
-                 year = {2017},
-                 url={http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeffele_Global_Optimality_in_CVPR_2017_paper.pdf},
-  }
-  @article{hien2017aguide,
-  author = {The-Hien Dang-Ha},
-  title = {A Guide to Receptive Field Arithmetic for Convolutional Neural Networks},
-  year = {2017},
-  url={https://medium.com/mlreview/a-guide-to-receptive-field-arithmetic-for-convolutional-neural-networks-e0f514068807},
-  }
-  @inproceedings{he2016deep,
-  author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
-  title = {Deep Residual Learning for Image Recognition},
-  booktitle = {Proc. CVPR},
-  year = {2016},
-  url={https://arxiv.org/abs/1512.03385},
-  }
-  @article{howard2017mobilenets,
-  author = {Howard, Andrew and Zhu, Menglong and Chen, Bo and Kalenichenko, Dmitry and Wang, Weijun and Weyand, Tobias and Andreetto, Marco and Adam, Hartwig},
-  title = {MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications},
-  year = {2017},
-  url={https://arxiv.org/abs/1704.04861},
-  }
-  @inproceedings{krizhevsky2012imagenet,
-  author = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey},
-  title = {ImageNet Classification with Deep Convolutional Neural Networks},
-  booktitle = {Proc. NIPS},
-  year = {2012},
-  url={https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf},
-  }
-  @article{le2017what,
-  author = {Hung Le and Ali Borji},
-  title = {What are the Receptive, Effective Receptive, and Projective Fields of Neurons in Convolutional Neural Networks?},
-  year = {2017},
-  url={https://arxiv.org/abs/1705.07049},
-  }
-  @inproceedings{luo2016understanding,
-  author = {Luo, Wenjie and Li, Yujia and Urtasun, Raquel and Zemel, Richard},
-  title = {Understanding the Effective Receptive Field in Deep Convolutional Neural Networks},
-  booktitle = {Proc. NIPS},
-  year = {2016},
-  url={https://arxiv.org/abs/1701.04128},
-  }
-  @article{neyshabur2014insearch,
-  author = {Behnam Neyshabur and Ryota Tomioka and Nathan Srebro},
-  title = {In Search of the Real Inductive Bias: On the
-           Role of Implicit Regularization in Deep Learning},
-  year = {2014},
-  url={https://arxiv.org/abs/1412.6614},
-  }
-  @inproceedings{noh2017large,
-  author = {Noh, Hyeonwoo and Araujo, Andre and Sim, Jack and Weyand, Tobias and Han, Bohyung},
-  title = {Large-Scale Image Retrieval with Attentive Deep Local Features},
-  booktitle = {Proc. ICCV},
-  year = {2017},
-  url={https://arxiv.org/abs/1612.06321},
-  }
-  @article{olah2017feature,
-  author = {Olah, Chris and Mordvintsev, Alexander and Schubert, Ludwig},
-  title = {Feature Visualization},
-  journal = {Distill},
-  year = {2017},
-  note = {https://distill.pub/2017/feature-visualization},
-  doi = {10.23915/distill.00007}
-  }
-  @inproceedings{simonyan2015very,
-  author = {Simonyan, Karen and Zisserman, Andrew},
-  title = {Very Deep Convolutional Networks for Large-Scale Image Recognition},
-  booktitle = {Proc. ICLR},
-  year = {2015},
-  url={https://arxiv.org/abs/1409.1556},
-  }
-  @article{szegedy2016inception,
-  author = {Szegedy, Christian and Ioffe, Sergey and Vanhoucke, Vincent and Alemi, Alex},
-  title = {Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning},
-  year = {2016},
-  url={https://arxiv.org/abs/1602.07261},
-  }
-  @inproceedings{zhang2017understanding,
-                 author = { Zhang, Chiyuan and Bengio, Samy and Hardt, Moritz and Recht, Benjamin and Vinyals, Oriol},
-                 title = {
-                 Understanding Deep Learning Requires Rethinking Generalization},
-                 booktitle = {Proc. ICLR},
-                 year = {2017},
-                 url={https://arxiv.org/abs/1611.03530},
-  }
-  @inproceedings{zhou2015object,
-                 author = {B. Zhou, A. Khosla, A. Lapedriza, A. Oliva, and A. Torralba},
-                 title = {Object Detectors Emerge in Deep Scene CNNs},
-                 booktitle = {Proc. ICLR},
-                 year = {2015},
-                 url={https://arxiv.org/abs/1412.6856},
-  }
-  @article{zhou2018interpreting,
-           author = {Zhou, B. and Bau, D. and Oliva, A. and Torralba, A.},
-           title = {Interpreting Deep Visual Representations via Network Dissection},
-           journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
-           year = {2018},
-           url={https://arxiv.org/abs/1711.05611}
-  }
-  @inproceedings{zeiler2014visualizing,
-                 author = {M. D. Zeiler and R. Fergus},
-                 title = {
-                 Visualizing and Understanding Convolutional Networks},
-                 booktitle = {Proc. ECCV},
-                 year = {2014},
-                 url={https://arxiv.org/abs/1311.2901},
-  }
-</script>
+    <p>
+      <strong>Upsampling.</strong>
+      Upsampling is frequently done using interpolation (e.g., bilinear, bicubic
+      or nearest-neighbor methods), resulting in an equal or larger receptive
+      field &mdash; since it relies on one or multiple features from the input.
+      Upsampling layers generally produce output features which depend locally on
+      input features, and for receptive field computation purposes can be
+      considered to have a kernel size equal to the number of input features
+      involved in the computation of an output feature.
+    </p>
+
+    <p>
+      <strong>Separable convolutions.</strong>
+      Convolutions may be separable in terms of spatial or channel dimensions.
+      The receptive field properties of the separable convolution are
+      identical to its corresponding equivalent non-separable convolution. For
+      example, a \(3 \times 3\) depth-wise separable convolution has a kernel
+      size of \(3\) for receptive field computation purposes.
+    </p>
+
+    <p>
+      <strong>Batch normalization.</strong>
+      At inference time, batch normalization consists of feature-wise operations
+      which do not alter the receptive field of the network. During training,
+      however, batch normalization parameters are computed based on all
+      activations from a specific layer, which means that its receptive field is
+      the whole input image.
+    </p>
+
+    <h3>Acknowledgments</h3>
+    <p>
+      We would like to thank Yuning Chai and George Papandreou for their careful
+      review of early drafts of this manuscript.
+      Regarding the open-source library, we thank Mark Sandler for helping with
+      the starter code, Liang-Chieh Chen and Iaroslav Tymchenko for careful
+      code review, and Till Hoffman for improving upon the original code release.
+      Thanks also to Mark Sandler for assistance with model profiling.
+    </p>
+
+    <d-footnote-list></d-footnote-list>
+    <d-bibliography src="bibliography.bib"></d-bibliography>
+
+  </d-appendix>
+
+</body>

@@ -213,12 +213,12 @@
       <li>
         \(p_l\): padding applied to the left side of the input feature map
         (non-negative integer)
-        <d-fn>
+        <d-footnote>
           A more general definition of padding may also be considered: negative
           padding, interpreted as cropping, can be used in our derivations
           without any changes. In order to make the article more concise, our
           presentation focuses solely on non-negative padding.
-        </d-fn>
+        </d-footnote>
       </li>
       <li>
         \(q_l\): padding applied to the right side of the input feature map
@@ -243,12 +243,12 @@
       Our notation is further illustrated with the simple
       network below. In this case, \(L=4\), and the network consists of a
       a convolution, followed by ReLU, a second convolution and max-pooling
-      <d-fn>
+      <d-footnote>
         We adopt the convention where the first output feature for each layer is
         computed by placing the kernel on the left-most position of the input,
         including padding. This convention is adopted by all major deep learning
         libraries.
-      </d-fn>
+      </d-footnote>
       .
     </p>
 
@@ -309,11 +309,11 @@
       entire region where the
       features come from, but it will cover \(s_l - 1\) too many features (purple),
       which is why it needs to be deducted.
-      <d-fn>
+      <d-footnote>
         As in the illustration below, note that, in some cases, the receptive
         field region may contain "holes", i.e., some of the input features may be
         unused for a given layer.
-      </d-fn>
+      </d-footnote>
     </p>
 
     <figure class="iframe-fix" style="height: 250px">
@@ -327,7 +327,7 @@
       use a kernel size of \(5\) (\(k_l=5\)), there would be \(2\) extra features used
       on each side, adding \(4\) in total. If \(k_l\) is even, this works as well,
       since the left and right padding will add to \(k_l-1\).
-      <d-fn>
+      <d-footnote>
         Due to border effects, note that the size of the region in the original
         image which is used to compute each output feature may be different. This
         happens if padding is used, in which case the receptive field for
@@ -335,7 +335,7 @@
         discuss how to compute the receptive field region for each feature,
         which can be used to determine exactly which image pixels are used for
         each output feature.
-      </d-fn>
+      </d-footnote>
     </p>
 
     <figure class="iframe-fix" style="height: 250px">
@@ -752,11 +752,11 @@
     <p>
       In this section, we present the receptive field parameters of modern
       convolutional networks
-      <d-fn>
+      <d-footnote>
         The models used for receptive field computations, as well as the accuracy reported on Imagenet experiments,
         are drawn from the <a href="https://github.com/tensorflow/models/tree/master/research/slim">TF-Slim
           repository</a>.
-      </d-fn>
+      </d-footnote>
       , which were computed using the new open-source
       library (script
       <a
@@ -967,13 +967,13 @@
       residual connections, batch normalization, to name only a few.
       In other words, while we conjecture that a large receptive field is necessary,
       by no means it is sufficient.
-      <d-fn>
+      <d-footnote>
         Additional experimentation is needed to confirm this hypothesis: for
         example, researchers may experimentally investigate how classification
         accuracy changes as kernel sizes and strides vary for different
         architectures. This may indicate if, at least for those architectures, a
         large receptive field is necessary.
-      </d-fn>
+      </d-footnote>
     </p>
     <p>
       Finally, note that a given feature is not equally impacted by all input pixels within

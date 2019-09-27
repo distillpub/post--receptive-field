@@ -143,7 +143,8 @@
       However, these computations are often done by hand, which is both tedious and error-prone.
       This is because there are no libraries to compute these parameters automatically.
       As our second contribution, we fill the void by introducing an
-      <d-cite key="araujo2017receptive">open-source library</d-cite>
+      open-source library
+      <d-cite key="araujo2017receptive"></d-cite>
       which handily performs the computations described here. The library is integrated into the Tensorflow codebase and
       can be easily employed to analyze a variety of models,
       as presented in this article.
@@ -168,14 +169,14 @@
     <p>
       First, we derive closed-form expressions when the network has a
       single path from input to output (as in
-      <d-cite key="krizhevsky2012imagenet">AlexNet</d-cite>
+      AlexNet <d-cite key="krizhevsky2012imagenet"></d-cite>
       or
-      <d-cite key="simonyan2015very">VGG</d-cite>). Then, we discuss the
+      VGG <d-cite key="simonyan2015very"></d-cite>). Then, we discuss the
       more general case of arbitrary computation graphs with multiple paths from the
       input to the output (as in
-      <d-cite key="he2016deep">ResNet</d-cite>
+      ResNet <d-cite key="he2016deep"></d-cite>
       or
-      <d-cite key="szegedy2016inception">Inception</d-cite>). We consider
+      Inception <d-cite key="szegedy2016inception"></d-cite>). We consider
       potential alignment issues that arise in this context, and explain
       an algorithm to compute the receptive field size and locations.
     </p>
@@ -262,9 +263,9 @@
       In this section, we compute recurrence and closed-form expressions for
       fully-convolutional networks with a single path from input to output
       (e.g.,
-      <d-cite key="krizhevsky2012imagenet">AlexNet</d-cite>
+      AlexNet <d-cite key="krizhevsky2012imagenet"></d-cite>
       or
-      <d-cite key="simonyan2015very">VGG</d-cite>).
+      VGG <d-cite key="simonyan2015very"></d-cite>).
     </p>
 
     <h3 id="computing-receptive-field-size">Computing receptive field size</h3>
@@ -564,7 +565,7 @@
       expression for the center of the receptive field region which influences a
       particular output feature. This can be used as the location of the feature in
       the input image (as done for recent
-      <d-cite key="noh2017large">deep learning-based local features</d-cite>, for
+      deep learning-based local features <d-cite key="noh2017large"></d-cite>, for
       example).
     </p>
 
@@ -610,8 +611,8 @@
 
     <p>
       Most state-of-the-art convolutional neural networks today (e.g.,
-      <d-cite key="he2016deep">ResNet</d-cite> or
-      <d-cite key="szegedy2016inception">Inception</d-cite>) rely on models
+      ResNet <d-cite key="he2016deep"></d-cite> or
+      Inception <d-cite key="szegedy2016inception"></d-cite>) rely on models
       where each layer may have more than one input, which
       means that there might be several different paths from the input image to the
       final output feature map. These architectures are usually represented using
@@ -761,12 +762,12 @@
       <a
         href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/receptive_field/python/util/examples/rf_benchmark.py">here</a>).
       The pre-computed parameters for
-      <d-cite key="krizhevsky2012imagenet">AlexNet</d-cite>,
-      <d-cite key="simonyan2015very">VGG</d-cite>,
-      <d-cite key="he2016deep">ResNet</d-cite>,
-      <d-cite key="szegedy2016inception">Inception</d-cite>
+      AlexNet <d-cite key="krizhevsky2012imagenet"></d-cite>,
+      VGG <d-cite key="simonyan2015very"></d-cite>,
+      ResNet <d-cite key="he2016deep"></d-cite>,
+      Inception <d-cite key="szegedy2016inception"></d-cite>
       and
-      <d-cite key="howard2017mobilenets">MobileNet</d-cite>
+      MobileNet <d-cite key="howard2017mobilenets"></d-cite>
       are presented in the table below.
       For a more
       comprehensive list, including intermediate network end-points, see
@@ -980,7 +981,7 @@
       the feature, and consequently carry more weight.
       The relative importance of each input pixel defines the
       <i>effective receptive field</i> of the feature.
-      <d-cite key="luo2016understanding">Recent work</d-cite>
+      Recent work <d-cite key="luo2016understanding"></d-cite>
       provides a mathematical formulation and a procedure to measure effective
       receptive fields, experimentally observing a Gaussian shape,
       with the peak at the receptive field center. Better understanding the

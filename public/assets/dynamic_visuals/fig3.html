@@ -13,30 +13,29 @@ body {
 </head>
 <body>
 
-<svg id="svg" height="580" width="800">
-
+<svg id="fig3_svg" height="450" width="500" style="position: relative; top: -20px;">
   Sorry, your browser does not support inline SVG.
 </svg>
 
-<div style="position: absolute; top: 183px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span id="value_k1">3</span></div>
-<div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span id="value_p1">1</span></div>
-<div style="height: 20px;">Stride (s<sub>1</sub>): <span id="value_s1">3</span></div>
+<div style="position: absolute; top: 163px; right: 0px; text-align: right;">
+<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>3</span></div>
+<div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span>1</span></div>
+<div style="height: 20px;">Stride (s<sub>1</sub>): <span>3</span></div>
 </div>
-<div style="position: absolute; top: 313px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span id="value_k1">2</span></div>
-<div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span id="value_p1">0</span></div>
-<div style="height: 20px;">Stride (s<sub>1</sub>): <span id="value_s1">1</span></div>
+<div style="position: absolute; top: 293px; right: 0px; text-align: right;">
+<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>2</span></div>
+<div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span>0</span></div>
+<div style="height: 20px;">Stride (s<sub>1</sub>): <span>1</span></div>
 </div>
-<div style="position: absolute; top: 55px; left: 53px;">u<sub>0</sub> = -1</div>
-<div style="position: absolute; top: 55px; left: 203px;">v<sub>0</sub> = 4</div>
-<div style="position: absolute; top: 140px; left: 40px;">f<sub>0</sub></div>
-<div style="position: absolute; top: 270px; left: 40px;">f<sub>1</sub></div>
-<div style="position: absolute; top: 400px; left: 40px;">f<sub>2</sub></div>
+<div style="position: absolute; top: 35px; left: 53px;">u<sub>0</sub> = -1</div>
+<div style="position: absolute; top: 35px; left: 203px;">v<sub>0</sub> = 4</div>
+<div style="position: absolute; top: 120px; left: 40px;">f<sub>0</sub></div>
+<div style="position: absolute; top: 250px; left: 40px;">f<sub>1</sub></div>
+<div style="position: absolute; top: 380px; left: 40px;">f<sub>2</sub></div>
 
 <script type="text/javascript" src="utils.js"></script>
 <script type="text/javascript">
-var svgEl = document.getElementById("svg");
+var svgEl = document.getElementById("fig3_svg");
 var globals = {
   "box_width": 30,
   "box_height": 30,
@@ -46,10 +45,6 @@ var globals = {
   "perspective_spacing": 4,
   "stroke_width": 1
 };
-
-// Signatures for reference:
-// renderRowFn(el, row, width, offset, globals)
-// renderFlowFn(el, row, width1, width2, offset1, offset2, globals)
 
 renderRowFn(svgEl, 2, 8, 3, globals);
 renderFlowFn(svgEl, 2, 6, 2, 2, 5, globals);

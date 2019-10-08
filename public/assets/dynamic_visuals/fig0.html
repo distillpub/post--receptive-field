@@ -13,29 +13,29 @@ body {
 </head>
 <body>
 
-<svg id="svg" height="350" width="800">
+<svg id="fig0_svg" height="295" width="500" style="position: relative; top: -75px;">
 
   Sorry, your browser does not support inline SVG.
 </svg>
 
-<div style="position: absolute; top: 183px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span id="value_k1">2</span></div>
-<div style="height: 20px;">Left Padding (p<sub>l</sub>): <span id="value_p1">1</span></div>
-<div style="height: 20px;">Right Padding (q<sub>l</sub>): <span id="value_p1">1</span></div>
-<div style="height: 20px;">Stride (s<sub>l</sub>): <span id="value_s1">3</span></div>
+<div style="position: absolute; top: 108px; left: 378px; text-align: right;">
+<div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span>2</span></div>
+<div style="height: 20px;">Left Padding (p<sub>l</sub>): <span>1</span></div>
+<div style="height: 20px;">Right Padding (q<sub>l</sub>): <span>1</span></div>
+<div style="height: 20px;">Stride (s<sub>l</sub>): <span>3</span></div>
 </div>
-<div style="position: absolute; top: 270px; left: 40px;">f<sub>l</sub></div>
-<div style="position: absolute; top: 140px; left: 40px;">f<sub>l-1</sub></div>
-<div style="position: absolute; top: 85px; left: 130px;">k<sub>l</sub></div>
-<div style="position: absolute; top: 85px; left: 205px;">k<sub>l</sub></div>
-<div style="position: absolute; top: 85px; left: 280px;">k<sub>l</sub></div>
-<div style="position: absolute; top: 180px; left: 130px;">s<sub>l</sub></div>
-<div style="position: absolute; top: 65px; left: 100px;">p<sub>l</sub></div>
-<div style="position: absolute; top: 65px; left: 310px;">q<sub>l</sub></div>
+<div style="position: absolute; top: 195px; left: 40px;">f<sub>l</sub></div>
+<div style="position: absolute; top: 65px; left: 40px;">f<sub>l-1</sub></div>
+<div style="position: absolute; top: 15px; left: 130px;">k<sub>l</sub></div>
+<div style="position: absolute; top: 15px; left: 205px;">k<sub>l</sub></div>
+<div style="position: absolute; top: 15px; left: 280px;">k<sub>l</sub></div>
+<div style="position: absolute; top: 105px; left: 130px;">s<sub>l</sub></div>
+<div style="position: absolute; top: -5px; left: 100px;">p<sub>l</sub></div>
+<div style="position: absolute; top: -5px; left: 310px;">q<sub>l</sub></div>
 
 <script type="text/javascript" src="utils.js"></script>
 <script type="text/javascript">
-var svgEl = document.getElementById("svg");
+var svgEl = document.getElementById("fig0_svg");
 var globals = {
   "box_width": 30,
   "box_height": 30,
@@ -45,12 +45,6 @@ var globals = {
   "perspective_spacing": 4,
   "stroke_width": 1
 };
-
-// Signatures for reference:
-// renderRowFn(el, row, width, offset, globals)
-// renderFlowFn(el, row, width1, width2, offset1, offset2, globals)
-// renderFlowAnnotationFn = function(el, row, width1, width2, offset1, offset2, direction, color, globals)
-// renderAnnotationFn = function(el, row, width, offset, direction, margin, color, globals)
 
 renderRowFn(svgEl, 2, 6, 4, globals);
 renderFlowFn(svgEl, 2, 2, 1, 3, 5.5, globals);
@@ -63,7 +57,6 @@ renderAnnotationFn(svgEl, 1, 2, 9, 1, 10, "rgb(16, 150, 24)", globals);
 renderAnnotationFn(svgEl, 1, 3, 3, 1, -50, "rgb(220, 18, 18)", globals);
 renderAnnotationFn(svgEl, 1, 1, 3, 1, 30, "rgb(153, 0, 153)", globals);
 renderAnnotationFn(svgEl, 1, 1, 10, 1, 30, "rgb(153, 0, 153)", globals);
-
 </script>
 
 </body>

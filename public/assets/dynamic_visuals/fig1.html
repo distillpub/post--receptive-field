@@ -147,19 +147,19 @@ var redoRendering = function() {
 
     flowStack = [];
     for (var j=0, k=0; kernel_size+k-1 < padded_input_fw; k += stride, j++) {
-      //renderFlowFn = function (el, row, width1, width2, offset1, offset2, globals) {
+      //renderFlowFn = function (el, row, width1, width2, offset1, offset2, globals)
       renderFlowFn(svgEl, i, kernel_size, 1, params[i-1]["i"]-padding+k, output_indent+j, globals, undefined, i==2);
     } 
     renderRowFn(svgEl, i+1, output_fw, output_indent, globals);
   }
 
-  var featureNodes = document.querySelectorAll(".feature");
+  var featureNodes = document.getElementById("fig1_svg").querySelectorAll(".feature");
   for (var i=0; i < featureNodes.length; i++) {
     featureNodes[i].addEventListener("mouseenter", renderSingleFlowStack);
   }
 };
 
-var nodes = document.querySelectorAll("input");
+var nodes = document.getElementById("fig1_svg").parentNode.querySelectorAll("input");
 for (var i = 0; i < nodes.length; i++) {
   nodes[i].setAttribute("oninput", "redoRendering();");
 }

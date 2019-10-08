@@ -79,12 +79,12 @@ renderFlowFn(svgEl, 2, 1, 1, 5, 9, globals, 2);
 
 renderRowFn(svgEl, 4, 2, 8, globals);
 
-var featureNodes = document.querySelectorAll(".feature");
+var featureNodes = svgEl.querySelectorAll(".feature");
 for (var i=0; i < featureNodes.length; i++) {
   featureNodes[i].addEventListener("mouseenter", renderSingleFlowStack);
 }
 
-renderSingleFlowStack.call(document.querySelector("#fig5_svg > rect.feature.feature_4_9"));
+renderSingleFlowStack.call(svgEl.querySelector("#fig5_svg > rect.feature.feature_4_9"));
 
 </script>
 

@@ -51,56 +51,7 @@
     }
   </style>
 
-  <style>
-  .figure-contents {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-    color: rgba(0, 0, 0, 0.6);
-    font-size: 13px;
-  }
-  [data-tip] {
-    position:relative;
-  }
-  [data-tip]:before {
-    content:'';
-    /* hides the tooltip when not hovered */
-    display:none;
-    content:'';
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 5px solid #1a1a1a;
-    position:absolute;
-    top:20px;
-    right:20px;
-    z-index:8;
-    font-size:0;
-    line-height:0;
-    width:0;
-    height:0;
-  }
-  [data-tip]:after {
-        display:none;
-    content:attr(data-tip);
-    position:absolute;
-    top:25px;
-    right:0px;
-    padding:5px 8px;
-    background:#1a1a1a;
-    color:#fff;
-    z-index:9; 
-    font-size: 0.75em;
-    height:18px;
-    line-height:18px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    white-space:nowrap;
-    word-wrap:normal;
-  }
-  [data-tip]:hover:before,
-  [data-tip]:hover:after {
-    display:block;
-  }
-  </style>
+  <link rel="stylesheet" type="text/css" href="assets/dynamic_visuals/style.css">
 </head>
 
 <body>
@@ -272,49 +223,27 @@
 
     <figure class="figure-contents" style="height: 220px;">
 
-<svg id="fig0_svg" height="295" width="500" style="position: relative; top: -75px;">
-  Sorry, your browser does not support inline SVG.
-</svg>
+      <svg id="fig0_svg" height="295" width="500" style="position: relative; top: -75px;">
+        Sorry, your browser does not support inline SVG.
+      </svg>
 
-<div style="position: absolute; top: 108px; left: 378px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span>2</span></div>
-<div style="height: 20px;">Left Padding (p<sub>l</sub>): <span>1</span></div>
-<div style="height: 20px;">Right Padding (q<sub>l</sub>): <span>1</span></div>
-<div style="height: 20px;">Stride (s<sub>l</sub>): <span>3</span></div>
-</div>
-<div style="position: absolute; top: 195px; left: 40px;">f<sub>l</sub></div>
-<div style="position: absolute; top: 65px; left: 40px;">f<sub>l-1</sub></div>
-<div style="position: absolute; top: 15px; left: 130px;">k<sub>l</sub></div>
-<div style="position: absolute; top: 15px; left: 205px;">k<sub>l</sub></div>
-<div style="position: absolute; top: 15px; left: 280px;">k<sub>l</sub></div>
-<div style="position: absolute; top: 105px; left: 130px;">s<sub>l</sub></div>
-<div style="position: absolute; top: -5px; left: 100px;">p<sub>l</sub></div>
-<div style="position: absolute; top: -5px; left: 310px;">q<sub>l</sub></div>
+      <div style="position: absolute; top: 108px; left: 378px; text-align: right;">
+        <div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span>2</span></div>
+        <div style="height: 20px;">Left Padding (p<sub>l</sub>): <span>1</span></div>
+        <div style="height: 20px;">Right Padding (q<sub>l</sub>): <span>1</span></div>
+        <div style="height: 20px;">Stride (s<sub>l</sub>): <span>3</span></div>
+      </div>
+      <div style="position: absolute; top: 195px; left: 40px;">f<sub>l</sub></div>
+      <div style="position: absolute; top: 65px; left: 40px;">f<sub>l-1</sub></div>
+      <div style="position: absolute; top: 15px; left: 130px;">k<sub>l</sub></div>
+      <div style="position: absolute; top: 15px; left: 205px;">k<sub>l</sub></div>
+      <div style="position: absolute; top: 15px; left: 280px;">k<sub>l</sub></div>
+      <div style="position: absolute; top: 105px; left: 130px;">s<sub>l</sub></div>
+      <div style="position: absolute; top: -5px; left: 100px;">p<sub>l</sub></div>
+      <div style="position: absolute; top: -5px; left: 310px;">q<sub>l</sub></div>
 
-<script type="text/javascript">
-var svgEl = document.getElementById("fig0_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-renderRowFn(svgEl, 2, 6, 4, globals);
-renderFlowFn(svgEl, 2, 2, 1, 3, 5.5, globals);
-renderFlowFn(svgEl, 2, 2, 1, 6, 6.5, globals);
-renderFlowFn(svgEl, 2, 2, 1, 9, 7.5, globals);
-renderRowFn(svgEl, 3, 3, 5.5, globals);
-renderAnnotationFn(svgEl, 1, 2, 3, 1, 10, "rgb(16, 150, 24)", globals);
-renderAnnotationFn(svgEl, 1, 2, 6, 1, 10, "rgb(16, 150, 24)", globals);
-renderAnnotationFn(svgEl, 1, 2, 9, 1, 10, "rgb(16, 150, 24)", globals);
-renderAnnotationFn(svgEl, 1, 3, 3, 1, -50, "rgb(220, 18, 18)", globals);
-renderAnnotationFn(svgEl, 1, 1, 3, 1, 30, "rgb(153, 0, 153)", globals);
-renderAnnotationFn(svgEl, 1, 1, 10, 1, 30, "rgb(153, 0, 153)", globals);
-</script>
+      <script type="text/javascript" src="assets/dynamic_visuals/fig0.js">
+      </script>
 
     </figure>
 
@@ -341,114 +270,51 @@ renderAnnotationFn(svgEl, 1, 1, 10, 1, 30, "rgb(153, 0, 153)", globals);
 
     <figure class="figure-contents" style="position: relative; width: 650px;">
 
-<img style="position: absolute; width: 27px; right: 0px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+      <img style="position: absolute; width: 27px; right: 0px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+      
+      <svg id="fig1_svg" height="580" width="650">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+      
+      <div style="position: absolute; top: 10px; left: 40px;">f<sub>0</sub></div>
+      <div style="position: absolute; top: 140px; left: 40px;">f<sub>1</sub></div>
+      <div style="position: absolute; top: 270px; left: 40px;">f<sub>2</sub></div>
+      <div style="position: absolute; top: 400px; left: 40px;">f<sub>3</sub></div>
+      <div style="position: absolute; top: 530px; left: 40px;">f<sub>4</sub></div>
+      
+      <div style="position: absolute; top: 53px; right: 0px; text-align: right;">
+      <b>Convolution</b><br />
+      Kernel Size (k<sub>1</sub>): <span id="value_k1">1</span> <input id="slider_k1" type="range" style="width: 80px;" min="1" max="3" value="3"><br />
+      Padding (p<sub>1</sub>, q<sub>1</sub>): <span id="value_p1">0</span> <input id="slider_p1" type="range" style="width: 80px;" min="0" max="2" value="1"><br />
+      Stride (s<sub>1</sub>): <span id="value_s1">1</span> <input id="slider_s1" type="range" style="width: 80px;" min="1" max="2" value="2"><br />
+      <span id="value_error_1" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
+      </div>
+      
+      <div style="position: absolute; top: 183px; right: 0px; text-align: right;" data-tip="ReLUs only map features one-to-one.">
+      <b>ReLU</b><br />
+      Kernel Size (k<sub>2</sub>): <span id="value_k2">1</span> <input id="slider_k2" type="range" style="width: 80px; display: none;" min="1" max="3" value="1" disabled><br />
+      Padding (p<sub>2</sub>, q<sub>2</sub>): <span id="value_p2">0</span> <input id="slider_p2" type="range" style="width: 80px; display: none;" min="0" max="3" value="0" disabled><br />
+      Stride (s<sub>2</sub>): <span id="value_s2">1</span> <input id="slider_s2" type="range" style="width: 80px; display: none;" min="1" max="3" value="1" disabled><br />
+      </div>
+      
+      <div style="position: absolute; top: 313px; right: 0px; text-align: right;">
+      <b>Convolution</b><br />
+      Kernel Size (k<sub>3</sub>): <span id="value_k3">1</span> <input id="slider_k3" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
+      Padding (p<sub>3</sub>, q<sub>3</sub>): <span id="value_p3">0</span> <input id="slider_p3" type="range" style="width: 80px;" min="0" max="1" value="0"><br />
+      Stride (s<sub>3</sub>): <span id="value_s3">1</span> <input id="slider_s3" type="range" style="width: 80px;" min="1" max="2" value="1"><br />
+      <span id="value_error3" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
+      </div>
+      
+      <div style="position: absolute; top: 443px; right: 0px; text-align: right;">
+      <b>Max Pooling</b><br />
+      Kernel Size (k<sub>4</sub>): <span id="value_k4">1</span> <input id="slider_k4" type="range" style="width: 80px;" min="1" max="3" value="3"><br />
+      Padding (p<sub>4</sub>, q<sub>4</sub>): <span id="value_p4">0</span> <input id="slider_p4" type="range" style="width: 80px;" min="0" max="1" value="1"><br />
+      Stride (s<sub>4</sub>): <span id="value_s4">1</span> <input id="slider_s4" type="range" style="width: 80px;" min="1" max="2" value="2"><br />
+      <span id="value_error4" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
+      </div>
 
-<svg id="fig1_svg" height="580" width="650">
-
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<div style="position: absolute; top: 10px; left: 40px;">f<sub>0</sub></div>
-<div style="position: absolute; top: 140px; left: 40px;">f<sub>1</sub></div>
-<div style="position: absolute; top: 270px; left: 40px;">f<sub>2</sub></div>
-<div style="position: absolute; top: 400px; left: 40px;">f<sub>3</sub></div>
-<div style="position: absolute; top: 530px; left: 40px;">f<sub>4</sub></div>
-
-<div style="position: absolute; top: 53px; right: 0px; text-align: right;">
-<b>Convolution</b><br />
-Kernel Size (k<sub>1</sub>): <span id="value_k1">1</span> <input id="slider_k1" type="range" style="width: 80px;" min="1" max="3" value="3"><br />
-Padding (p<sub>1</sub>, q<sub>1</sub>): <span id="value_p1">0</span> <input id="slider_p1" type="range" style="width: 80px;" min="0" max="2" value="1"><br />
-Stride (s<sub>1</sub>): <span id="value_s1">1</span> <input id="slider_s1" type="range" style="width: 80px;" min="1" max="2" value="2"><br />
-<span id="value_error_1" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
-</div>
-
-<div style="position: absolute; top: 183px; right: 0px; text-align: right;" data-tip="ReLUs only map features one-to-one.">
-<b>ReLU</b><br />
-Kernel Size (k<sub>2</sub>): <span id="value_k2">1</span> <input id="slider_k2" type="range" style="width: 80px; display: none;" min="1" max="3" value="1" disabled><br />
-Padding (p<sub>2</sub>, q<sub>2</sub>): <span id="value_p2">0</span> <input id="slider_p2" type="range" style="width: 80px; display: none;" min="0" max="3" value="0" disabled><br />
-Stride (s<sub>2</sub>): <span id="value_s2">1</span> <input id="slider_s2" type="range" style="width: 80px; display: none;" min="1" max="3" value="1" disabled><br />
-</div>
-
-<div style="position: absolute; top: 313px; right: 0px; text-align: right;">
-<b>Convolution</b><br />
-Kernel Size (k<sub>3</sub>): <span id="value_k3">1</span> <input id="slider_k3" type="range" style="width: 80px;" min="1" max="3" value="1"><br />
-Padding (p<sub>3</sub>, q<sub>3</sub>): <span id="value_p3">0</span> <input id="slider_p3" type="range" style="width: 80px;" min="0" max="1" value="0"><br />
-Stride (s<sub>3</sub>): <span id="value_s3">1</span> <input id="slider_s3" type="range" style="width: 80px;" min="1" max="2" value="1"><br />
-<span id="value_error3" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
-</div>
-
-<div style="position: absolute; top: 443px; right: 0px; text-align: right;">
-<b>Max Pooling</b><br />
-Kernel Size (k<sub>4</sub>): <span id="value_k4">1</span> <input id="slider_k4" type="range" style="width: 80px;" min="1" max="3" value="3"><br />
-Padding (p<sub>4</sub>, q<sub>4</sub>): <span id="value_p4">0</span> <input id="slider_p4" type="range" style="width: 80px;" min="0" max="1" value="1"><br />
-Stride (s<sub>4</sub>): <span id="value_s4">1</span> <input id="slider_s4" type="range" style="width: 80px;" min="1" max="2" value="2"><br />
-<span id="value_error4" style="display: none; color: red;">Invalid setup! Decrease kernel<br />size or increase padding.</span>
-</div>
-
-<script type="text/javascript">
-var svgEl = document.getElementById("fig1_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-DEFAULT_WIDTH = 13;
-DEFAULT_INDENT = 4;
-
-var redoRendering = function(svgEl) {
-  svgEl.innerHTML = "";
-  renderRowFn(svgEl, 1, DEFAULT_WIDTH, DEFAULT_INDENT, globals);
-
-  // k=kernel size, p=padding size, s=stride, w=feature width, i=indent
-  var params = [
-    {"k": -1, "p": -1, "s": -1, "w": DEFAULT_WIDTH, "i": DEFAULT_INDENT}
-  ];
-
-  for (var i = 1; i <= 4; i++) {
-    var kernel_size = parseInt(document.getElementById("slider_k" + i).value);
-    document.getElementById("value_k" + i).innerText = kernel_size;
-    var padding = parseInt(document.getElementById("slider_p" + i).value);
-    document.getElementById("value_p" + i).innerText = padding;
-    var stride = parseInt(document.getElementById("slider_s" + i).value);
-    document.getElementById("value_s" + i).innerText = stride;
-
-    var input_fw = params[i-1]["w"];
-    var padded_input_fw = input_fw + (2 * padding);
-    var output_fw = Math.ceil((padded_input_fw-(kernel_size-1))/stride);
-    var output_indent = Math.max(0, params[i-1]["i"] - Math.ceil((output_fw - input_fw)/2));
-    
-    params.push({"k": kernel_size, "p": padding, "s": stride, "w": output_fw, "i": output_indent});
-
-    if (document.getElementById("value_error" + i)) {
-      document.getElementById("value_error" + i).style.display = output_fw < 1 ? "block" : "none";
-    }
-
-    flowStack = [];
-    for (var j=0, k=0; kernel_size+k-1 < padded_input_fw; k += stride, j++) {
-      //renderFlowFn = function (el, row, width1, width2, offset1, offset2, globals)
-      renderFlowFn(svgEl, i, kernel_size, 1, params[i-1]["i"]-padding+k, output_indent+j, globals, undefined, i==2);
-    } 
-    renderRowFn(svgEl, i+1, output_fw, output_indent, globals);
-  }
-
-  var featureNodes = document.getElementById("fig1_svg").querySelectorAll(".feature");
-  for (var i=0; i < featureNodes.length; i++) {
-    featureNodes[i].addEventListener("mouseenter", renderSingleFlowStack);
-  }
-};
-
-var nodes = document.getElementById("fig1_svg").parentNode.querySelectorAll("input");
-for (var i = 0; i < nodes.length; i++) {
-  nodes[i].addEventListener("input", redoRendering.bind(this, svgEl));
-}
-
-redoRendering(svgEl);
-</script>
+      <script type="text/javascript" src="assets/dynamic_visuals/fig1.js">
+      </script>
 
     </figure>
 
@@ -480,41 +346,22 @@ redoRendering(svgEl);
 
     <figure class="figure-contents" style="height: 200px">
 
-<svg id="fig2b_svg" height="320" width="500" style="position: relative; top: -100px;">
+      <svg id="fig2b_svg" height="320" width="500" style="position: relative; top: -100px;">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+      
+      <div style="position: absolute; top: 83px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>L</sub>): <span>2</span></div>
+      <div style="height: 20px;">Padding (p<sub>L</sub>, q<sub>L</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>L</sub>): <span>3</span></div>
+      </div>
+      <div style="position: absolute; top: -20px; left: 115px;">k<sub>L</sub></div>
+      <div style="position: absolute; top: -20px; left: 200px;">k<sub>L</sub></div>
+      <div style="position: absolute; top: 40px; left: 40px;">f<sub>L-1</sub></div>
+      <div style="position: absolute; top: 170px; left: 40px;">f<sub>L</sub></div>
 
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<div style="position: absolute; top: 83px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>L</sub>): <span>2</span></div>
-<div style="height: 20px;">Padding (p<sub>L</sub>, q<sub>L</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>L</sub>): <span>3</span></div>
-</div>
-<div style="position: absolute; top: -20px; left: 115px;">k<sub>L</sub></div>
-<div style="position: absolute; top: -20px; left: 200px;">k<sub>L</sub></div>
-<div style="position: absolute; top: 40px; left: 40px;">f<sub>L-1</sub></div>
-<div style="position: absolute; top: 170px; left: 40px;">f<sub>L</sub></div>
-
-<script type="text/javascript">
-var svgEl = document.getElementById("fig2b_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-renderRowFn(svgEl, 2, 5, 3, globals);
-renderFlowFn(svgEl, 2, 2, 1, 3, 5, globals);
-renderFlowFn(svgEl, 2, 2, 1, 6, 6, globals);
-renderRowFn(svgEl, 3, 2, 5, globals);
-renderAnnotationFn(svgEl, 1, 2, 3, 1, 10, "rgb(16, 150, 24)", globals);
-renderAnnotationFn(svgEl, 1, 2, 6, 1, 10, "rgb(16, 150, 24)", globals);
-
-</script>
+      <script type="text/javascript" src="assets/dynamic_visuals/fig2b.js">
+      </script>
 
     </figure>
 
@@ -548,43 +395,23 @@ renderAnnotationFn(svgEl, 1, 2, 6, 1, 10, "rgb(16, 150, 24)", globals);
 
     <figure class="figure-contents" style="height: 280px">
 
-<svg id="fig2_svg" height="350" width="500" style="position: relative; top: -70px;">
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<div style="position: absolute; top: 113px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span>1</span></div>
-<div style="height: 20px;">Padding (p<sub>l</sub>, q<sub>l</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>l</sub>): <span>3</span></div>
-</div>
-<div style="position: absolute; top: 10px; left: 130px;">s<sub>l</sub>⋅r<sub>l</sub></div>
-<div style="position: absolute; top: -5px; left: 228px;">s<sub>l</sub>-1</div>
-<div style="position: absolute; top: 70px; left: 40px;">f<sub>l-1</sub></div>
-<div style="position: absolute; top: 200px; left: 40px;">f<sub>l</sub></div>
-<div style="position: absolute; top: 255px; left: 170px;">r<sub>l</sub>=2</div>
-
-<script type="text/javascript">
-var svgEl = document.getElementById("fig2_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-renderRowFn(svgEl, 2, 8, 3, globals);
-renderFlowFn(svgEl, 2, 1, 1, 3, 5, globals);
-renderFlowFn(svgEl, 2, 1, 1, 6, 6, globals);
-renderFlowFn(svgEl, 2, 1, 1, 9, 7, globals);
-renderRowFn(svgEl, 3, 3, 5, globals);
-renderAnnotationFn(svgEl, 3, 2, 5, 0, 20, "rgb(220, 18, 18)", globals);
-renderAnnotationFn(svgEl, 1, 6, 3, 1, 10, "rgb(16, 150, 24)", globals);
-renderAnnotationFn(svgEl, 1, 2, 7, 1, 30, "rgb(153, 0, 153)", globals);
-
-</script>
+      <svg id="fig2_svg" height="350" width="500" style="position: relative; top: -70px;">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+      
+      <div style="position: absolute; top: 113px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span>1</span></div>
+      <div style="height: 20px;">Padding (p<sub>l</sub>, q<sub>l</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>l</sub>): <span>3</span></div>
+      </div>
+      <div style="position: absolute; top: 10px; left: 130px;">s<sub>l</sub>⋅r<sub>l</sub></div>
+      <div style="position: absolute; top: -5px; left: 228px;">s<sub>l</sub>-1</div>
+      <div style="position: absolute; top: 70px; left: 40px;">f<sub>l-1</sub></div>
+      <div style="position: absolute; top: 200px; left: 40px;">f<sub>l</sub></div>
+      <div style="position: absolute; top: 255px; left: 170px;">r<sub>l</sub>=2</div>
+      
+      <script type="text/javascript" src="assets/dynamic_visuals/fig2.js">
+      </script>
 
     </figure>
 
@@ -607,44 +434,24 @@ renderAnnotationFn(svgEl, 1, 2, 7, 1, 30, "rgb(153, 0, 153)", globals);
 
     <figure class="figure-contents" style="height: 280px">
 
-<svg id="fig2c_svg" height="350" width="800" style="position: relative; top: -60px;">
-  Sorry, your browser does not support inline SVG.
-</svg>
+      <svg id="fig2c_svg" height="350" width="800" style="position: relative; top: -60px;">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+      
+      <div style="position: absolute; top: 113px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span>5</span></div>
+      <div style="height: 20px;">Padding (p<sub>l</sub>, q<sub>l</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>l</sub>): <span>3</span></div>
+      </div>
+      <div style="position: absolute; top: 20px; left: 175px;">s<sub>l</sub>⋅r<sub>l</sub> - (s<sub>l</sub>-1)</div>
+      <div style="position: absolute; top: 5px; left: 275px;">(k<sub>l</sub>-1)/2</div>
+      <div style="position: absolute; top: 5px; left: 95px;">(k<sub>l</sub>-1)/2</div>
+      <div style="position: absolute; top: 80px; left: 40px;">f<sub>l-1</sub></div>
+      <div style="position: absolute; top: 210px; left: 40px;">f<sub>l</sub></div>
+      <div style="position: absolute; top: 265px; left: 200px;">r<sub>l</sub>=2</div>
 
-<div style="position: absolute; top: 113px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>l</sub>): <span>5</span></div>
-<div style="height: 20px;">Padding (p<sub>l</sub>, q<sub>l</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>l</sub>): <span>3</span></div>
-</div>
-<div style="position: absolute; top: 20px; left: 175px;">s<sub>l</sub>⋅r<sub>l</sub> - (s<sub>l</sub>-1)</div>
-<div style="position: absolute; top: 5px; left: 275px;">(k<sub>l</sub>-1)/2</div>
-<div style="position: absolute; top: 5px; left: 95px;">(k<sub>l</sub>-1)/2</div>
-<div style="position: absolute; top: 80px; left: 40px;">f<sub>l-1</sub></div>
-<div style="position: absolute; top: 210px; left: 40px;">f<sub>l</sub></div>
-<div style="position: absolute; top: 265px; left: 200px;">r<sub>l</sub>=2</div>
-
-<script type="text/javascript">
-var svgEl = document.getElementById("fig2c_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-renderRowFn(svgEl, 2, 8, 3, globals);
-renderFlowFn(svgEl, 2, 5, 1, 3, 6, globals);
-renderFlowFn(svgEl, 2, 5, 1, 6, 7, globals);
-renderRowFn(svgEl, 3, 2, 6, globals);
-renderAnnotationFn(svgEl, 3, 2, 6, 0, 20, "rgb(220, 18, 18)", globals);
-renderAnnotationFn(svgEl, 1, 4, 5, 1, 10, "rgb(16, 150, 24)", globals);
-renderAnnotationFn(svgEl, 1, 2, 9, 1, 30, "rgb(153, 0, 153)", globals);
-renderAnnotationFn(svgEl, 1, 2, 3, 1, 30, "rgb(153, 0, 153)", globals);
-
-</script>
+      <script type="text/javascript" src="assets/dynamic_visuals/fig2c.js">
+      </script>
 
     </figure>
 
@@ -715,47 +522,28 @@ renderAnnotationFn(svgEl, 1, 2, 3, 1, 30, "rgb(153, 0, 153)", globals);
 
     <figure class="figure-contents" style="width: 500px;">
 
-<svg id="fig3_svg" height="450" width="500" style="position: relative; top: -20px;">
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<div style="position: absolute; top: 163px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>3</span></div>
-<div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span>1</span></div>
-<div style="height: 20px;">Stride (s<sub>1</sub>): <span>3</span></div>
-</div>
-<div style="position: absolute; top: 293px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>2</span></div>
-<div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>1</sub>): <span>1</span></div>
-</div>
-<div style="position: absolute; top: 35px; left: 53px;">u<sub>0</sub> = -1</div>
-<div style="position: absolute; top: 35px; left: 203px;">v<sub>0</sub> = 4</div>
-<div style="position: absolute; top: 120px; left: 40px;">f<sub>0</sub></div>
-<div style="position: absolute; top: 250px; left: 40px;">f<sub>1</sub></div>
-<div style="position: absolute; top: 380px; left: 40px;">f<sub>2</sub></div>
-
-<script type="text/javascript">
-var svgEl = document.getElementById("fig3_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-renderRowFn(svgEl, 2, 8, 3, globals);
-renderFlowFn(svgEl, 2, 6, 2, 2, 5, globals);
-renderRowFn(svgEl, 3, 3, 5, globals);
-renderArrowFn(svgEl, 2, 7.5, globals);
-renderArrowFn(svgEl, 2, 2.5, globals);
-renderFlowFn(svgEl, 3, 2, 1, 5, 5, globals);
-renderRowFn(svgEl, 4, 2, 5, globals);
-
-</script>
+      <svg id="fig3_svg" height="450" width="500" style="position: relative; top: -20px;">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+      
+      <div style="position: absolute; top: 163px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>3</span></div>
+      <div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span>1</span></div>
+      <div style="height: 20px;">Stride (s<sub>1</sub>): <span>3</span></div>
+      </div>
+      <div style="position: absolute; top: 293px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>2</span></div>
+      <div style="height: 20px;">Padding (p<sub>1</sub>, q<sub>1</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>1</sub>): <span>1</span></div>
+      </div>
+      <div style="position: absolute; top: 35px; left: 53px;">u<sub>0</sub> = -1</div>
+      <div style="position: absolute; top: 35px; left: 203px;">v<sub>0</sub> = 4</div>
+      <div style="position: absolute; top: 120px; left: 40px;">f<sub>0</sub></div>
+      <div style="position: absolute; top: 250px; left: 40px;">f<sub>1</sub></div>
+      <div style="position: absolute; top: 380px; left: 40px;">f<sub>2</sub></div>
+      
+      <script type="text/javascript" src="assets/dynamic_visuals/fig3.js">
+      </script>
 
     </figure>
 
@@ -989,89 +777,36 @@ renderRowFn(svgEl, 4, 2, 5, globals);
 
     <figure class="figure-contents" style="width: 650px; position: relative;">
 
-<img style="position: absolute; right: 0; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
-
-<svg id="fig4_svg" height="450" width="800">
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<div style="position: absolute; top: 53px; left: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>5</span></div>
-<div style="height: 20px;">Left Pad (p<sub>1</sub></sub>): <span>2</span></div>
-<div style="height: 20px;">Right Pad (q<sub>1</sub>): <span>1</span></div>
-<div style="height: 20px;">Stride (s<sub>1</sub>): <span>2</span></div>
-</div>
-<div style="position: absolute; top: 53px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>2</sub>): <span>3</span></div>
-<div style="height: 20px;">Left Pad (p<sub>2</sub></sub>): <span>0</span></div>
-<div style="height: 20px;">Right Pad (q<sub>2</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>2</sub>): <span>1</span></div>
-</div>
-<div style="position: absolute; top: 183px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>3</sub>): <span>3</span></div>
-<div style="height: 20px;">Left Pad (p<sub>3</sub></sub>): <span>0</span></div>
-<div style="height: 20px;">Right Pad (q<sub>3</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>3</sub>): <span>1</span></div>
-</div>
-<div style="position: absolute; top: 353px; right: 100px; text-align: right;">
-<div style="height: 20px;">Add</div>
-</div>
-
-<script type="text/javascript">
-var svgEl = document.getElementById("fig4_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-renderRowFn(svgEl, 1, 8, 6, globals);
-
-renderFlowFn(svgEl, 1, 5, 1, 4, 4, globals);
-renderFlowFn(svgEl, 1, 5, 1, 6, 5, globals);
-renderFlowFn(svgEl, 1, 5, 1, 8, 6, globals);
-renderFlowFn(svgEl, 1, 5, 1, 10, 7, globals);
-
-renderFlowFn(svgEl, 1, 3, 1, 6, 9, globals);
-renderFlowFn(svgEl, 1, 3, 1, 7, 10, globals);
-renderFlowFn(svgEl, 1, 3, 1, 8, 11, globals);
-renderFlowFn(svgEl, 1, 3, 1, 9, 12, globals);
-renderFlowFn(svgEl, 1, 3, 1, 10, 13, globals);
-renderFlowFn(svgEl, 1, 3, 1, 11, 14, globals);
-
-renderRowFn(svgEl, 2, 4, 4, globals);
-renderRowFn(svgEl, 2, 6, 9, globals);
-
-renderFlowFn(svgEl, 2, 3, 1, 9, 10, globals);
-renderFlowFn(svgEl, 2, 3, 1, 10, 11, globals);
-renderFlowFn(svgEl, 2, 3, 1, 11, 12, globals);
-renderFlowFn(svgEl, 2, 3, 1, 12, 13, globals);
-
-renderRowFn(svgEl, 3, 4, 10, globals);
-
-renderFlowFn(svgEl, 3, 1, 1, 10, 7, globals);
-renderFlowFn(svgEl, 3, 1, 1, 11, 8, globals);
-renderFlowFn(svgEl, 3, 1, 1, 12, 9, globals);
-renderFlowFn(svgEl, 3, 1, 1, 13, 10, globals);
-renderFlowFn(svgEl, 2, 1, 1, 4, 7, globals, 2);
-renderFlowFn(svgEl, 2, 1, 1, 5, 8, globals, 2);
-renderFlowFn(svgEl, 2, 1, 1, 6, 9, globals, 2);
-renderFlowFn(svgEl, 2, 1, 1, 7, 10, globals, 2);
-
-renderRowFn(svgEl, 4, 4, 7, globals);
-
-var featureNodes = svgEl.querySelectorAll(".feature");
-for (var i=0; i < featureNodes.length; i++) {
-  featureNodes[i].addEventListener("mouseenter", renderSingleFlowStack);
-}
-
-renderSingleFlowStack.call(svgEl.querySelector("#fig4_svg > rect.feature.feature_4_8"));
-
-</script>
+      <img style="position: absolute; right: 0; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+      
+      <svg id="fig4_svg" height="450" width="800">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+      
+      <div style="position: absolute; top: 53px; left: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>5</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>1</sub></sub>): <span>2</span></div>
+      <div style="height: 20px;">Right Pad (q<sub>1</sub>): <span>1</span></div>
+      <div style="height: 20px;">Stride (s<sub>1</sub>): <span>2</span></div>
+      </div>
+      <div style="position: absolute; top: 53px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>2</sub>): <span>3</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>2</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Right Pad (q<sub>2</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>2</sub>): <span>1</span></div>
+      </div>
+      <div style="position: absolute; top: 183px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>3</sub>): <span>3</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>3</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Right Pad (q<sub>3</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>3</sub>): <span>1</span></div>
+      </div>
+      <div style="position: absolute; top: 353px; right: 100px; text-align: right;">
+      <div style="height: 20px;">Add</div>
+      </div>
+      
+      <script type="text/javascript" src="assets/dynamic_visuals/fig4.js">
+      </script>
 
     </figure>
 
@@ -1116,79 +851,36 @@ renderSingleFlowStack.call(svgEl.querySelector("#fig4_svg > rect.feature.feature
 
     <figure class="figure-contents" style="width: 650px; position: relative;">
 
-<img style="position: absolute; right: 0; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
-
-<svg id="fig5_svg" height="450" width="800">
-  Sorry, your browser does not support inline SVG.
-</svg>
-
-<div style="position: absolute; top: 53px; left: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>1</span></div>
-<div style="height: 20px;">Left Pad (p<sub>1</sub></sub>): <span>0</span></div>
-<div style="height: 20px;">Right Pad (q<sub>1</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>1</sub>): <span>4</span></div>
-</div>
-<div style="position: absolute; top: 53px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>2</sub>): <span>3</span></div>
-<div style="height: 20px;">Left Pad (p<sub>2</sub></sub>): <span>1</span></div>
-<div style="height: 20px;">Right Pad (q<sub>2</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>2</sub>): <span>2</span></div>
-</div>
-<div style="position: absolute; top: 183px; right: 0px; text-align: right;">
-<div style="height: 20px;">Kernel Size (k<sub>3</sub>): <span>1</span></div>
-<div style="height: 20px;">Left Pad (p<sub>3</sub></sub>): <span>0</span></div>
-<div style="height: 20px;">Right Pad (q<sub>3</sub>): <span>0</span></div>
-<div style="height: 20px;">Stride (s<sub>3</sub>): <span>2</span></div>
-</div>
-<div style="position: absolute; top: 353px; right: 100px; text-align: right;">
-<div style="height: 20px;">Add</div>
-</div>
-
-<script type="text/javascript">
-var svgEl = document.getElementById("fig5_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
-
-renderRowFn(svgEl, 1, 8, 4, globals);
-
-renderFlowFn(svgEl, 1, 1, 1, 4, 4, globals);
-renderFlowFn(svgEl, 1, 1, 1, 8, 5, globals);
-
-renderFlowFn(svgEl, 1, 3, 1, 3, 9, globals);
-renderFlowFn(svgEl, 1, 3, 1, 5, 10, globals);
-renderFlowFn(svgEl, 1, 3, 1, 7, 11, globals);
-renderFlowFn(svgEl, 1, 3, 1, 9, 12, globals);
-
-renderRowFn(svgEl, 2, 2, 4, globals);
-renderRowFn(svgEl, 2, 4, 9, globals);
-
-renderFlowFn(svgEl, 2, 1, 1, 9, 10, globals);
-renderFlowFn(svgEl, 2, 1, 1, 11, 11, globals);
-
-renderRowFn(svgEl, 3, 2, 10, globals);
-
-renderFlowFn(svgEl, 3, 1, 1, 10, 8, globals);
-renderFlowFn(svgEl, 3, 1, 1, 11, 9, globals);
-renderFlowFn(svgEl, 2, 1, 1, 4, 8, globals, 2);
-renderFlowFn(svgEl, 2, 1, 1, 5, 9, globals, 2);
-
-renderRowFn(svgEl, 4, 2, 8, globals);
-
-var featureNodes = svgEl.querySelectorAll(".feature");
-for (var i=0; i < featureNodes.length; i++) {
-  featureNodes[i].addEventListener("mouseenter", renderSingleFlowStack);
-}
-
-renderSingleFlowStack.call(svgEl.querySelector("#fig5_svg > rect.feature.feature_4_9"));
-
-</script>
+      <img style="position: absolute; right: 0; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+      
+      <svg id="fig5_svg" height="450" width="800">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+      
+      <div style="position: absolute; top: 53px; left: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>1</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>1</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Right Pad (q<sub>1</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>1</sub>): <span>4</span></div>
+      </div>
+      <div style="position: absolute; top: 53px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>2</sub>): <span>3</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>2</sub></sub>): <span>1</span></div>
+      <div style="height: 20px;">Right Pad (q<sub>2</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>2</sub>): <span>2</span></div>
+      </div>
+      <div style="position: absolute; top: 183px; right: 0px; text-align: right;">
+      <div style="height: 20px;">Kernel Size (k<sub>3</sub>): <span>1</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>3</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Right Pad (q<sub>3</sub>): <span>0</span></div>
+      <div style="height: 20px;">Stride (s<sub>3</sub>): <span>2</span></div>
+      </div>
+      <div style="position: absolute; top: 353px; right: 100px; text-align: right;">
+      <div style="height: 20px;">Add</div>
+      </div>
+      
+      <script type="text/javascript" src="assets/dynamic_visuals/fig5.js">
+      </script>
 
     </figure>
 

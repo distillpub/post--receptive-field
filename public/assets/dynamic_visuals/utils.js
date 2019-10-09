@@ -114,39 +114,39 @@ var renderArrowFn = function(el, row, offset, globals) {
   el.innerHTML += htmlStr;
 };
 
-var recursiveFlowUnhide = function(row, offset) {
-  var featureEls = document.querySelectorAll(".feature_" + row + "_" + offset);
+var recursiveFlowUnhide = function(row, offset, parentNode) {
+  var featureEls = parentNode.querySelectorAll(".feature_" + row + "_" + offset);
   for (var i = 0; i < featureEls.length; i++) {
     featureEls[i].style.fill = "rgb(224,234,250)";
   }
-  var featureBottomEls = document.querySelectorAll(".featurebottom_" + row + "_" + offset);
+  var featureBottomEls = parentNode.querySelectorAll(".featurebottom_" + row + "_" + offset);
   for (var i = 0; i < featureBottomEls.length; i++) {
     featureBottomEls[i].style.fill = "rgb(224,234,250)";
   }
-  var featureSideEls = document.querySelectorAll(".featureside_" + row + "_" + offset);
+  var featureSideEls = parentNode.querySelectorAll(".featureside_" + row + "_" + offset);
   for (var i = 0; i < featureSideEls.length; i++) {
     featureSideEls[i].style.fill = "rgb(224,234,250)";
   }
 
-  var flowEls = document.querySelectorAll(".flow_" + row + "_" + offset);
+  var flowEls = parentNode.querySelectorAll(".flow_" + row + "_" + offset);
   for (var j = 0; j < flowEls.length; j++) {
     flowEls[j].style.display = "block";
     for (var i = parseInt(flowEls[j].dataset.offset1); i < parseInt(flowEls[j].dataset.offset1) + parseInt(flowEls[j].dataset.width1); i++) {
-      recursiveFlowUnhide(row - flowEls[j].dataset.rowheight, i);
+      recursiveFlowUnhide(row - flowEls[j].dataset.rowheight, i, parentNode);
     }
   }
 };
 
 var renderSingleFlowStack = function(event) {
-  var featureNodes = document.querySelectorAll(".feature");
+  var featureNodes = this.parentNode.querySelectorAll(".feature");
   for (var i=0; i < featureNodes.length; i++) {
     featureNodes[i].style.fill = "rgb(255, 255, 255)";
   }
-  var flowNodes = document.querySelectorAll(".flow");
+  var flowNodes = this.parentNode.querySelectorAll(".flow");
   for (var i=0; i < flowNodes.length; i++) {
     flowNodes[i].style.display = "none";
   }
   var data = this.dataset.id.split("_");
-  recursiveFlowUnhide(data[1], data[2]);
+  recursiveFlowUnhide(data[1], data[2], this.parentNode);
 };
 

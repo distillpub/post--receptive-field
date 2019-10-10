@@ -767,7 +767,7 @@
       be computed using misaligned regions of the input image, depending on the
       path from input to output. Also, the relative position between the image regions
       used for the computation of each output feature may vary. As a consequence,
-      <strong>the receptive field may not be shift-invariant</strong>
+      <strong>the receptive field size may not be shift-invariant</strong>
       . This is illustrated in the
       figure below with a toy example, in which case the centers of the regions used
       in the input image are different for the two paths from input to output.
@@ -817,7 +817,7 @@
       Also, note that the receptive field size for each output
       feature may be different. For the second feature from the left, \(6\) input
       samples are used, while only \(5\) are used for the third feature. This means
-      that the receptive field may not be shift-invariant when the network is not
+      that the receptive field size may not be shift-invariant when the network is not
       aligned.
     </p>
 

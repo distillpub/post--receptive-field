@@ -1094,7 +1094,7 @@
       classification accuracy. The figure below plots ImageNet
       top-1 accuracy as a function of the network's receptive field size, for
       the same networks listed above. The circle size for each data point is
-      proportional to the number of floating-point operations for each
+      proportional to the number of floating-point operations (FLOPs) for each
       architecture.
     </p>
 
@@ -1146,7 +1146,7 @@
       For example, note how MobileNets achieve high recognition performance even
       if using a very compact architecture: with depth-wise convolutions,
       the receptive field is increased with a small compute footprint.
-      In comparison, VGG-16 requires 27X more multiply-adds than MobileNets, but produces
+      In comparison, VGG-16 requires 27X more FLOPs than MobileNets, but produces
       a smaller receptive field size; even if much more complex, VGG's accuracy
       is only slightly better than MobileNet's.
       This suggests that networks which can efficiently generate large receptive

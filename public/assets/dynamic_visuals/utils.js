@@ -5,7 +5,7 @@ var positionElByRowHeightFn = function(svg_id, el_id, row, globals, opt_under_ro
 
   var yPos = ((row - 1) * (globals.box_height + globals.row_space));
   if (opt_under_row) {
-    yPos += globals.box_height;
+    yPos += globals.box_height + 5;
   }
   yPos += height_adjustment;
   el.style.top = yPos + "px";

@@ -1,6 +1,7 @@
 var fig4_globals = globals;
 if (mobile) {
-  fig4_globals = mobile_globals2;
+  fig4_globals = mobile_globals;
+  document.getElementById("fig4_svg").style.left = "50px";
 }
 
 positionElByRowHeightFn("fig4_svg", "fig4_params_l1a", 1, fig4_globals, true);

@@ -52,6 +52,19 @@
       font-weight: 600;
     }
   </style>
+  <style>
+    #model_table>table,
+    th,
+    td {
+      border: 1px solid #dfe2e5;
+      border-collapse: collapse;
+      padding: 6px 13px !important;
+    }
+
+    tr:nth-child(even)>td {
+      background-color: rgb(246, 248, 250);
+    }
+  </style>
 
   <link rel="stylesheet" type="text/css" href="assets/dynamic_visuals/style.css">
 </head>
@@ -270,7 +283,7 @@
 
     <figure class="figure-contents" style="position: relative;">
 
-      <img style="position: absolute; width: 27px; right: 0px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+      <img style="position: absolute; width: 27px; right: 0px; top: -10px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
       
       <svg id="fig1_svg" height="580" width="650" style="top: 0px;">
         Sorry, your browser does not support inline SVG.
@@ -777,27 +790,27 @@
 
     <figure class="figure-contents" style="position: relative;">
 
-      <img style="position: absolute; right: 0; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+      <img style="position: absolute; right: 0; top: -10px; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
       
-      <svg id="fig4_svg" height="450" width="800" style="top: 0px;">
+      <svg id="fig4_svg" height="450" width="800" style="position: relative; top: 0px;">
         Sorry, your browser does not support inline SVG.
       </svg>
       
       <div id="fig4_params_l1a" style="position: absolute; top: 53px; left: 0px; text-align: right;">
       <div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>5</span></div>
-      <div style="height: 20px;">Left Pad (p<sub>1</sub></sub>): <span>2</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>1</sub>): <span>2</span></div>
       <div style="height: 20px;">Right Pad (q<sub>1</sub>): <span>1</span></div>
       <div style="height: 20px;">Stride (s<sub>1</sub>): <span>2</span></div>
       </div>
       <div id="fig4_params_l1b" style="position: absolute; top: 53px; right: 0px; text-align: right;">
       <div style="height: 20px;">Kernel Size (k<sub>2</sub>): <span>3</span></div>
-      <div style="height: 20px;">Left Pad (p<sub>2</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>2</sub>): <span>0</span></div>
       <div style="height: 20px;">Right Pad (q<sub>2</sub>): <span>0</span></div>
       <div style="height: 20px;">Stride (s<sub>2</sub>): <span>1</span></div>
       </div>
       <div id="fig4_params_l2" style="position: absolute; top: 183px; right: 0px; text-align: right;">
       <div style="height: 20px;">Kernel Size (k<sub>3</sub>): <span>3</span></div>
-      <div style="height: 20px;">Left Pad (p<sub>3</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>3</sub>): <span>0</span></div>
       <div style="height: 20px;">Right Pad (q<sub>3</sub>): <span>0</span></div>
       <div style="height: 20px;">Stride (s<sub>3</sub>): <span>1</span></div>
       </div>
@@ -851,27 +864,27 @@
 
     <figure class="figure-contents" style="position: relative;">
 
-      <img style="position: absolute; right: 0; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
+      <img style="position: absolute; right: 0; top: -10px; width: 27px;" height="27" width="27" src="https://distill.pub/2018/feature-wise-transformations/images/pointer.svg" />
       
-      <svg id="fig5_svg" height="450" width="800">
+      <svg id="fig5_svg" height="450" width="800" style="position: relative; top: 0px;">
         Sorry, your browser does not support inline SVG.
       </svg>
       
       <div id="fig5_params_l1a" style="position: absolute; top: 40px; left: 0px; text-align: right;">
       <div style="height: 20px;">Kernel Size (k<sub>1</sub>): <span>1</span></div>
-      <div style="height: 20px;">Left Pad (p<sub>1</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>1</sub>): <span>0</span></div>
       <div style="height: 20px;">Right Pad (q<sub>1</sub>): <span>0</span></div>
       <div style="height: 20px;">Stride (s<sub>1</sub>): <span>4</span></div>
       </div>
       <div id="fig5_params_l1b" style="position: absolute; top: 40px; right: 0px; text-align: right;">
       <div style="height: 20px;">Kernel Size (k<sub>2</sub>): <span>3</span></div>
-      <div style="height: 20px;">Left Pad (p<sub>2</sub></sub>): <span>1</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>2</sub>): <span>1</span></div>
       <div style="height: 20px;">Right Pad (q<sub>2</sub>): <span>0</span></div>
       <div style="height: 20px;">Stride (s<sub>2</sub>): <span>2</span></div>
       </div>
       <div id="fig5_params_l2" style="position: absolute; top: 170px; right: 0px; text-align: right;">
       <div style="height: 20px;">Kernel Size (k<sub>3</sub>): <span>1</span></div>
-      <div style="height: 20px;">Left Pad (p<sub>3</sub></sub>): <span>0</span></div>
+      <div style="height: 20px;">Left Pad (p<sub>3</sub>): <span>0</span></div>
       <div style="height: 20px;">Right Pad (q<sub>3</sub>): <span>0</span></div>
       <div style="height: 20px;">Stride (s<sub>3</sub>): <span>2</span></div>
       </div>
@@ -971,19 +984,6 @@
     </p>
 
     <p>
-      <style>
-        #model_table>table,
-        th,
-        td {
-          border: 1px solid #dfe2e5;
-          border-collapse: collapse;
-          padding: 6px 13px !important;
-        }
-
-        tr:nth-child(even)>td {
-          background-color: rgb(246, 248, 250);
-        }
-      </style>
       <table class="model_table" style="margin: 0px auto;">
         <thead>
           <tr>
@@ -1127,7 +1127,7 @@
             hAxis: { title: 'Receptive field size (pixels)', gridlines: { count: 10 } },
             vAxis: { title: 'ImageNet top-1 accuracy', format: 'percent' },
             sizeAxis: { maxSize: 10 },
-            legend: { position: 'right', textStyle: { fontSize: 12 } },
+            legend: { position: 'bottom', textStyle: { fontSize: 12 } },
             bubble: { textStyle: { fontSize: 11 } }
           };
 
@@ -1135,8 +1135,8 @@
           chart.draw(data, options);
         }
       </script>
-      <div style="width: 680px; height: 500px; position: relative;">
-        <div id="series_chart_div" style="position: relative; left: -30px; width: 680px; height: 500px;"></div>
+      <div style="width: 100%; max-width: 680px; height: 500px; position: relative;">
+        <div id="series_chart_div" style="position: relative; width: 100%; height: 500px;"></div>
       </div>
     </p>
 

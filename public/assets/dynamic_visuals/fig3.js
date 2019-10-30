@@ -1,13 +1,10 @@
+positionElByRowHeightFn("fig3_svg", "fig3_f0", 2, globals);
+positionElByRowHeightFn("fig3_svg", "fig3_f1", 3, globals);
+positionElByRowHeightFn("fig3_svg", "fig3_f2", 4, globals);
+positionElByRowHeightFn("fig3_svg", "fig3_params_l1", 2, globals, true);
+positionElByRowHeightFn("fig3_svg", "fig3_params_l2", 3, globals, true);
+
 var svgEl = document.getElementById("fig3_svg");
-var globals = {
-  "box_width": 30,
-  "box_height": 30,
-  "box_inner_padding": 5,
-  "row_space": 100,
-  "perspective_shift": 18,
-  "perspective_spacing": 4,
-  "stroke_width": 1
-};
 
 renderRowFn(svgEl, 2, 8, 3, globals);
 renderFlowFn(svgEl, 2, 6, 2, 2, 5, globals);

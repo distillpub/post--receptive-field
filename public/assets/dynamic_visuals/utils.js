@@ -1,3 +1,16 @@
+var positionElByRowHeightFn = function(svg_id, el_id, row, globals, opt_under_row) {
+  var svg_el = document.getElementById(svg_id);
+  var height_adjustment = parseInt(svg_el.style.top);
+  var el = document.getElementById(el_id);
+
+  var yPos = ((row - 1) * (globals.box_height + globals.row_space));
+  if (opt_under_row) {
+    yPos += globals.box_height + 5;
+  }
+  yPos += height_adjustment;
+  el.style.top = yPos + "px";
+};
+
 var renderRowFn = function(el, row, width, offset, globals) {
   var htmlStr = '';
 
